@@ -1,0 +1,32 @@
+- name: Configure webserver with nginx
+  hosts: webservers
+  become: True
+  tasks:
+    - name: Update apt cache and install Nginx
+      apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+    - name: Apply Nginx template
+      template: 
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+      notify: Restart Nginx
+    - name: enable configuration
+      file:
+        dest: /etc/nginx/sites-enabled/default
+        src: /etc/nginx/sites-available/default
+        state: link
+    - name: "sync website"
+      synchronize:
+        src: templates/index.html.j2
+        dest: /usr/share/nginx/html/index.html
+        archive: no
+        checksum: yes
+        recursive: yes
+        delete: yes
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted

@@ -1,0 +1,10 @@
+vagrant destroy --force
+
+from the book: ansible for devops (pg 72)
+
+option 2:
+https://linuxopsys.com/topics/ansible-playbook-to-install-apache
+
+# hosts.ini is the hosts file and app is the group
+ansible -i hosts.ini app -m ping
+
