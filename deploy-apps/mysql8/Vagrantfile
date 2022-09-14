@@ -27,18 +27,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Database server1
   config.vm.define "db" do |db|
-    db.vm.hostname = "orc-db.test"
+    db.vm.hostname = "orc-db1.test"
     db.vm.network :private_network, ip: "192.168.60.6"
   end
 
   # Database server2
   config.vm.define "db" do |db|
-    db.vm.hostname = "orc-db.test"
+    db.vm.hostname = "orc-db2.test"
     db.vm.network :private_network, ip: "192.168.60.7"
   end
   # Database server3
   config.vm.define "db" do |db|
-    db.vm.hostname = "orc-db.test"
+    db.vm.hostname = "orc-db3.test"
     db.vm.network :private_network, ip: "192.168.60.8"
   end
 end
