@@ -1,0 +1,6 @@
+option 1:
+https://blog.nonstopio.com/deploying-a-node-js-app-using-ansible-cfe7dfeddcac
+
+- save application port as variable
+- test using curl or lynx
+

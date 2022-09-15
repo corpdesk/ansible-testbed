@@ -1,0 +1,50 @@
+---
+- hosts: app
+  become: yes
+  vars:
+      git_repo_url: https://github.com/georemo/node-test-proj.git
+      proj_name: node-test-proj
+      repo_path: /home/vagrant/apps
+      repo_branch: main
+  tasks: 
+    - name: Update apt-get repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600  
+    - name: Ansible shell module multiple commands
+      shell: 'curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -'  
+    
+    - name: Allow everything and enable UFW
+      community.general.ufw:
+        state: enabled
+        policy: allow
+
+    - name: Install reqired packages
+      apt: name={{ item }} state=present
+      with_items:
+        - git
+        - curl
+        - wget
+        - nginx
+        - nodejs
+
+    - name: Clone a private repository
+      git:
+        repo: "{{ git_repo_url }}"
+        dest: "{{ repo_path }}"
+        version: "{{ repo_branch }}"
+        accept_hostkey: yes
+    - name: Install Forever (to run our Node.js app).
+      npm: name=forever global=yes state=present
+
+    - name: Install packages based on package.json using the npm
+      npm:
+        path: "{{ repo_path }}"
+        state: present
+    
+    - name: Check list of running Node.js apps.
+      command: forever list
+      register: forever_list
+      changed_when: false
+
+    - name: Start example Node.js app.
+      command: "forever start {{ repo_path }}/server.js"
+      when: "forever_list.stdout.find(repo_path + '/server.js') == -1"

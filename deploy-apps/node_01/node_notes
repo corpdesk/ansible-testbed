@@ -1,0 +1,10 @@
+option 1:
+https://blog.nonstopio.com/deploying-a-node-js-app-using-ansible-cfe7dfeddcac
+
+Archive & Unarcive file:
+https://linuxhint.com/ansible_archive_unarchive/
+
+node_01 now working:
+to test: curl http://192.168.60.4:8081  
+
+
