@@ -4,7 +4,7 @@
   vars:
       git_repo_url: https://github.com/georemo/node-test-proj.git
       proj_name: node-test-proj
-      repo_path: /home/vagrant/apps
+      repo_path: /home/vagrant/node-test-proj
       repo_branch: main
   tasks: 
     - name: Update apt-get repo and cache

@@ -1,0 +1,20 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Create new Droplet.
+      digital_ocean:
+        state: present
+        command: droplet
+        name: ansible-test
+        private_networking: yes
+        size_id: s-1vcpu-1gb
+        image_id: centos-7-x64
+        region_id: nyc3
+        # Customize this for your account.
+        ssh_key_ids: 138954
+        # Required for idempotence/only one droplet creation.
+        unique_name: yes
+      register: do
