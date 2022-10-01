@@ -1,0 +1,9 @@
+- https://devops4solutions.medium.com/setup-ssh-key-and-initial-user-using-ansible-playbook-61eabbb0dba4
+- https://stackoverflow.com/questions/19292899/creating-a-new-user-and-password-with-ansible
+- https://medium.com/@ranmalsl/ansible-create-initial-user-on-managed-hosts-using-a-playbook-e7406a99e98b
+CHANGE PASSWORD:
+- https://jianjye.medium.com/how-to-update-user-password-with-ansible-f971f41a3b3e
+
+Process:
+- ansible controller created by: multipass launch -c 2 -d 10G -m 4G --network en0 --network name=bridge0,mode=manual
+- multipass name: uptown-urchin

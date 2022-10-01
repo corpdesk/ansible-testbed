@@ -1,0 +1,9 @@
+---
+
+- hosts: dstores
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - robertdebock.bootstrap
+    - robertdebock.glusterfs

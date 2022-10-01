@@ -6,8 +6,6 @@
     droplet_image: ubuntu-18-04-x64
   
   tasks:
-    
-
     - name: "add public ssh key to digitalocean account"
       digital_ocean_sshkey:
         name: "MacBook Pro"

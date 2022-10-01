@@ -1,1 +1,2 @@
 deploy-apps/mysql8/roles/
+deploy-apps/gluster_02/roles
