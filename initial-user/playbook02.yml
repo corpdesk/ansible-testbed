@@ -1,5 +1,7 @@
 ---
-- hosts: app
+# - hosts: app
+- hosts: localhost
+  connection: local 
 
   become: true
 
@@ -15,4 +17,4 @@
     password: $1Ec1hmh5UW3w
 
   tasks:
-    - user: name=devops password={{password}}
+    - user: name=devops02 password={{password}}
