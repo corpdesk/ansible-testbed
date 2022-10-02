@@ -12,9 +12,9 @@
     # - $1Ec1hmh5UW3w
     # recomended option: 
     # - openssl passwd -salt MySalt -1 "yU0B14NC1PdE"
-    # resulet:
+    # result:
     # - $1$MySalt$EuHbTnh6cKOGVXfP8Hh1b0
-    password: $1Ec1hmh5UW3w
+    password: $1$MySalt$EuHbTnh6cKOGVXfP8Hh1b0
 
   tasks:
     - user: name=devops02 password={{password}}
