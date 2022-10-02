@@ -9,6 +9,7 @@
     - name: Create devops03 user
       user:
         name: devops03
+        group: sudo
         password: "{{ 'password' | password_hash('sha512') }}"
         shell: /bin/zsh
         update_password: on_create
