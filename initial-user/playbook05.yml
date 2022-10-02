@@ -1,0 +1,13 @@
+---
+- hosts: app
+
+  become: true
+
+  tasks:
+    - name: Create user
+      user: name=devops shell=/bin/bash home=/home/devops groups=admin,sudo generate_ssh_key=yes ssh_key_bits=2048
+    - name: Set password to user
+      shell: echo user:plain_text_password | sudo chpasswd
+      no_log: True
+
+

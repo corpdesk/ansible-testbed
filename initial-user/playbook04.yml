@@ -1,0 +1,17 @@
+---
+- hosts: app
+
+  become: true
+
+  tasks:
+    # ansible all -i hosts.ini, -m debug -a "msg={{ 'devops' | password_hash('sha512', 'MySalt') }}"
+    - name: User creation
+      user: 
+        name: devops  
+        uid: UID
+        group: sudo
+        shell: /bin/bash
+        comment: "test user"
+        password: "$1$MySalt$EuHbTnh6cKOGVXfP8Hh1b0"
+
+

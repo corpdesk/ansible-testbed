@@ -1,9 +1,21 @@
 - https://devops4solutions.medium.com/setup-ssh-key-and-initial-user-using-ansible-playbook-61eabbb0dba4
 - https://stackoverflow.com/questions/19292899/creating-a-new-user-and-password-with-ansible
 - https://medium.com/@ranmalsl/ansible-create-initial-user-on-managed-hosts-using-a-playbook-e7406a99e98b
+- https://github.com/lyenliang/AnsibleLinuxAccountCreator/blob/master/createUsers.yml
 CHANGE PASSWORD:
 - https://jianjye.medium.com/how-to-update-user-password-with-ansible-f971f41a3b3e
 
 Process:
-- ansible controller created by: multipass launch -c 2 -d 10G -m 4G --network en0 --network name=bridge0,mode=manual
-- multipass name: uptown-urchin
+- ansible controller created by: 
+    - multipass launch -c 2 -d 10G -m 4G --network en0 --network name=bridge0,mode=manual
+    - multipass name: uptown-urchin
+        - sudo useradd -m -s /bin/bash devops
+		- mkpasswd -m sha-512 "yU0B14NC1PdE"
+		- make sure to replace each $ with \$
+		- or create in out.txt with already replaced
+		- or mkpasswd -m sha-512 "yU0B14NC1PdE" | sed 's/\$/\\$/g' > out.txt 
+		- then:
+		- useradd -m -s /bin/bash -p 
+		- useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
+		- login devops
+- ansible-playbook -i hosts.ini playbook.yml --extra-vars="uusername=devops01 upassword=yU0B14NC1PdE"

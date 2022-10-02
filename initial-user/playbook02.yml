@@ -1,0 +1,18 @@
+---
+- hosts: app
+
+  become: true
+
+  vars:
+    # created with:
+    # - python -c 'import crypt; print crypt.crypt("yU0B14NC1PdE", "$1$MySalt$")'
+    # result: 
+    # - $1Ec1hmh5UW3w
+    # recomended option: 
+    # - openssl passwd -salt MySalt -1 "yU0B14NC1PdE"
+    # resulet:
+    # - $1$MySalt$EuHbTnh6cKOGVXfP8Hh1b0
+    password: $1Ec1hmh5UW3w
+
+  tasks:
+    - user: name=devops password={{password}}

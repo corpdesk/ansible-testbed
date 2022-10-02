@@ -1,0 +1,17 @@
+---
+- hosts: app
+
+  become: true
+
+  vars:
+    # created with:
+    #  original(not working): python -c "from passlib.hash import sha512_crypt; print sha512_crypt.encrypt('yU0B14NC1PdE')"
+    #  working: python -c 'import crypt; print crypt.crypt("yU0B14NC1PdE", "$1$MySalt$")'
+    # above command requires the PassLib library: sudo pip install passlib
+    - password: '$1Ec1hmh5UW3w'
+
+  tasks:
+    - name: Create user
+      user: "name=spree password={{password}} groups=sudo,www-data shell=/bin/bash append=yes"
+
+
