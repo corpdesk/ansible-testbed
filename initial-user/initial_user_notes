@@ -18,4 +18,10 @@ Process:
 		- useradd -m -s /bin/bash -p 
 		- useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
 		- login devops
+- vagrant up
+- multipass shell uptown-urchin
+- sudo apt upgrade
+- sudo apt install ansible net-tools git tree -y
+- cd ansible-testbed/initial-user
 - ansible-playbook -i hosts.ini playbook.yml --extra-vars="uusername=devops01 upassword=yU0B14NC1PdE"
+- ansible-playbook -i localhost playbook.yml --extra-vars="uusername=devops01 upassword=yU0B14NC1PdE"
