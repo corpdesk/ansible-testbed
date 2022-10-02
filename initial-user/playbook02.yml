@@ -17,5 +17,4 @@
     password: $1$MySalt$EuHbTnh6cKOGVXfP8Hh1b0
 
   tasks:
-    - user: name=devops02 password={{password}}
-    - groups: sudo append=yes
+    - user: name=devops02 password={{password}} groups=admin,sudo
