@@ -4,13 +4,13 @@
   become: true
 
   tasks:
-    - name: Create madhead user
+    - name: Create devops03 user
       user:
-        name: madhead
+        name: devops03
         password: "{{ 'password' | password_hash('sha512') }}"
         shell: /bin/zsh
         update_password: on_create
-      register: madhead
-    - name: Force madhead to change password
-      shell: chage -d 0 madhead
-      when: madhead.changed
+      register: devops03
+    - name: Force devops03 to change password
+      shell: chage -d 0 devops03
+      when: devops03.changed

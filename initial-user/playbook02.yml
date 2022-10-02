@@ -18,3 +18,4 @@
 
   tasks:
     - user: name=devops02 password={{password}}
+      groups: sudo append=yes
