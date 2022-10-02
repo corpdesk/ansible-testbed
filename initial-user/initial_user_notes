@@ -24,5 +24,7 @@ Process:
 - sudo apt install ansible net-tools git tree -y
 - cd ansible-testbed/initial-user
 - ansible-playbook -i hosts.ini playbook.yml --extra-vars="uusername=devops01 upassword=yU0B14NC1PdE"
-PALYBOOK02
+PALYBOOK02: working
 - ansible-playbook playbook02.yml
+PALYBOOK03: working
+- ansible-playbook playbook03.yml
