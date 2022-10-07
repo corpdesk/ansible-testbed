@@ -15,7 +15,7 @@ helpFunction()
     exit 1 # Exit script after printing help
 }
 
-while getopts "a:d:" opt
+while getopts "n:d:" opt
 do
     case "$opt" in
         n ) sshKeyName="$OPTARG" ;;
