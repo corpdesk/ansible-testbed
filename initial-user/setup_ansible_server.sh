@@ -1,3 +1,4 @@
+#!/bin/bash
 # INSTALL ANSIBLE SERVER REQUIREMENTS
 #   - variable input for setup_nfs_server.sh:
 #   - inventory array or subnet specification nfs, $shared_dir=/var/nfs/p-key

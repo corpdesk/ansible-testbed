@@ -1,3 +1,4 @@
+#!/bin/bash
 # variable input for setup_nfs_server.sh:
 # inventory array or subnet specification nfs, $shared_dir=/var/nfs/p-key
 # ssh file name: $ssh_key_name=id_rsa_ansible
