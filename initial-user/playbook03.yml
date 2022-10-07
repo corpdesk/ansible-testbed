@@ -1,8 +1,8 @@
 ---
 # working
 # - hosts: app
-- hosts: localhost
-  connection: local 
+- hosts: app2
+  # connection: local 
 
   become: true
 
