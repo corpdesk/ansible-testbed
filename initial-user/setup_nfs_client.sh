@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Usage:
-# sh setup_nfs_client.sh -a ansibleServer -d sharedDirectory -p mountingPoint
+# sudo sh setup_nfs_client.sh -a ansibleServer -d sharedDirectory -p mountingPoint
 # Example:
-# sh setup_nfs_client.sh -a 192.168.1.155 -d /var/nfs/p_key -p /nfs/p_key
+# sudo sh setup_nfs_client.sh -a 192.168.1.155 -d /var/nfs/p_key -p /nfs/p_key
 
 helpFunction()
 {
