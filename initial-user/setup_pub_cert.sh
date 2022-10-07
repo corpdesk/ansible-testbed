@@ -36,8 +36,10 @@ echo "$sshKeyName"
 echo "$sharedDirectory"
 
 sudo sh setup_nfs_server.sh
+sleep 3
 # create ssh key pair
 sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/"$sshKeyName" -q -N ""
 # copy the generated public file to shared directory for target inventory servers
+sleep 2
 sudo cp ~/.ssh/"$sshKeyName".pub "$sharedDirectory"/"$sshKeyName".pub
 
