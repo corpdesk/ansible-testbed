@@ -13,10 +13,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.linked_clone = true
   end
 
-  # Application server 1.
+  # Ansible server 1.
+  config.vm.define "ansible" do |ansible|
+    app.vm.hostname = "orc-ansible.test"
+    app.vm.network :private_network, ip: "192.168.60.3"
+  end
+
+  # Application server 1
   config.vm.define "app1" do |app|
-    app.vm.hostname = "orc-app1.test"
-    app.vm.network :private_network, ip: "192.168.60.4"
+    db.vm.hostname = "orc-app1.test"
+    db.vm.network :private_network, ip: "192.168.60.4"
   end
 
   # Application server 2.

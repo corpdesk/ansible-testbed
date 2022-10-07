@@ -18,13 +18,78 @@ Process:
 		- useradd -m -s /bin/bash -p 
 		- useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
 		- login devops
-- vagrant up
-- multipass shell uptown-urchin
-- sudo apt upgrade
-- sudo apt install ansible net-tools git tree -y
-- cd ansible-testbed/initial-user
-- ansible-playbook -i hosts.ini playbook.yml --extra-vars="uusername=devops01 upassword=yU0B14NC1PdE"
-PALYBOOK02: working
-- ansible-playbook playbook02.yml
-PALYBOOK03: working
-- ansible-playbook playbook03.yml
+
+/////////////////////////////////////////////////
+
+1. SETUP ANSIBLE SERVER
+    OPTION 1 (multipass):
+        - launch multipass instance (ansible server host)
+            - multipass launch -c 2 -d 10G -m 4G --network en0 --network name=bridge0,mode=manual
+        SSH into instance
+            - multipass shell uptown-urchin
+    OPTION 2 (vagrant):
+        - launch vagrant instance (ansible server host)
+            - vagrant up 
+        SSH into instance
+            - vagrant ssh vagrant@192.168.60.3
+    OPTION 3 (docker):
+        - launch docker instance
+            - docker run goremo/ansible-server
+        SSH into instance
+            - docker exec -it <container name> /bin/bash
+
+    
+
+    INSTALL ANSIBLE SERVER REQUIREMENTS
+    - sudo apt upgrade
+    - sudo apt install net-tools git tree nfs-kernel-server ansible   -y
+    - git clone https://github.com/georemo/ansible-testbed.git
+    
+    GENERATE SSH KEYS
+    - ansible-generate-keys
+    - yes | cp ~/.ssh/id_rsa.pub ansible-testbed/initial-user/id_rsa.pub
+    - git push
+
+    SET INITIAL USER
+    - cd ansible-testbed/initial-user
+    - ansible-playbook playbook03.yml
+    EXIT
+
+
+
+2. SET PUBLIC KEYS TO INVENTORY:
+    - vagrant up
+    - vagrant ssh vagrant@<inventory-ip>
+    - 
+    - git clone https://github.com/georemo/ansible-testbed.git
+    - cd ansible-testbed/initial-user/
+    - sudo sh setup_nfs_access.sh
+    - sudo sh setup_pub_cert.sh
+    EXIT
+
+3. ANSIBLE SERVER -> SETUP HOST MACHINES:
+    - ssh into host machines 
+    - ansible -> setup host machines
+        - install multipass/vagrant
+        - create multipass/vagrant instances as per inventory
+
+4. ANSIBLE SERVER -> DEPLOY SYSTEMS:
+    - multipass shell uptown-urchin 
+    - cd ansible-testbed/mysql-cluster
+        - ansible-playbook -i hosts.ini playbook.yml
+    - cd ansible-testbed/mysql-data
+        - ansible-playbook -i hosts.ini playbook.yml
+    - cd ansible-testbed/nodejs cluster
+        - ansible-playbook -i hosts.ini playbook.yml
+    - cd ansible-testbed/angular module federation cluster
+        - ansible-playbook -i hosts.ini playbook.yml
+
+//////////////////
+SHARE SSH KEYS VIA NFS:
+https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-22-04
+
+
+
+
+
+
