@@ -44,5 +44,6 @@ sudo apt update -y
 sudo apt install nfs-common -y
 sudo mkdir -p /nfs/p_key
 # sudo mount 192.168.1.155:/var/nfs/p_key /nfs/p_key
-sudo mount "$ansibleServer":"$sharedDirectory" "$mountingPoint"
+sudo mount "$ansibleServer":"$sharedDirectory" "$mountingPoint" &
+
 
