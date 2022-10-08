@@ -10,9 +10,11 @@ sudo id devops
 echo "switch to devops user:"
 su -c devops
 echo "move to devops home dir:"
-cd ~/
+cd /home/devops
 echo "current directory:"
 pwd
+echo "who am i:"
+whoami
 # useradd -m -s /bin/bash -p
 # useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
 
