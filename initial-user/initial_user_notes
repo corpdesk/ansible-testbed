@@ -16,7 +16,7 @@ Process:
 		- or mkpasswd -m sha-512 "yU0B14NC1PdE" | sed 's/\$/\\$/g' > out.txt 
 		- then:
 		- useradd -m -s /bin/bash -p 
-		- useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
+		- sudo useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
 		- login devops
 
 /////////////////////////////////////////////////
