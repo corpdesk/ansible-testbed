@@ -49,6 +49,6 @@ sleep 3
 sudo sh setup_initial_user.sh
 # echo "content of target file:"
 # less "$mountingPoint"/ansibleServer.pub &
-su devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"
+su devops -c "echo 'yU0B14NC1PdE' | sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"
 
 
