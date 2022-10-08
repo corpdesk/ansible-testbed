@@ -49,6 +49,9 @@ sleep 3
 sudo sh setup_initial_user.sh
 # echo "content of target file:"
 # less "$mountingPoint"/ansibleServer.pub &
-echo 'yU0B14NC1PdE' | su - devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"
 
+# echo 'yU0B14NC1PdE' | su - devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"
+echo "Start 2nd su:"
+expect -c 'spawn su - devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"; expect "Password :"; send "yU0B14NC1PdE\n"; interact'
+echo "End 2nd su:"
 
