@@ -40,8 +40,10 @@ sleep 3
 sudo rm /var/nfs/p_key/ansibleServer.pub
 sudo rm ~/.ssh/ansibleServer.pub
 # create ssh key pair
-sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/"$sshKeyName" -q -N ""
+# sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/"$sshKeyName" -q -N ""
+sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/ansibleServer -q -N ""
 # copy the generated public file to shared directory for target inventory servers
 sleep 4
 sudo cp ~/.ssh/"$sshKeyName".pub "$sharedDirectory"/"$sshKeyName".pub
+sudo cp "$sharedDirectory"/"$sshKeyName".pub /home/ubuntu/"$sshKeyName".pub
 
