@@ -47,6 +47,6 @@ sudo mkdir -p /nfs/p_key
 sudo mount "$ansibleServer":"$sharedDirectory" "$mountingPoint" &
 sleep 3
 sudo sh setup_initial_user.sh
-cp "$mountingPoint"/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub
+sudo cp "$mountingPoint"/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub
 
 
