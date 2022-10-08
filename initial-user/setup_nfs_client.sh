@@ -45,9 +45,9 @@ sudo apt install nfs-common -y
 sudo mkdir -p /nfs/p_key
 sudo chmod -R 777 /nfs/p_key/
 printf "\nStart mounting nfs shared dir:"
-sudo mount "$ansibleServer":"$sharedDirectory" "$mountingPoint" &
+sudo mount "$ansibleServer":"$sharedDirectory" "$mountingPoint"
 printf "\nEnd mounting nfs shared dir:\n"
-sleep 3
+sleep 4
 printf "\nStart setting up initial user:"
 sudo sh setup_initial_user.sh
 printf "\nEnd setting up initial user:"
