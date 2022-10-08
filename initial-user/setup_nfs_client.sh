@@ -55,6 +55,9 @@ printf "\nEnd setting up initial user:"
 
 # echo 'yU0B14NC1PdE' | su - devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"
 printf "\nStart 2nd su:"
-expect -c 'spawn su - -l devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"; expect "Password :"; send "yU0B14NC1PdE\n"; interact'
+#  expect -c 'spawn su - -l devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"; expect "Password :"; send "yU0B14NC1PdE\n"; interact'
+echo "yU0B14NC1PdE" | sudo -S sleep 1 && sudo su - devops
 printf "\nEnd 2nd su:"
+printf "\nWho am I?"
+whoami
 
