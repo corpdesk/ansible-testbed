@@ -41,7 +41,7 @@ echo "$mountingPoint"
 # variable input:
 # host_ip, server shared dir:  /var/nfs/p_key, local mounting point: /nfs/p_key
 sudo apt update -y
-sudo apt install nfs-common -y
+sudo apt install nfs-common expect -y
 sudo mkdir -p /nfs/p_key
 printf "\nStart mounting nfs shared dir:"
 sudo mount "$ansibleServer":"$sharedDirectory" "$mountingPoint" &

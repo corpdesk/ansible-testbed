@@ -9,7 +9,7 @@ sudo sh setup_initial_user.sh
 
 printf "\nStart 1st su:"
 echo 'yU0B14NC1PdE' | su - devops -c "sudo sh setup_pub_cert.sh -n ansibleServer -d /var/nfs/p_key"
-printf "\nEnd 1st su:"
+printf "\nEnd 1st su:\n"
 sudo apt upgrade -y
 sudo apt install ansible -y
 su - devops -c "ansible app2 -m ping"
