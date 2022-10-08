@@ -2,8 +2,8 @@
 # sudo sh setup_initial_user.sh
 # INSTALL ANSIBLE SERVER REQUIREMENTS
 # sudo useradd -m -s /bin/bash devops
-sudo adduser devops
-usermod -aG sudo devops
+sudo adduser devops -y
+usermod -aG sudo devops -y
 sudo id devops
 su -c devops
 # useradd -m -s /bin/bash -p
