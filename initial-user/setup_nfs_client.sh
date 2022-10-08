@@ -61,6 +61,9 @@ sudo mkdir /home/devops/.ssh
 sudo cp --verbose /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub
 chown -R devops /home/devops/
 sudo chmod -R 755 /home/devops/
+
+sudo mkdir /home/ubuntu/.ssh
+sudo cp --verbose /nfs/p_key/ansibleServer.pub /home/ubuntu/.ssh/ansibleServer.public
 #  expect -c 'spawn su - -l devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"; expect "Password :"; send "yU0B14NC1PdE\n"; interact'
 # echo "yU0B14NC1PdE" | sudo -S sleep 1 && sudo su - devops -c "cp --verbose /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"
 # expect -c '
