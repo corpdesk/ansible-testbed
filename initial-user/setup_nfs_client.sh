@@ -43,10 +43,13 @@ echo "$mountingPoint"
 sudo apt update -y
 sudo apt install nfs-common -y
 sudo mkdir -p /nfs/p_key
-# sudo mount 192.168.1.155:/var/nfs/p_key /nfs/p_key
+echo "Start mounting nfs shared dir:"
 sudo mount "$ansibleServer":"$sharedDirectory" "$mountingPoint" &
+echo "End mounting nfs shared dir:"
 sleep 3
+echo "Start setting up initial user:"
 sudo sh setup_initial_user.sh
+echo "End setting up initial user:"
 # echo "content of target file:"
 # less "$mountingPoint"/ansibleServer.pub &
 
