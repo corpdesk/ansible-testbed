@@ -1,5 +1,9 @@
 #!/bin/bash
 # sudo sh setup_initial_user.sh
+
+# reset environment
+sudo sh reset_environment.sh
+
 # INSTALL ANSIBLE SERVER REQUIREMENTS
 # sudo useradd -m -s /bin/bash devops
 echo "creating devops user (non-inteructive, with preset hushed password):"
