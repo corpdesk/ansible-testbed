@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # update execution codes
-git pull
+git pull https://georemo@github.com/georemo/ansible-testbed.git
 
 # Reset: remove previous versions
 sudo rm /var/nfs/p_key/ansibleServer.pub
