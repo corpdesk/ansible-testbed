@@ -45,5 +45,7 @@ sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/ansibleServer -q -N ""
 sleep 4
 sudo chmod -R 755 /home/ubuntu/
 sudo cp ~/.ssh/"$sshKeyName".pub "$sharedDirectory"/"$sshKeyName".pub
-sudo cp /root/.ssh/"$sshKeyName".pub /home/ubuntu/.ssh/"$sshKeyName".pub
+
+sudo cp ~/.ssh/"$sshKeyName" /home/ubuntu/.ssh/"$sshKeyName"
+sudo cp ~/.ssh/"$sshKeyName".pub /home/ubuntu/.ssh/"$sshKeyName".pub
 
