@@ -51,16 +51,16 @@ sudo ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
 sleep 4
 
 # OPTION 1
-sudo ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@192.168.1.121
+# sudo ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@192.168.1.121
 
 # OPTION 2
-$ sshpass -f p.txt ssh-copy-id devops@192.168.1.121
+$ sudo sshpass -f p.txt ssh-copy-id devops@192.168.1.121
 
 # OPTION 2
-spawn ssh-copy-id $argv
-expect "password:"
-send "yU0B14NC1PdE\n"
-expect eof
+# spawn ssh-copy-id $argv
+# expect "password:"
+# send "yU0B14NC1PdE\n"
+# expect eof
 
 # OPTION 2
 # sudo chmod -R 755 /home/ubuntu/
