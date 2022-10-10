@@ -39,7 +39,7 @@ fi
 echo "$sshKeyName"
 echo "$sharedDirectory"
 
-sudo sh setup_nfs_server.sh
+# sudo sh setup_nfs_server.sh
 sleep 3
 
 

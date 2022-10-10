@@ -25,6 +25,7 @@ Process:
     OPTION 1 (multipass):
         - launch multipass instance (ansible server host)
             - multipass launch --name=ansible-server -c 2 -d 5G -m 4G --network en0 --network name=bridge0,mode=manual
+            - multipass launch --name=mysql-01 -c 2 -d 5G -m 4G --network en0 --network name=bridge0,mode=manual
         SSH into instance
             - multipass shell uptown-urchin
     OPTION 2 (vagrant):
