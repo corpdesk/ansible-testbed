@@ -24,7 +24,7 @@ Process:
 1. SETUP ANSIBLE SERVER
     OPTION 1 (multipass):
         - launch multipass instance (ansible server host)
-            - multipass launch -c 2 -d 10G -m 4G --network en0 --network name=bridge0,mode=manual
+            - multipass launch --name=ansible-server -c 2 -d 5G -m 4G --network en0 --network name=bridge0,mode=manual
         SSH into instance
             - multipass shell uptown-urchin
     OPTION 2 (vagrant):
@@ -87,6 +87,21 @@ Process:
 //////////////////
 SHARE SSH KEYS VIA NFS:
 https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-22-04
+
+///////////////
+KEY SHARING:
+# Ref: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-22-04
+- nb: Disable Password Authentication before applying ssh-copy-id  
+# The #? is an extended regular expression that matches the line whether it's commented or not. 
+# The -E switch enables extended regexp support for sed.
+- sudo sed -i -E 's/#?PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+- use ssh-copy-id username@remote_host
+sudo ssh-copy-id -i /home/ubuntu/.ssh/id_rsa.pub ubuntu@192.168.1.137
+- automate password authentication: https://stackoverflow.com/questions/12202587/automatically-enter-ssh-password-with-script
+
+sudo apt install sshpass -y
+sshpass -p "yU0B14NC1PdE" ssh -o StrictHostKeyChecking=no ubuntu@192.168.1.137
+
 
 
 

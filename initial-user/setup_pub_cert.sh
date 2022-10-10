@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# https://www.digitalocean.com/community/questions/ssh-copy-id-not-working-permission-denied-publickey
+# https://www.linuxbabe.com/linux-server/setup-passwordless-ssh-login
+# https://stackoverflow.com/questions/12202587/automatically-enter-ssh-password-with-script
+
 # Usage:
 # sudo sh setup_pub_cert.sh -n sshKeyName -d sharedDirectory
 # Example:
@@ -38,14 +42,21 @@ echo "$sharedDirectory"
 sudo sh setup_nfs_server.sh
 sleep 3
 
+
 # create ssh key pair
 # sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/"$sshKeyName" -q -N ""
-sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/ansibleServer -q -N ""
+# sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/ansibleServer -q -N ""
+sudo ssh-keygen -t rsa -b 2048 -f /home/ubuntu/.ssh/id_rsa -q -N ""
 # copy the generated public file to shared directory for target inventory servers
 sleep 4
-sudo chmod -R 755 /home/ubuntu/
-sudo cp ~/.ssh/"$sshKeyName".pub "$sharedDirectory"/"$sshKeyName".pub
 
-sudo cp ~/.ssh/"$sshKeyName" /home/ubuntu/.ssh/"$sshKeyName"
-sudo cp ~/.ssh/"$sshKeyName".pub /home/ubuntu/.ssh/"$sshKeyName".pub
+# OPTION 1
+sudo ssh-copy-id -i /home/ubuntu/.ssh/id_rsa.pub ubuntu@192.168.1.137
+
+# OPTION 2
+# sudo chmod -R 755 /home/ubuntu/
+# sudo cp /home/ubuntu/.ssh/"$sshKeyName".pub "$sharedDirectory"/"$sshKeyName".pub
+
+# sudo cp /home/ubuntu/.ssh/"$sshKeyName".pub /home/devops/.ssh/"$sshKeyName".pub
+# sudo chmod -R 755 /home/devops/
 
