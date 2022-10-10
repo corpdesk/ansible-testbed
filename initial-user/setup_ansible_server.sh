@@ -6,7 +6,6 @@
 
 sudo sh reset_environment.sh
 # INSTALL ANSIBLE SERVER REQUIREMENTS
-sudo apt upgrade -y
 sudo apt install ansible sshpass -y
 
 # SETUP INITIAL USER

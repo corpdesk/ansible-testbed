@@ -4,7 +4,7 @@
 # update execution codes
 # git pull https://georemo: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@github.com/georemo/ansible-testbed.git
 # git pull https://username:password@git_hostname.com/my/repository
-
+sudo apt update -y
 sudo sh remove_devops.sh
 
 # Reset: remove previous versions
