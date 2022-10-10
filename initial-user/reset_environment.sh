@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# git clone https://github.com/georemo/ansible-testbed.git
 # update execution codes
 # git pull https://georemo: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@github.com/georemo/ansible-testbed.git
 # git pull https://username:password@git_hostname.com/my/repository
@@ -12,4 +13,12 @@
 # Disable Password Authentication before applying ssh-copy-id  
 # The #? is an extended regular expression that matches the line whether it's commented or not. 
 # The -E switch enables extended regexp support for sed.
-sudo sed -i -E 's/#?PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+# sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i -E 's/#?ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i -E 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+sudo sed -i -E 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
+sudo systemctl restart ssh
+
+

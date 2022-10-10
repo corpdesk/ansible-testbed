@@ -46,12 +46,21 @@ sleep 3
 # create ssh key pair
 # sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/"$sshKeyName" -q -N ""
 # sudo ssh-keygen -t rsa -b 2048 -f ~/.ssh/ansibleServer -q -N ""
-sudo ssh-keygen -t rsa -b 2048 -f /home/ubuntu/.ssh/id_rsa -q -N ""
+sudo ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
 # copy the generated public file to shared directory for target inventory servers
 sleep 4
 
 # OPTION 1
-sudo ssh-copy-id -i /home/ubuntu/.ssh/id_rsa.pub ubuntu@192.168.1.137
+sudo ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@192.168.1.121
+
+# OPTION 2
+$ sshpass -f p.txt ssh-copy-id devops@192.168.1.121
+
+# OPTION 2
+spawn ssh-copy-id $argv
+expect "password:"
+send "yU0B14NC1PdE\n"
+expect eof
 
 # OPTION 2
 # sudo chmod -R 755 /home/ubuntu/

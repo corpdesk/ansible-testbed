@@ -4,10 +4,6 @@
 # reset environment
 sudo sh reset_environment.sh
 
-# The #? is an extended regular expression that matches the line whether it's commented or not. 
-# The -E switch enables extended regexp support for sed.
-sudo sed -i -E 's/#?PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
-
 # INSTALL ANSIBLE SERVER REQUIREMENTS
 # sudo useradd -m -s /bin/bash devops
 echo "creating devops user (non-inteructive, with preset hushed password):"
