@@ -24,5 +24,5 @@ printf "\nEnd 1st su:\n"
 # su - devops -c "ansible app2 -m ping"
 # ansible app2 -m ping
 # ansible-playbook playbook03.yml
-# ansible app2 --extra-vars "ansible_user=devops ansible_password=yU0B14NC1PdE" -m ping -vvv
+ansible app2 --extra-vars "ansible_user=devops ansible_password=yU0B14NC1PdE" -m ping -vvv
 
