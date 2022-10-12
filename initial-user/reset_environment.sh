@@ -16,6 +16,7 @@ sudo sh remove_devops.sh
 # The #? is an extended regular expression that matches the line whether it's commented or not. 
 # The -E switch enables extended regexp support for sed.
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+sudo ufw allow from 192.168.1.0/24 to any port 22
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo sed -i -E 's/#?ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
