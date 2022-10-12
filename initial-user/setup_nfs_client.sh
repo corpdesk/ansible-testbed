@@ -3,13 +3,13 @@
 # Usage:
 # sudo sh setup_nfs_client.sh -a ansibleServer -d sharedDirectory -p mountingPoint
 # Example:
-# sudo sh setup_nfs_client.sh -a 192.168.1.155 -d /var/nfs/p_key -p /nfs/p_key
+# sudo sh setup_nfs_client.sh -a 192.168.1.155 -d /var/nfs/p_key -p ~/nfs/p_key
 
 helpFunction()
 {
     echo ""
     echo "Usage: $0 -a ansibleServer -d sharedDirectory -p mountingPoint"
-    echo "Example: $0 -a 192.168.1.155 -d /var/nfs/p_key -p /nfs/p_key"
+    echo "Example: $0 -a 192.168.1.155 -d /var/nfs/p_key -p ~/nfs/p_key"
     echo -e "\t-a hostname or ip for ansible server"
     echo -e "\t-d shared directory"
     echo -e "\t-p mounting point"
@@ -41,9 +41,12 @@ echo "$mountingPoint"
 # variable input:
 # host_ip, server shared dir:  /var/nfs/p_key, local mounting point: /nfs/p_key
 sudo apt update -y
+printf "\nInstall nfs client:"
 sudo apt install nfs-common -y
-sudo mkdir -p /nfs/p_key
-sudo chmod -R 777 /nfs/p_key/
+printf "\nInstall nfs client:"
+sudo mkdir -p "$mountingPoint"
+printf "\nInstall nfs client:"
+sudo chmod -R 777 "$mountingPoint"
 printf "\nStart mounting nfs shared dir:"
 sudo mount "$ansibleServer":"$sharedDirectory" "$mountingPoint"
 printf "\nEnd mounting nfs shared dir:\n"
@@ -57,12 +60,12 @@ printf "\nEnd setting up initial user:"
 # echo 'yU0B14NC1PdE' | su - devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"
 printf "\nStart 2nd su:"
 sudo chmod -R 755 /home/devops/
-sudo mkdir /home/devops/.ssh
-sudo cp --verbose /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub
-chown -R devops /home/devops/
-sudo chmod -R 755 /home/devops/
+# sudo mkdir /home/devops/.ssh
+# sudo cp --verbose /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub
+# chown -R devops /home/devops/
+# sudo chmod -R 755 /home/devops/
 
-sudo cp --verbose /nfs/p_key/ansibleServer.pub /home/ubuntu/.ssh/ansibleServer.pub
+# sudo cp --verbose /nfs/p_key/ansibleServer.pub /home/ubuntu/.ssh/ansibleServer.pub
 #  expect -c 'spawn su - -l devops -c "sudo cp /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"; expect "Password :"; send "yU0B14NC1PdE\n"; interact'
 # echo "yU0B14NC1PdE" | sudo -S sleep 1 && sudo su - devops -c "cp --verbose /nfs/p_key/ansibleServer.pub /home/devops/.ssh/ansibleServer.pub"
 # expect -c '
