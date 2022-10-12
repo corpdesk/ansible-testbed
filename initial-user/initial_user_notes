@@ -44,6 +44,7 @@ Process:
     INSTALL ANSIBLE SERVER REQUIREMENTS
     # https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-22-04
     # https://www.digitalocean.com/community/questions/ssh-copy-id-not-working-permission-denied-publickey
+    # https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-20-04
     - sudo apt upgrade
     - sudo apt install net-tools git tree nfs-kernel-server ansible   -y
     - git clone https://github.com/georemo/ansible-testbed.git
