@@ -1,8 +1,13 @@
 ---
+# ansible-galaxy install -p ./roles aeimer.install-virtualbox-vagrant 
+# ansible-galaxy install -p ./roles darkwizard242.vagrant
 # ansible-playbook -i hosts.ini install-vagrant.yaml --extra-vars "ansible_user=devops ansible_password=yU0B14NC1PdE" -kK -vvv
+# 
+# 
 - hosts: multipass
   remote_user: devops
   become: yes
   roles: 
-  - aeimer.install-virtualbox-vagrant 
+  # - aeimer.install-virtualbox-vagrant 
+  - darkwizard242.vagrant
 
