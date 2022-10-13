@@ -1,0 +1,8 @@
+---
+# ansible-playbook -i hosts.ini install-vagrant.yaml --extra-vars "ansible_user=devops ansible_password=yU0B14NC1PdE"
+- hosts: multipass
+  remote_user: devops
+  become: yes
+  roles: 
+  - aeimer.install-virtualbox-vagrant 
+

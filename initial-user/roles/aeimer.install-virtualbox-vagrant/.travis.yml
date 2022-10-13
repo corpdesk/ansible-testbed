@@ -1,0 +1,43 @@
+---
+language: python
+python: "2.7"
+
+env:
+  global:
+    - IDEM_CHANGED=4
+    - IDEM_FAILED=0
+
+before_install:
+  # Make sure everything's up to date.
+  - sudo apt-get update -qq
+
+install:
+  # Install Ansible.
+  - pip install ansible
+
+  # Add ansible.cfg to pick up roles path.
+  - cp tests/ansible.cfg.test ansible.cfg
+
+script:
+  # Check the role/playbook's syntax.
+  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
+
+  # Run the role/playbook with ansible-playbook.
+  - ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo
+  
+  # Run the role/playbook again, checking to make sure it's idempotent.
+  - >
+    ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo
+    | tee /dev/tty
+    | grep -q "changed=$IDEM_CHANGED.*failed=$IDEM_FAILED"
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+  
+  # Check if virtualbox is installed
+  # TODO: Check if anything has to be installed
+  - VBoxManage --version
+  - VBoxManage --help
+  
+  # Check if vagrant is installed
+  - vagrant --version
+  - vagrant --help

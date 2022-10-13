@@ -1,0 +1,11 @@
+# VIRTUALBOX
+virtualbox_version: 5.1
+virtualbox_apt_key_url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
+virtualbox_apt_key_url_old: https://www.virtualbox.org/download/oracle_vbox.asc
+virtualbox_apt_repo_url: http://download.virtualbox.org/virtualbox/debian
+virtualbox_users: []
+
+# VAGRANT
+vagrant_version: 1.9.8
+vagrant_deb_url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb"
+vagrant_deb_sha_url: "https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_SHA256SUMS"
