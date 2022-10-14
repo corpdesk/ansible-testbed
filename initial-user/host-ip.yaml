@@ -9,6 +9,9 @@
     debug:
       msg: "{{ ansible_ssh_host }}"
 
+  - name: write ip
+    shell: echo "{{ ansible_ssh_host }}" >> /home/devops/this_ip.txt
+
   - name: delegate update_facts
     setup:
     delegate_to: '{{ item }}'
