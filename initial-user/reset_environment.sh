@@ -6,7 +6,9 @@
 # git pull https://username:password@git_hostname.com/my/repository
 sudo apt update -y
 sudo sh remove_devops.sh
-mkdir /home/devops/vagrant-deploy
+sudo mkdir /home/devops/vagrant-deploy
+sudo chmod -R 755 /home/devops/vagrant-deploy
+chown -R devops /home/devops/vagrant-deploy
 
 # allow rsync
 sudo ufw allow from 192.168.1.0/24 to any port 873
