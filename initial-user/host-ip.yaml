@@ -21,7 +21,7 @@
 
   - name: deploy vagrant config
     synchronize:
-      src: sub-hosts/"{{ ansible_ssh_host }}"
-      dest: rsync://"{{ ansible_ssh_host }}"/home/devops/vagrant-deploy
+      src: sub-hosts/{{ ansible_ssh_host }}
+      dest: rsync://{{ ansible_ssh_host }}/home/devops/vagrant-deploy
  
 
