@@ -21,6 +21,7 @@
 
   - name: deploy vagrant config
     synchronize:
+      sudo: no
       src: sub-hosts/{{ ansible_ssh_host }}
       dest: /home/devops/vagrant-deploy
       # owner: devops
