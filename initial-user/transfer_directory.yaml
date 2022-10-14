@@ -1,0 +1,27 @@
+---
+# ansible-playbook -i hosts.ini host-ip.yaml -kK -vvv
+- hosts: vagranthosts
+  remote_user: devops
+  become: yes
+  
+  tasks:
+  - name: Show host's ip
+    debug:
+      msg: "{{ ansible_ssh_host }}"
+
+  - name: write ip
+    shell: echo "{{ ansible_ssh_host }}" >> /home/devops/this_ip.txt
+
+  - name: delegate update_facts
+    setup:
+    delegate_to: '{{ item }}'
+    delegate_facts: yes      
+    with_items: '{{ groups["vagranthosts"] }}'
+    when: hostvars[item]["ansible_default_ipv4"]["address"] is not defined
+
+  - name: deploy directory specific to host
+    synchronize:
+      src: /sub-hosts/"{{ ansible_ssh_host }}"
+      dest: /home/devops/"{{ ansible_ssh_host }}"
+ 
+
