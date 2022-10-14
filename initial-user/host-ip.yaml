@@ -21,7 +21,7 @@
 
   - name: deploy vagrant config
     copy:
-      src: sub-hosts/{{ ansible_ssh_host }}/vagrantfile
+      src: sub-hosts/{{ ansible_ssh_host }}/Vagrantfile
       dest: /home/devops/vagrant-deploy/vagrantfile
       owner: devops
       group: devops
