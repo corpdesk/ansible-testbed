@@ -5,7 +5,7 @@
 - hosts: multipass
   remote_user: devops
   become: yes
-  
+
   roles: 
   - robertdebock.virtualbox
   - darkwizard242.vagrant
@@ -14,4 +14,17 @@
   - name: Show host's ip
     debug:
       msg: "{{ ansible_ssh_host }}"
+
+  - name: deploy vagrant config
+    copy:
+      src: sub-hosts/{{ ansible_ssh_host }}/Vagrantfile
+      dest: /home/devops/vagrant-deploy/Vagrantfile
+      owner: devops
+      group: devops
+      mode: '0755'
+
+  - name: move to vagrant-deploy and launch vms for this host
+    shell:
+      cmd: vagrant up
+      chdir: /home/devops/vagrant-deploy/
 
