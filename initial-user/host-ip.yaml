@@ -13,7 +13,7 @@
     setup:
     delegate_to: '{{ item }}'
     delegate_facts: yes      
-    with_items: '{{ groups["linux_webservers"] }}'
+    with_items: '{{ groups["vagranthosts"] }}'
     when: hostvars[item]["ansible_default_ipv4"]["address"] is not defined
  
 
