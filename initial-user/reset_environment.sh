@@ -7,6 +7,9 @@
 sudo apt update -y
 sudo sh remove_devops.sh
 
+# allow rsync
+sudo ufw allow from 192.168.1.0/24 to any port 873
+
 # Reset: remove previous versions
 # sudo rm /var/nfs/p_key/ansibleServer.pub
 # sudo rm /home/ubuntu/.ssh/ansibleServer.pub
@@ -25,9 +28,6 @@ sudo sed -i -E 's/#?ChallengeResponseAuthentication no/ChallengeResponseAuthenti
 sudo sed -i -E 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 sudo sed -i -E 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
 sudo systemctl restart ssh
-
-# allow rsync
-sudo ufw allow from 192.168.1.0/24 to any port 873
 
 
 
