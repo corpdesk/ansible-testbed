@@ -28,6 +28,23 @@ printf "\nEnd 1st su:\n"
 # ansible app2 -m ping
 # ansible-playbook playbook03.yml
 ansible app2 --extra-vars "ansible_user=devops ansible_password=yU0B14NC1PdE" -m ping
-# ansible-galaxy collection install aeimer.install-virtualbox-vagrant --upgrade
+# ansible-playbook -i hosts.ini install-vagrant.yaml -kK -vvv
+# on physical host servers, copy vagrant directory in devops directory
+#   - set ips for given host
+#   - Vagrantfile with allocated ips
+# run vagrant up
+# setup mysql
+#   - mysql-servers
+#   - mysql-shell
+#   - operator
+# setup gluster file system
+# setup redis cluster
+# setup node.js
+#   - load-balancer 
+#   - queue
+#   - with mysql-router
+# setup angular cluster
+#   - with loadbalancer
+
 
 

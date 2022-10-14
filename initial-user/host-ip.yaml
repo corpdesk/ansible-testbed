@@ -1,0 +1,11 @@
+---
+# ansible-playbook -i hosts.ini host-ip.yaml -kK -vvv
+- hosts: multipass
+  remote_user: devops
+  become: yes
+  
+  tasks:
+  - name: Show host's ip
+    debug:
+      msg: "{{ ansible_ssh_host }}"
+
