@@ -26,4 +26,9 @@ sudo sed -i -E 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/s
 sudo sed -i -E 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
 sudo systemctl restart ssh
 
+# allow rsync
+sudo ufw allow from 192.168.1.0/24 to any port 873
+
+
+
 
