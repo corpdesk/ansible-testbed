@@ -14,14 +14,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # vagrant server 11.
-  config.vm.define "s1" do |ansible|
-    app.vm.hostname = "orc-s1.test"
+  config.vm.define "app" do |app|
+    app.vm.hostname = "orc-app1.test"
     app.vm.network :private_network, ip: "192.168.1.221"
   end
 
   # vagrant server 12
-  config.vm.define "s2" do |app|
-    db.vm.hostname = "orc-s2.test"
+  config.vm.define "app" do |app|
+    db.vm.hostname = "orc-app2.test"
     db.vm.network :private_network, ip: "192.168.1.222"
   end
 
