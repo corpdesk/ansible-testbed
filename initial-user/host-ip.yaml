@@ -20,12 +20,11 @@
     when: hostvars[item]["ansible_default_ipv4"]["address"] is not defined
 
   - name: deploy vagrant config
-    synchronize:
-      sudo: no
-      src: sub-hosts/{{ ansible_ssh_host }}
-      dest: /home/devops/vagrant-deploy
-      # owner: devops
-      # group: devops
-      # mode: '0755'
+    copy:
+      src: sub-hosts/{{ ansible_ssh_host }}/vagrantfile
+      dest: /home/devops/vagrant-deploy/vagrantfile
+      owner: devops
+      group: devops
+      mode: '0755'
  
 
