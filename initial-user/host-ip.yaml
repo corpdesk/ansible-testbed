@@ -18,5 +18,10 @@
     delegate_facts: yes      
     with_items: '{{ groups["vagranthosts"] }}'
     when: hostvars[item]["ansible_default_ipv4"]["address"] is not defined
+
+  - name: deploy vagrant config
+    synchronize:
+    src: sub-hosts/"{{ ansible_ssh_host }}"
+    dest: /home/devops/vagrant-deploy
  
 
