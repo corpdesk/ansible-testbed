@@ -22,7 +22,10 @@
       owner: devops
       group: devops
       mode: '0755'
-
+  - name: install prerequisites
+    ansible.builtin.apt:
+      name: libfuse2
+      state: present
   - name: move to vagrant-deploy and launch vms for this host
     shell:
       cmd: vagrant up
