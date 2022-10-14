@@ -9,3 +9,11 @@
     debug:
       msg: "{{ ansible_ssh_host }}"
 
+  - name: delegate update_facts
+    setup:
+    delegate_to: '{{ item }}'
+    delegate_facts: yes      
+    with_items: '{{ groups["linux_webservers"] }}'
+    when: hostvars[item]["ansible_default_ipv4"]["address"] is not defined
+ 
+
