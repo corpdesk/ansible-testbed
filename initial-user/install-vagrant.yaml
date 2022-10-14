@@ -15,6 +15,12 @@
     debug:
       msg: "{{ ansible_ssh_host }}"
 
+
+  - name: Remove vagrant file
+    file:
+      path: /home/devops/vagrant-deploy/Vagrantfile
+      state: absent
+
   - name: deploy vagrant config
     copy:
       src: sub-hosts/{{ ansible_ssh_host }}/Vagrantfile
@@ -23,7 +29,7 @@
       group: devops
       mode: '0755'
   - name: install prerequisites
-    ansible.builtin.apt:
+    apt:
       name: libfuse2
       state: present
   - name: move to vagrant-deploy and launch vms for this host
