@@ -51,6 +51,7 @@
 
   - name: move to vagrant-deploy and launch vms for this host
     shell:
-      cmd: sudo vagrant up
+      cmd: vagrant up
       chdir: /home/devops/vagrant-deploy/
+    become: yes
 
