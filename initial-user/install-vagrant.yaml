@@ -53,5 +53,5 @@
     shell:
       cmd: vagrant up
       chdir: /home/devops/vagrant-deploy/
-    become_user: devops
+    become: yes
 
