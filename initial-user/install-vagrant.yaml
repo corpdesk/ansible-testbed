@@ -54,10 +54,10 @@
       path: /home/devops/vagrant-deploy/.vagrant
       state: absent
 
-  - name: move to vagrant-deploy and initilize vagrant
-    shell:
-      cmd: vagrant init
-      chdir: /home/devops/vagrant-deploy/
+  # - name: move to vagrant-deploy and initilize vagrant
+  #   shell:
+  #     cmd: vagrant init
+  #     chdir: /home/devops/vagrant-deploy/
 
   - name: move to vagrant-deploy and launch vms for this host
     shell:
