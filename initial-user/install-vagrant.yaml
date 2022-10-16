@@ -31,18 +31,18 @@
   
   # ISSUE: The IP address configured for the host-only network is not within the allowed range
   # SOLUTION: https://stackoverflow.com/questions/70704093/the-ip-address-configured-for-the-host-only-network-is-not-within-the-allowed-ra
-  - name: Remove vagrant file
-    file:
-      path: sub-hosts/networks.conf
-      state: absent
+  # - name: Remove vagrant file
+  #   file:
+  #     path: sub-hosts/networks.conf
+  #     state: absent
 
-  - name: configure vagrant networks to comply with 192.168.1.0
-    copy:
-      src: sub-hosts/networks.conf
-      dest: /etc/vbox/networks.conf
-      owner: root
-      group: root
-      mode: '0644'
+  # - name: configure vagrant networks to comply with 192.168.1.0
+  #   copy:
+  #     src: sub-hosts/networks.conf
+  #     dest: /etc/vbox/networks.conf
+  #     owner: root
+  #     group: root
+  #     mode: '0644'
   
   - name: install prerequisites
     apt:
