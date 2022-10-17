@@ -4,29 +4,17 @@
 # ansible-playbook -i hosts.ini install-vagrant.yaml -kK -vvv
 - hosts: vagranthosts
   remote_user: devops
-  become: yes
+  # become: yes
 
   # roles: 
   # - robertdebock.virtualbox
   # - darkwizard242.vagrant
 
   tasks:
-  - name: Show host's ip
-    debug:
-      msg: "{{ ansible_ssh_host }}"
+  # - name: Show host's ip
+  #   debug:
+  #     msg: "{{ ansible_ssh_host }}"
 
-  - name: Remove previous vagrant start script file
-    file:
-      path: /home/devops/vagrant-deploy/start_vagrant.sh
-      state: absent
-
-  - name: install vagrant start script file
-    copy:
-      src: sub-hosts/start_vagrant.sh
-      dest: /home/devops/vagrant-deploy/start_vagrant.sh
-      owner: devops
-      group: devops
-      mode: '0755'
 
   - name: Remove vagrant file
     file:
@@ -56,27 +44,28 @@
   #     group: root
   #     mode: '0644'
   
-  - name: install prerequisites
-    apt:
-      name: libfuse2
-      state: present
+  # - name: install prerequisites
+  #   apt:
+  #     name: libfuse2
+  #     state: present
 
-  - name: remove previous .vagrant
-    ansible.builtin.file:
-      path: /home/devops/vagrant-deploy/.vagrant
-      state: absent
+  # - name: remove previous .vagrant
+  #   ansible.builtin.file:
+  #     path: /home/devops/vagrant-deploy/.vagrant
+  #     state: absent
 
   # - name: move to vagrant-deploy and initilize vagrant
   #   shell:
   #     cmd: vagrant init
   #     chdir: /home/devops/vagrant-deploy/
 
-  # - name: move to vagrant-deploy and launch vms for this host
-  #   shell:
-  #     cmd: vagrant up
-  #     chdir: /home/devops/vagrant-deploy/
-
   - name: move to vagrant-deploy and launch vms for this host
     shell:
-      cmd: sh /home/devops/vagrant-deploy/start_vagrant.sh
+      cmd: vagrant up
+      chdir: /home/devops/vagrant-deploy/
+
+  # - name: move to vagrant-deploy and launch vms for this host
+  #   shell:
+  #     cmd: sh /home/devops/vagrant-deploy/start_vagrant.sh
+  #     become_user: devops
 
