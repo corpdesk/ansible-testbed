@@ -49,10 +49,10 @@
   #     name: libfuse2
   #     state: present
 
-  # - name: remove previous .vagrant
-  #   ansible.builtin.file:
-  #     path: /home/devops/vagrant-deploy/.vagrant
-  #     state: absent
+  - name: remove previous .vagrant
+    ansible.builtin.file:
+      path: /home/devops/vagrant-deploy/.vagrant
+      state: absent
 
   # - name: move to vagrant-deploy and initilize vagrant
   #   shell:
