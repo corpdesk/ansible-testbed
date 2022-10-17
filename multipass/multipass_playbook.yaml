@@ -1,0 +1,16 @@
+---
+
+- hosts: multipass
+
+  become: yes
+
+  tasks:
+
+    - name: install snap
+      apt:
+        name: snapd
+
+    - name: Install foo
+      community.general.snap:
+        name:
+          - multipass
