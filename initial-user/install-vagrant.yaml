@@ -31,9 +31,9 @@
   #     name: vagrant
   #     state: absent
 
-  - name: Install vitualbox
+  - name: Install virtualbox
     ansible.builtin.apt:
-      name: vitualbox
+      name: virtualbox
       state: present
 
   - name: Install vagrant
