@@ -21,16 +21,16 @@
   - name: Upgrade all apt packages
     apt: upgrade=dist force_apt_get=yes
 
-  - name: Install vitualbox
-    ansible.builtin.apt:
-      name: vitualbox
-      state: absent
+  # - name: Install vitualbox
+  #   ansible.builtin.apt:
+  #     name: vitualbox
+  #     state: absent
 
-  - name: Install vagrant
-    ansible.builtin.apt:
-      name: vagrant
-      state: absent
-      
+  # - name: Install vagrant
+  #   ansible.builtin.apt:
+  #     name: vagrant
+  #     state: absent
+
   - name: Install vitualbox
     ansible.builtin.apt:
       name: vitualbox
