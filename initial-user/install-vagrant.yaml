@@ -4,7 +4,7 @@
 # ansible-playbook -i hosts.ini install-vagrant.yaml -kK -vvv
 - hosts: vagranthosts
   remote_user: devops
-  # become: yes
+  become: yes
 
   # roles: 
   # - robertdebock.virtualbox
@@ -88,6 +88,7 @@
     shell:
       cmd: vagrant up
       chdir: /home/devops/vagrant-deploy/
+    become_user: devops
 
   # - name: move to vagrant-deploy and launch vms for this host
   #   shell:
