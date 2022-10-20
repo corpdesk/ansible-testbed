@@ -84,6 +84,11 @@
   #     cmd: vagrant init
   #     chdir: /home/devops/vagrant-deploy/
 
+  - name: Restart network manager for virtualbox 
+    shell:
+      cmd: modprobe vboxnetadp
+    become: yes
+
   - name: move to vagrant-deploy and launch vms for this host
     shell:
       cmd: vagrant up
