@@ -1,6 +1,7 @@
 ---
 # ansible-galaxy install -p ./roles robertdebock.virtualbox
 # ansible-galaxy install -p ./roles darkwizard242.vagrant
+# ansible-galaxy install -p ./roles install hispanico.nginx_revproxy
 # ansible-playbook -i hosts.ini install-vagrant.yaml -kK -vvv
 - hosts: vagranthosts
   remote_user: devops

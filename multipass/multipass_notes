@@ -1,0 +1,1 @@
+multipass launch --name enginx-revproxy -c 2 -d 5G -m 4G --network en0 --network name=bridge0,mode=manual
