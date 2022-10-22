@@ -1,13 +1,15 @@
 https://linuxhint.com/install-configure-haproxy-ubuntu-22-04/
 intall:
 sudo apt install haproxy -y
+sudo systemctl enable haproxy
 remove:
 sudo apt purge haproxy -y
 
 option 2:
-sudo add-apt-repository ppa:vbernat/haproxy-2.4 -y
+sudo add-apt-repository ppa:vbernat/haproxy-2.6 -y
 sudo apt update
-sudo apt install haproxy=2.4.\* -y
+sudo apt install haproxy=2.6.\* -y
+sudo systemctl enable haproxy
 
 Configuration:
 sudo nano /etc/haproxy/haproxy.cfg
