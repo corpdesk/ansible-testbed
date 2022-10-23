@@ -57,9 +57,9 @@
       enabled: yes
   
   - name: configure haproxy.cfg file
-    template:
-      src: "{{ ansible_ssh_host }}/haproxy.cfg.j2"
-      dest: "/etc/haproxy/haproxy.cfg"
+    copy:
+      src: sub-hosts/{{ ansible_ssh_host }}/haproxy.cfg.j2
+      dest: /etc/haproxy/haproxy.cfg
 
   - name: " haproxy service start"
     service:
