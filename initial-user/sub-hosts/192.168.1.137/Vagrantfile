@@ -25,6 +25,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     app.vm.network :private_network, ip: "192.168.60.202"
   end
 
+  # vagrant server 02
+  config.vm.define "app" do |app|
+    app.vm.hostname = "orc-app3.test"
+    app.vm.network :private_network, ip: "192.168.60.203"
+  end
+
   # # Database server1
   # config.vm.define "db" do |db|
   #   db.vm.hostname = "orc-db1.test"

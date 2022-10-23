@@ -1,0 +1,82 @@
+global
+        log /dev/log    local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+        stats timeout 30s
+        user haproxy
+        group haproxy
+        daemon
+
+        # Default SSL material locations
+        ca-base /etc/ssl/certs
+        crt-base /etc/ssl/private
+
+        # See: https://ssl-config.mozilla.org/#server=haproxy&server-version=2.0.3&config=intermediate
+        ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1>
+        ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+        ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+
+defaults
+        log     global
+        mode    http
+        option  httplog
+        option  dontlognull
+        timeout connect 5000
+        timeout client  50000
+        timeout server  50000
+        errorfile 400 /etc/haproxy/errors/400.http
+        errorfile 403 /etc/haproxy/errors/403.http
+        errorfile 408 /etc/haproxy/errors/408.http
+        errorfile 500 /etc/haproxy/errors/500.http
+        errorfile 502 /etc/haproxy/errors/502.http
+        errorfile 503 /etc/haproxy/errors/503.http
+        errorfile 504 /etc/haproxy/errors/504.http
+
+frontend mysql-f-ssh-01
+        bind *:7122
+        stats uri /haproxy?stats
+        use_backend be-ssh-01
+
+backend be-ssh-01
+        server mysql-01 192.168.60.201:22
+
+frontend mysql-f-mysql-01
+        bind *:6201
+        stats uri /haproxy?stats
+        use_backend be-mysql-01
+
+backend be-mysql-01
+        server mysql-01 192.168.60.201:3306
+
+frontend mysql-f-ssh-02
+        bind *:7222
+        stats uri /haproxy?stats
+        use_backend be-ssh-02
+
+backend be-ssh-02
+        server mysql-01 192.168.60.202:22
+
+frontend mysql-f-mysql-02
+        bind *:6202
+        stats uri /haproxy?stats
+        use_backend be-mysql-02
+
+backend be-mysql-02
+        server mysql-01 192.168.60.202:3306
+
+frontend mysql-f-ssh-03
+        bind *:7322
+        stats uri /haproxy?stats
+        use_backend be-ssh-02
+
+backend be-ssh-03
+        server mysql-01 192.168.60.203:22
+
+frontend mysql-f-mysql-03
+        bind *:7422
+        stats uri /haproxy?stats
+        use_backend be-mysql-03
+
+backend be-mysql-03
+        server mysql-01 192.168.60.203:3306

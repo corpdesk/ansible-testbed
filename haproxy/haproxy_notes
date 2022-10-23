@@ -1,3 +1,4 @@
+https://www.linuxtechi.com/install-configure-haproxy-on-ubuntu/
 https://linuxhint.com/install-configure-haproxy-ubuntu-22-04/
 intall:
 sudo apt install haproxy -y
@@ -13,3 +14,32 @@ sudo systemctl enable haproxy
 
 Configuration:
 sudo nano /etc/haproxy/haproxy.cfg
+
+Ansible methods:
+// https://28gauravkhore.medium.com/how-to-configure-the-haproxy-using-the-ansible-and-also-how-to-configure-haproxy-dynamically-f18a55de3a66
+// https://www.redhat.com/sysadmin/reverse-proxy-ansible
+// https://aws.plainenglish.io/ansible-for-configuring-haproxy-load-balancer-and-webservers-on-aws-a96cd99273db
+  - name: Remove haproxy stable repository from PPA and install its signing key on Ubuntu target
+    ansible.builtin.apt_repository:
+      repo: ppa:vbernat/haproxy-2.4
+      state: absent
+
+  - name: Add haproxy stable repository from PPA and install its signing key on Ubuntu target
+    ansible.builtin.apt_repository:
+      repo: ppa:vbernat/haproxy-2.6
+      state: present
+
+  - name: Install haproxy
+    ansible.builtin.apt:
+      name: haproxy
+      state: present
+
+  - name: Enable haproxy
+    ansible.builtin.systemd:
+      name: haproxy
+      state: started
+      enabled: yes
+
+// Roles:
+
+// https://github.com/geerlingguy/ansible-role-haproxy

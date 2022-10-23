@@ -8,5 +8,5 @@ curl -fsSL https://download.webmin.com/jcameron-key.asc | sudo gpg --dearmor -o 
 sed -i '/download.webmin/d' /etc/apt/sources.list
 # add line to /etc/apt/sources.list: 
 sudo echo "deb [signed-by=/usr/share/keyrings/webmin.gpg] http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
-sudo apt update
-sudo apt install webmin
+sudo apt update -y
+sudo apt install webmin -y
