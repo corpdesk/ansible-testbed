@@ -33,7 +33,6 @@
 - name: create symlink for nginx_rev_proxy
   shell:
     cmd: ln -s /etc/nginx/sites-available/nginx_rev_proxy /etc/nginx/sites-enabled/
-    become: yes
 
 - name: " nginx service restart"
   service:
