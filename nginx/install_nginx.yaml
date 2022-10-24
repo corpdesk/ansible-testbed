@@ -12,15 +12,20 @@
     state: started
     enabled: yes
   
-- name: Remove nginx site config file
+- name: Remove nginx site config file1
   file:
     path: /etc/nginx/sites-available/nginx_rev_proxy
+    state: absent
+
+- name: Remove nginx site config file2
+  file:
+    path: /etc/nginx/nginx_rev_proxy
     state: absent
 
 - name: configure nginx.cfg file
   copy:
     src: sub-hosts/{{ ansible_ssh_host }}/nginx_rev_proxy
-    dest: /etc/nginx/sites-available/nginx_rev_proxy
+    dest: /etc/nginx/nginx_rev_proxy
 
 
 # sudo ln -s /etc/nginx/sites-available/your_domain /etc/nginx/sites-enabled/
@@ -32,7 +37,7 @@
 
 - name: create symlink for nginx_rev_proxy
   shell:
-    cmd: ln -s /etc/nginx/sites-available/nginx_rev_proxy /etc/nginx/sites-enabled/
+    cmd: ln -s /etc/nginx/nginx_rev_proxy /etc/nginx/
 
 - name: " nginx service restart"
   service:
