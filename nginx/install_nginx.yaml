@@ -1,17 +1,6 @@
 ---
 # INSTALL AND CONFIGURE NGINX
 
-- name: Update repositories cache and install "nginx" package
-  ansible.builtin.apt:
-    name: nginx
-    update_cache: yes
-
-- name: Enable nginx
-  ansible.builtin.systemd:
-    name: nginx
-    state: started
-    enabled: yes
-  
 - name: Remove nginx site config file1
   file:
     path: /etc/nginx/sites-available/nginx_rev_proxy
@@ -22,11 +11,21 @@
     path: /etc/nginx/nginx_rev_proxy
     state: absent
 
+- name: Update repositories cache and install "nginx" package
+  ansible.builtin.apt:
+    name: nginx
+    update_cache: yes
+
 - name: configure nginx.cfg file
   copy:
     src: sub-hosts/{{ ansible_ssh_host }}/nginx_rev_proxy
     dest: /etc/nginx/nginx_rev_proxy
 
+# - name: Enable nginx
+#   ansible.builtin.systemd:
+#     name: nginx
+#     state: started
+#     enabled: yes
 
 # sudo ln -s /etc/nginx/sites-available/your_domain /etc/nginx/sites-enabled/
 # - name: Creating a symlink
