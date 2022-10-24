@@ -16,21 +16,21 @@
   #   debug:
   #     msg: "{{ ansible_ssh_host }}"
 
-  - name: Remove haproxy stable repository from PPA and install its signing key on Ubuntu target
-    ansible.builtin.apt_repository:
-      repo: ppa:vbernat/haproxy-2.4
-      state: absent
+  # - name: Remove haproxy stable repository from PPA and install its signing key on Ubuntu target
+  #   ansible.builtin.apt_repository:
+  #     repo: ppa:vbernat/haproxy-2.4
+  #     state: absent
 
-  - name: Add haproxy stable repository from PPA and install its signing key on Ubuntu target
-    ansible.builtin.apt_repository:
-      repo: ppa:vbernat/haproxy-2.6
-      state: present
+  # - name: Add haproxy stable repository from PPA and install its signing key on Ubuntu target
+  #   ansible.builtin.apt_repository:
+  #     repo: ppa:vbernat/haproxy-2.6
+  #     state: present
 
-  - name: Update apt-get repo and cache
-    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  # - name: Update apt-get repo and cache
+  #   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
 
-  - name: Upgrade all apt packages
-    apt: upgrade=dist force_apt_get=yes
+  # - name: Upgrade all apt packages
+  #   apt: upgrade=dist force_apt_get=yes
 
   # INSTALL AND CONFIGURE HAPROXY
   # - name: Install nginx
@@ -44,32 +44,32 @@
   #     state: started
   #     enabled: yes
 
-  # INSTALL AND CONFIGURE HAPROXY
-  - name: Install haproxy
-    ansible.builtin.apt:
-      name: haproxy
-      state: present
+  # # INSTALL AND CONFIGURE HAPROXY
+  # - name: Install haproxy
+  #   ansible.builtin.apt:
+  #     name: haproxy
+  #     state: present
 
-  - name: Enable haproxy
-    ansible.builtin.systemd:
-      name: haproxy
-      state: started
-      enabled: yes
+  # - name: Enable haproxy
+  #   ansible.builtin.systemd:
+  #     name: haproxy
+  #     state: started
+  #     enabled: yes
   
-  - name: Remove haproxy.cfg file
-    file:
-      path: /etc/haproxy/haproxy.cfg
-      state: absent
+  # - name: Remove haproxy.cfg file
+  #   file:
+  #     path: /etc/haproxy/haproxy.cfg
+  #     state: absent
 
-  - name: configure haproxy.cfg file
-    copy:
-      src: sub-hosts/{{ ansible_ssh_host }}/haproxy.cfg
-      dest: /etc/haproxy/haproxy.cfg
+  # - name: configure haproxy.cfg file
+  #   copy:
+  #     src: sub-hosts/{{ ansible_ssh_host }}/haproxy.cfg
+  #     dest: /etc/haproxy/haproxy.cfg
 
-  - name: " haproxy service start"
-    service:
-      name: haproxy
-      state: restarted
+  # - name: " haproxy service start"
+  #   service:
+  #     name: haproxy
+  #     state: restarted
 
   # - name: Install vagrant
   #   ansible.builtin.apt:
@@ -144,4 +144,7 @@
   #   shell:
   #     cmd: sh /home/devops/vagrant-deploy/start_vagrant.sh
   #     become_user: devops
+
+  # - import_tasks: ../haproxy/install_haproxy.yml
+  - import_tasks: ../nginx/install_nginx.yml
 
