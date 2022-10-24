@@ -145,6 +145,6 @@
   #     cmd: sh /home/devops/vagrant-deploy/start_vagrant.sh
   #     become_user: devops
 
-  # - import_tasks: ../haproxy/install_haproxy.yml
-  - import_tasks: ../nginx/install_nginx.yml
+  # - import_tasks: ../haproxy/install_haproxy.yaml
+  - import_tasks: ../nginx/install_nginx.yaml
 
