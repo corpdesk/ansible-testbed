@@ -24,11 +24,16 @@
 
 
 # sudo ln -s /etc/nginx/sites-available/your_domain /etc/nginx/sites-enabled/
-- name: Creating a symlink
-  ansible.builtin.file:
-    src: /etc/nginx/sites-available/nginx_rev_proxy
-    dest: /etc/nginx/sites-enabled/
-    state: link
+# - name: Creating a symlink
+#   ansible.builtin.file:
+#     src: /etc/nginx/sites-available/nginx_rev_proxy
+#     dest: /etc/nginx/sites-enabled/
+#     state: link
+
+- name: create symlink for nginx_rev_proxy
+  shell:
+    cmd: ln -s /etc/nginx/sites-available/nginx_rev_proxy /etc/nginx/sites-enabled/
+    become: yes
 
 - name: " nginx service restart"
   service:
