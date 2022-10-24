@@ -34,9 +34,9 @@
 #     dest: /etc/nginx/sites-enabled/
 #     state: link
 
-- name: create symlink for nginx_rev_proxy
-  shell:
-    cmd: ln -s /etc/nginx/nginx_rev_proxy /etc/nginx/
+# - name: create symlink for nginx_rev_proxy
+#   shell:
+#     cmd: ln -s /etc/nginx/nginx_rev_proxy /etc/nginx/
 
 - name: " nginx service restart"
   service:
