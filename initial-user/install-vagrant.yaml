@@ -140,9 +140,9 @@
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 
-  - name: kill host fowarding port
-    shell:
-      cmd: kill -9 $(lsof -t -i:9122)
+  # - name: kill host fowarding port
+  #   shell:
+  #     cmd: kill -9 $(lsof -t -i:9001)
 
   - name: move to vagrant-deploy and launch vms for this host
     shell:
