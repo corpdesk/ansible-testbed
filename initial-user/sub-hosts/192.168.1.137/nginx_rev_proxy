@@ -4,7 +4,7 @@ stream {
   }
 
   server {
-    listen 6201;
+    listen 7201;
     proxy_pass ssh-01;
   }
 
@@ -49,7 +49,7 @@ stream {
   }
 
   server {
-    listen 7222;
+    listen 7322;
     proxy_pass mysql-02;
   }
 }
