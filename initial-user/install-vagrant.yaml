@@ -134,9 +134,15 @@
       cmd: modprobe vboxnetadp
     become: yes
 
+  # - name: move to vagrant-deploy and stop vms for this host
+  #   shell:
+  #     cmd: vagrant halt
+  #     chdir: /home/devops/vagrant-deploy/
+  #   become_user: devops
+
   - name: move to vagrant-deploy and launch vms for this host
     shell:
-      cmd: vagrant up
+      cmd: vagrant reload
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 
