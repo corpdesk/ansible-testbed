@@ -106,6 +106,9 @@
       path: sub-hosts/networks.conf
       state: absent
 
+  - name: Ensures /etc/vbox/ dir exists
+    file: path=/etc/vbox/ state=directory
+
   - name: configure vagrant networks to comply with 192.168.1.0
     copy:
       src: sub-hosts/networks.conf
