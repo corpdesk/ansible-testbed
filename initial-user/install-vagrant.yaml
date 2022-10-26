@@ -98,6 +98,14 @@
       owner: devops
       group: devops
       mode: '0755'
+
+  - name: place initial user script
+    copy:
+      src: setup_initial_user.sh
+      dest: /home/devops/vagrant-deploy/setup_initial_user.sh
+      owner: devops
+      group: devops
+      mode: '0755'
   
   # ISSUE: The IP address configured for the host-only network is not within the allowed range
   # SOLUTION: https://superuser.com/questions/1691783/cannot-create-a-private-network-from-vagrant-in-virtualbox-after-updating-it
@@ -140,9 +148,19 @@
 
   - name: move to vagrant-deploy and stop vms for this host
     shell:
-      cmd: vagrant destroy
+      cmd: vagrant destroy -f
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
+  
+  - name: Recursively remove .vagrant dir
+    ansible.builtin.file:
+      path: /home/devops/vagrant-deploy/.vagrant
+      state: absent
+
+  - name: Restart network manager for virtualbox 
+    shell:
+      cmd: modprobe vboxnetadp
+    become: yes
 
   # - name: kill host fowarding port
   #   shell:
@@ -173,7 +191,7 @@
 
   - name: move to vagrant-deploy and launch vms for this host
     shell:
-      cmd: vagrant up --provision
+      cmd: vagrant up
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 

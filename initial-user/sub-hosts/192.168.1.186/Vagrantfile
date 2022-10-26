@@ -17,18 +17,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "app1" do |app|
     app.vm.hostname = "orc-app1.test"
     app.vm.network :private_network, ip: "192.168.60.221"
+    app.vm.network :forwarded_port, guest: 22, host: 7422
+    app.vm.provision :shell do |shell|
+        shell.path = "setup_initial_user.sh"
+    end
   end
 
   # vagrant server 12
   config.vm.define "app2" do |app|
     app.vm.hostname = "orc-app2.test"
     app.vm.network :private_network, ip: "192.168.60.222"
+    app.vm.network :forwarded_port, guest: 22, host: 7522
+    app.vm.provision :shell do |shell|
+        shell.path = "setup_initial_user.sh"
+    end
   end
 
   # vagrant server 13
   config.vm.define "app3" do |app|
     app.vm.hostname = "orc-app3.test"
     app.vm.network :private_network, ip: "192.168.60.223"
+    app.vm.network :forwarded_port, guest: 22, host: 7622
+    app.vm.provision :shell do |shell|
+        shell.path = "setup_initial_user.sh"
+    end
   end
 
   # # Database server1
