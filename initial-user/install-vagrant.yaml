@@ -146,7 +146,7 @@
 
   - name: move to vagrant-deploy and launch vms for this host
     shell:
-      cmd: vagrant up
+      cmd: vagrant up --provision
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 
