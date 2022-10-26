@@ -162,6 +162,11 @@
       cmd: modprobe vboxnetadp
     become: yes
 
+  - name: Vagrant hard halt 
+    shell:
+      cmd: pkill -9 VBoxHeadless
+    become: yes
+
   # - name: kill host fowarding port
   #   shell:
   #     cmd: kill -9 $(lsof -t -i:9001)
