@@ -153,6 +153,7 @@
     # shell: "ps -ef | grep -v grep | grep -w {{ PROCESS }} | awk '{print $2}'"
     shell: lsof -t -i:9122
     register: running_processes
+    ignore_errors: yes
 
   - name: Kill running processes
     shell: "kill {{ item }}"
