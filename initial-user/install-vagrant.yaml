@@ -166,6 +166,7 @@
     shell:
       cmd: pkill -9 VBoxHeadless
     become: yes
+    ignore_errors: yes
 
   # - name: kill host fowarding port
   #   shell:
