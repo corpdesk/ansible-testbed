@@ -183,5 +183,5 @@
   #     become_user: devops
 
   # - import_tasks: ../haproxy/install_haproxy.yaml
-  - import_tasks: ../nginx/install_nginx.yaml
+  # - import_tasks: ../nginx/install_nginx.yaml
 

@@ -16,21 +16,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # vagrant server 01.
-  config.vm.define "app" do |app|
+  config.vm.define "app1" do |app|
     app.vm.hostname = "orc-app1.test"
     app.vm.network :private_network, ip: "192.168.60.201"
     app.vm.network :forwarded_port, guest: 22, host: 9122
   end
 
   # vagrant server 02
-  config.vm.define "app" do |app|
+  config.vm.define "app2" do |app|
     app.vm.hostname = "orc-app2.test"
     # app.vm.network :private_network, ip: "192.168.60.202"
     app.vm.network :public_network, ip: "192.168.1.202"
   end
 
-  # vagrant server 02
-  config.vm.define "app" do |app|
+  # vagrant server 03
+  config.vm.define "app3" do |app|
     app.vm.hostname = "orc-app3.test"
     app.vm.network :private_network, ip: "192.168.60.203"
   end
