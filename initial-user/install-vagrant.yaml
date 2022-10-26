@@ -174,7 +174,7 @@
 
   - name: Get running processes
     # shell: "ps -ef | grep -v grep | grep -w {{ PROCESS }} | awk '{print $2}'"
-    shell: lsof -t -i:9122
+    shell: sudo lsof -i :7122-7622
     register: running_processes
     ignore_errors: yes
 
