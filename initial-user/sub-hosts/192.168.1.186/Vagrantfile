@@ -8,55 +8,35 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "bento/ubuntu-22.04"
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # setup devops user
+  config.vm.provision "file", source: "remove_devops.sh", destination: "remove_devops.sh"
+  config.vm.provision "file", source: "reset_environment.sh", destination: "reset_environment.sh"
+  config.vm.provision "shell", path: "setup_initial_user.sh"
+  # network setup
+  config.vm.network "public_network", bridge: "wlp2s0: Wi-Fi (AirPort)"
+
   config.vm.provider :virtualbox do |v|
-    v.memory = 1024
+    v.memory = 2048
     v.linked_clone = true
   end
 
   # vagrant server 11.
   config.vm.define "app1" do |app|
     app.vm.hostname = "orc-app1.test"
-    app.vm.network :private_network, ip: "192.168.60.221"
-    app.vm.network :forwarded_port, guest: 22, host: 7422
-    app.vm.provision :shell do |shell|
-        shell.path = "setup_initial_user.sh"
-    end
+    app.vm.network :public_network, ip: "192.168.1.221"
   end
 
   # vagrant server 12
   config.vm.define "app2" do |app|
     app.vm.hostname = "orc-app2.test"
-    app.vm.network :private_network, ip: "192.168.60.222"
-    app.vm.network :forwarded_port, guest: 22, host: 7522
-    app.vm.provision :shell do |shell|
-        shell.path = "setup_initial_user.sh"
-    end
+    app.vm.network :public_network, ip: "192.168.1.222"
   end
 
   # vagrant server 13
   config.vm.define "app3" do |app|
     app.vm.hostname = "orc-app3.test"
-    app.vm.network :private_network, ip: "192.168.60.223"
-    app.vm.network :forwarded_port, guest: 22, host: 7622
-    app.vm.provision :shell do |shell|
-        shell.path = "setup_initial_user.sh"
-    end
+    app.vm.network :public_network, ip: "192.168.1.223"
   end
 
-  # # Database server1
-  # config.vm.define "db" do |db|
-  #   db.vm.hostname = "orc-db1.test"
-  #   db.vm.network :private_network, ip: "192.168.60.6"
-  # end
-
-  # # Database server2
-  # config.vm.define "db" do |db|
-  #   db.vm.hostname = "orc-db2.test"
-  #   db.vm.network :private_network, ip: "192.168.60.7"
-  # end
-  # # Database server3
-  # config.vm.define "db" do |db|
-  #   db.vm.hostname = "orc-db3.test"
-  #   db.vm.network :private_network, ip: "192.168.60.8"
-  # end
 end
