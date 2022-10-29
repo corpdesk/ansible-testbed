@@ -1,0 +1,33 @@
+
+// create a directory
+mkdir -p ~/os
+// download vagrant file
+sudo wget https://app.vagrantup.com/bento/boxes/ubuntu-22.04/versions/202206.03.0/providers/virtualbox.box -O ~/os/ubuntu-22.04.box
+// 1. create a local custom http repository eg http://192.168.1.107/os/
+// 2. move to local repostitory: 
+mv ~/os/ubuntu-22.04.box /Users/goremo/Sites/os/ubuntu-22.04.box
+
+// create multipass instance
+multipass launch --name vagrant-optimal -c 2 -d 5G -m 4G --network en0 --network name=bridge0,mode=manual
+
+// ssh into the instance:
+multipass shell vagrant-optimal
+
+// install git and wget
+sudo apt install git wget
+
+// clone ansible-testbed
+git clone https://github.com/georemo/ansible-testbed.git
+
+// cd into initial-user project
+cd ansible-testbed/initial-user
+
+// install vagrant and virtualbox
+sudo sh setup_vagrant_host.sh
+
+// download vagrant box from local repository
+wget http://192.168.1.107/os/ubuntu-22.04.box
+
+// Follow instructions for manually setting up vagrant box based on 
+// https://gist.github.com/firmanelhakim/77b6ee7fb50883155eeefc9e0dc10b9b
+vagrant box add bento/ubuntu-22.04 ubuntu-22.04.box
