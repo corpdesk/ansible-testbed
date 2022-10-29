@@ -125,10 +125,10 @@
   
   # ISSUE: The IP address configured for the host-only network is not within the allowed range
   # SOLUTION: https://superuser.com/questions/1691783/cannot-create-a-private-network-from-vagrant-in-virtualbox-after-updating-it
-  - name: Remove vagrant file
-    file:
-      path: sub-hosts/networks.conf
-      state: absent
+  # - name: Remove vagrant file
+  #   file:
+  #     path: sub-hosts/networks.conf
+  #     state: absent
 
   # - name: Ensures /etc/vbox/ dir exists
   #   file: path=/etc/vbox/ state=directory
@@ -147,10 +147,10 @@
   #     name: libfuse2
   #     state: present
 
-  - name: remove previous .vagrant
-    ansible.builtin.file:
-      path: /home/devops/vagrant-deploy/.vagrant
-      state: absent
+  # - name: remove previous .vagrant
+  #   ansible.builtin.file:
+  #     path: /home/devops/vagrant-deploy/.vagrant
+  #     state: absent
 
   # - name: move to vagrant-deploy and initilize vagrant
   #   shell:
@@ -213,7 +213,7 @@
 
   - name: move to vagrant-deploy and launch vms for this host
     shell:
-      cmd: vagrant up
+      cmd: vagrant provision
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 

@@ -19,7 +19,7 @@ sudo sh setup_initial_user.sh
 
 printf "\nStart 1st su:"
 sudo sh setup_nfs_server.sh
-sudo sh setup_pub_cert.sh -n id_rsa -d /var/nfs/p_key
+sudo sh setup_pub_cert.sh -n id_rsa -d /var/nfs/share
 printf "\nEnd 1st su:\n"
 
 

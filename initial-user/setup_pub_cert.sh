@@ -7,13 +7,13 @@
 # Usage:
 # sudo sh setup_pub_cert.sh -n sshKeyName -d sharedDirectory
 # Example:
-# sudo sh setup_pub_cert.sh -n ansibleServer -d /var/nfs/p_key
+# sudo sh setup_pub_cert.sh -n ansibleServer -d /var/nfs/share
 
 helpFunction()
 {
     echo ""
     echo "Usage: $0 -n sshKeyName -d sharedDirectory"
-    echo "Example: $0 -n ansibleServer -d /var/nfs/p_key"
+    echo "Example: $0 -n ansibleServer -d /var/nfs/share"
     echo -e "\t-n hostname or ip for ansible server"
     echo -e "\t-d shared directory"
     exit 1 # Exit script after printing help

@@ -11,7 +11,7 @@ sudo sh remove_devops.sh
 sudo ufw allow from 192.168.1.0/24 to any port 873
 
 # Reset: remove previous versions
-# sudo rm /var/nfs/p_key/ansibleServer.pub
+# sudo rm /var/nfs/share/ansibleServer.pub
 # sudo rm /home/ubuntu/.ssh/ansibleServer.pub
 # sudo rm /root/.ssh/ansibleServer.pub
 
