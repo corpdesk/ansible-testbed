@@ -223,6 +223,11 @@
       dest: /home/devops/vagrant-deploy/ubuntu-22.04.box
       force: yes
 
+  - name: add the vagrant box
+    shell:
+      cmd: vagrant box remove -f bento/ubuntu-22.04
+      chdir: /home/devops/vagrant-deploy/
+    become_user: devops
 
   - name: add the vagrant box
     shell:
