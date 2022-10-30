@@ -33,6 +33,18 @@ wget http://192.168.1.107/os/ubuntu-22.04.box -O ~/ubuntu-22.04.box
 // Ref2: https://stackoverflow.com/questions/45167945/can-i-manually-download-a-vagrant-box-file-and-use-it-if-so-how
 vagrant box add --name bento/ubuntu-22.04 ubuntu-22.04.box
 
+// check if version directory exists
+    if [ -d "~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0" ] 
+    then
+        echo "update files" 
+        mv -f ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0/* ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0/.
+    else
+        echo "create the folder"
+        mv -f ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0/* ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0/.
+    fi
+
+
+
 // if not in ansible-testbed/initial-user folder (for testing vagrant):
 wget http://192.168.1.107/os/Vagrantfile -O ~/Vagrantfile
 wget http://192.168.1.107/os/remove_devops.sh -O ~/remove_devops.sh

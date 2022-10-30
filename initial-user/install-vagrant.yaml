@@ -223,11 +223,19 @@
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 
+  - name: replace existing, if any
+    shell:
+      cmd: mv -f ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0 ls ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0
+    become_user: devops
+
   - name: launch vms for this host
     shell:
       cmd: vagrant provision
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
+
+  # replace existing
+  # mv -f source target
 
   # - name: move to vagrant-deploy and launch vms for this host
   #   shell:
@@ -236,4 +244,9 @@
 
   # - import_tasks: ../haproxy/install_haproxy.yaml
   # - import_tasks: ../nginx/install_nginx.yaml
+
+  # - name: Change the working directory to somedir/ before executing the command
+  #   ansible.builtin.shell: somescript.sh
+  #   args:
+  #     chdir: /home/devops/vagrant-deploy/
 
