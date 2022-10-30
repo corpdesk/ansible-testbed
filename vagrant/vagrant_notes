@@ -2,7 +2,7 @@
 // create a directory
 mkdir -p ~/os
 // download vagrant file
-sudo wget https://app.vagrantup.com/bento/boxes/ubuntu-22.04/versions/202206.03.0/providers/virtualbox.box -O ~/os/ubuntu-22.04.box
+wget https://app.vagrantup.com/bento/boxes/ubuntu-22.04/versions/202206.03.0/providers/virtualbox.box -O ~/os/ubuntu-22.04.box
 // 1. create a local custom http repository eg http://192.168.1.107/os/
 // 2. move to local repostitory: 
 mv ~/os/ubuntu-22.04.box /Users/goremo/Sites/os/ubuntu-22.04.box
@@ -26,8 +26,32 @@ cd ansible-testbed/initial-user
 sudo sh setup_vagrant_host.sh
 
 // download vagrant box from local repository
-wget http://192.168.1.107/os/ubuntu-22.04.box
+wget http://192.168.1.107/os/ubuntu-22.04.box -O ~/ubuntu-22.04.box
 
 // Follow instructions for manually setting up vagrant box based on 
-// https://gist.github.com/firmanelhakim/77b6ee7fb50883155eeefc9e0dc10b9b
-vagrant box add bento/ubuntu-22.04 ubuntu-22.04.box
+// Ref1: https://gist.github.com/firmanelhakim/77b6ee7fb50883155eeefc9e0dc10b9b
+// Ref2: https://stackoverflow.com/questions/45167945/can-i-manually-download-a-vagrant-box-file-and-use-it-if-so-how
+vagrant box add --name bento/ubuntu-22.04 ubuntu-22.04.box
+
+// if not in ansible-testbed/initial-user folder (for testing vagrant):
+wget http://192.168.1.107/os/Vagrantfile -O ~/Vagrantfile
+wget http://192.168.1.107/os/remove_devops.sh -O ~/remove_devops.sh
+wget http://192.168.1.107/os/reset_environment.sh -O ~/reset_environment.sh
+wget http://192.168.1.107/os/setup_initial_user.sh -O ~/setup_initial_user.sh
+vagrant up
+
+
+//////////////////////////////////
+// set up various modes for running ansible
+// 1. fresh
+// 2. refresh
+// 3. maintenance
+
+//////////////////////////////////
+// review ansible process for optimizatin
+// 1. group related cmds and apply script where possible
+// 2. apply conditional paths where possible
+// 3. apply variables where possible
+// 4. create a dedicated project
+
+

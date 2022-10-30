@@ -211,7 +211,19 @@
     with_items: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
     # -----------------------------------
 
-  - name: move to vagrant-deploy and launch vms for this host
+  - name: download vagrant box
+    shell:
+      cmd: wget http://192.168.1.107/os/ubuntu-22.04.box -O ubuntu-22.04.box
+      chdir: /home/devops/vagrant-deploy/
+    become_user: devops
+
+  - name: add the vagrant box
+    shell:
+      cmd: vagrant box add --name bento/ubuntu-22.04 ubuntu-22.04.box
+      chdir: /home/devops/vagrant-deploy/
+    become_user: devops
+
+  - name: launch vms for this host
     shell:
       cmd: vagrant provision
       chdir: /home/devops/vagrant-deploy/
