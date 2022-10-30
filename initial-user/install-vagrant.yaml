@@ -211,11 +211,18 @@
     with_items: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
     # -----------------------------------
 
+  # - name: download vagrant box from local repository
+  #   shell:
+  #     cmd: wget http://192.168.1.107/os/ubuntu-22.04.box -O ubuntu-22.04.box
+  #     chdir: /home/devops/vagrant-deploy/
+  #   become_user: devops
+
   - name: download vagrant box from local repository
-    shell:
-      cmd: wget http://192.168.1.107/os/ubuntu-22.04.box -O ubuntu-22.04.box
-      chdir: /home/devops/vagrant-deploy/
-    become_user: devops
+    get_url: 
+      url: http://192.168.1.107/os/ubuntu-22.04.box 
+      dest: /home/devops/vagrant-deploy/ubuntu-22.04.box
+      force: yes
+
 
   - name: add the vagrant box
     shell:
