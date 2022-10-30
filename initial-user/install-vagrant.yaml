@@ -245,11 +245,11 @@
       cmd: echo -n "https://vagrantcloud.com/bento/ubuntu-22.04" > ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/metadata_url
     become_user: devops
 
-  - name: launch vms for this host
-    shell:
-      cmd: vagrant up
-      chdir: /home/devops/vagrant-deploy/
-    become_user: devops
+  # - name: launch vms for this host
+  #   shell:
+  #     cmd: vagrant up
+  #     chdir: /home/devops/vagrant-deploy/
+  #   become_user: devops
 
   # replace existing
   # mv -f source target
