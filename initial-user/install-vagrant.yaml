@@ -211,7 +211,7 @@
     with_items: "{{ killed_processes.results | select('failed') | map(attribute='item') | list }}"
     # -----------------------------------
 
-  - name: download vagrant box
+  - name: download vagrant box from local repository
     shell:
       cmd: wget http://192.168.1.107/os/ubuntu-22.04.box -O ubuntu-22.04.box
       chdir: /home/devops/vagrant-deploy/
@@ -223,9 +223,10 @@
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 
+# cp -TRv foo/ bar/
   - name: replace existing, if any
     shell:
-      cmd: mv -f ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0 ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0
+      cmd: cp -TRv ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0 ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0
     become_user: devops
 
   - name: launch vms for this host
