@@ -225,7 +225,7 @@
 
   - name: add the vagrant box
     shell:
-      cmd: vagrant box remove -f bento/ubuntu-22.04
+      cmd: vagrant box remove -f bento/ubuntu-22.04 --box-version 202206.13.0
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 
