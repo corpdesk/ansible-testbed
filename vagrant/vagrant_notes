@@ -41,7 +41,7 @@ vagrant box add --name bento/ubuntu-22.04 ubuntu-22.04.box
     else
         echo "create the folder"
         mv -f ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0/* ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0/.
-        echo -n "https://vagrantcloud.com/bento/ubuntu-22.04" > bento-VAGRANTSLASH-ubuntu-22.04/metadata_url
+        echo -n "https://vagrantcloud.com/bento/ubuntu-22.04" > ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/metadata_url
     fi
 
 
