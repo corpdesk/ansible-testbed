@@ -225,7 +225,7 @@
 
   - name: replace existing, if any
     shell:
-      cmd: mv -f ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0 ls ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0
+      cmd: mv -f ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0 ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0
     become_user: devops
 
   - name: launch vms for this host
