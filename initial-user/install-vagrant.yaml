@@ -223,7 +223,6 @@
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
 
-# cp -TRv foo/ bar/
   - name: replace existing, if any
     shell:
       cmd: cp -TRv ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0 ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0
