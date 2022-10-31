@@ -12,7 +12,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # setup devops user
   config.vm.provision "file", source: "remove_devops.sh", destination: "remove_devops.sh"
   config.vm.provision "file", source: "reset_environment.sh", destination: "reset_environment.sh"
-  config.vm.provision "shell", path: "setup_initial_user.sh"
+  config.vm.provision "file", path: "setup_initial_user.sh"
   # network setup
   config.vm.network "public_network", bridge: "wlp2s0: Wi-Fi (AirPort)", auto_config: true
 
