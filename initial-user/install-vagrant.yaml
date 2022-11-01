@@ -228,8 +228,9 @@
 
   - name: Get running processes
     # shell: "ps -ef | grep -v grep | grep -w {{ PROCESS }} | awk '{print $2}'"
-    shell: sudo lsof -t -i:7122-7622
+    shell: lsof -t -i:7122-7622
     register: running_processes
+    become: yes
     ignore_errors: yes
 
   - name: Kill running processes
@@ -265,6 +266,7 @@
       cmd: vagrant box remove -f bento/ubuntu-22.04 --box-version 0
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
+    ignore_errors: yes
 
   - name: add the vagrant box
     shell:
