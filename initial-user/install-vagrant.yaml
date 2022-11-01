@@ -124,6 +124,7 @@
 
   - name: upload setup files
     copy: src={{ item.src }} dest={{ item.dest }}
+    delegate_to: '{{item}}'
     with_items:
       - { src: '../ansible.cfg', dest: '/home/devops/vagrant-deploy/ansible.cfg', owner: devops, mode: '0755' }
       - { src: '../hosts.ini', dest: '/home/devops/vagrant-deploy/hosts.ini', owner: devops, mode: '0755' }
