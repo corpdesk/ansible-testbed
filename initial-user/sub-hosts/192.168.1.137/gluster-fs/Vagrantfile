@@ -30,32 +30,32 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # vagrant server 11.
-  config.vm.define "server_186_236" do |app|
-    app.vm.hostname = "orc-server_186_236.test"
+  config.vm.define "server-137-236" do |app|
+    app.vm.hostname = "orc-server-137-236.test"
     app.vm.network :public_network, ip: "192.168.1.236"
   end
 
   # vagrant server 12
-  config.vm.define "server_186_237" do |app|
-    app.vm.hostname = "orc-server_186_237.test"
+  config.vm.define "server-137-237" do |app|
+    app.vm.hostname = "orc-server-137-237.test"
     app.vm.network :public_network, ip: "192.168.1.237"
   end
 
   # vagrant server 13
-  config.vm.define "server_186_238" do |app|
+  config.vm.define "server-137-238" do |app|
     app.vm.hostname = "orc-app3.test"
     app.vm.network :public_network, ip: "192.168.1.238"
   end
 
   # vagrant server 12
-  config.vm.define "server_186_239" do |app|
-    app.vm.hostname = "orc-server_186_239.test"
+  config.vm.define "server-137-239" do |app|
+    app.vm.hostname = "orc-server-137-239.test"
     app.vm.network :public_network, ip: "192.168.1.239"
   end
 
   # vagrant server 13
-  config.vm.define "server_186_240" do |app|
-    app.vm.hostname = "orc-server_186_430.test"
+  config.vm.define "server-137-240" do |app|
+    app.vm.hostname = "orc-server_137_240.test"
     app.vm.network :public_network, ip: "192.168.1.240"
   end
 
