@@ -86,55 +86,73 @@
       name: vagrant
       state: present
 
+  - name: Remove ansible.cfg file
+    ansible.builtin.file:
+      path: /home/devops/vagrant-deploy/ansible.cfg
+      state: absent
+
+  - name: Remove hosts.ini file
+    ansible.builtin.file:
+      path: /home/devops/vagrant-deploy/hosts.ini
+      state: absent
+
   - name: Remove setup_initial_user.yaml file
     ansible.builtin.file:
       path: /home/devops/vagrant-deploy/setup_initial_user.yaml
       state: absent
 
-  - name: place setup_initial_user.yaml file
-    copy:
-      src: sub-hosts/{{ ansible_ssh_host }}/setup_initial_user.yaml
-      dest: /home/devops/vagrant-deploy/setup_initial_user.yaml
-      owner: devops
-      group: devops
-      mode: '0755'
+  # - name: place setup_initial_user.yaml file
+  #   copy:
+  #     src: sub-hosts/{{ ansible_ssh_host }}/setup_initial_user.yaml
+  #     dest: /home/devops/vagrant-deploy/setup_initial_user.yaml
+  #     owner: devops
+  #     group: devops
+  #     mode: '0755'
 
   - name: Remove vagrant file
     file:
       path: /home/devops/vagrant-deploy/Vagrantfile
       state: absent
 
-  - name: deploy vagrant config
-    copy:
-      src: sub-hosts/{{ ansible_ssh_host }}/Vagrantfile
-      dest: /home/devops/vagrant-deploy/Vagrantfile
-      owner: devops
-      group: devops
-      mode: '0755'
+  # - name: deploy vagrant config
+  #   copy:
+  #     src: sub-hosts/{{ ansible_ssh_host }}/Vagrantfile
+  #     dest: /home/devops/vagrant-deploy/Vagrantfile
+  #     owner: devops
+  #     group: devops
+  #     mode: '0755'
+
+  - name: upload setup files
+    copy: src={{ item.src }} dest={{ item.dest }}
+    with_items:
+      - { src: '../ansible.cfg', dest: '/home/devops/vagrant-deploy/ansible.cfg', owner: devops, mode: '0755' }
+      - { src: '../hosts.ini', dest: '/home/devops/vagrant-deploy/hosts.ini', owner: devops, mode: '0755' }
+      - { src: 'sub-hosts/{{ ansible_ssh_host }}/setup_initial_user.yaml', dest: '/home/devops/vagrant-deploy/setup_initial_user.yaml', owner: devops, mode: '0755' }
+      - { src: 'sub-hosts/{{ ansible_ssh_host }}/Vagrantfile', dest: '/home/devops/vagrant-deploy/Vagrantfile', owner: devops, mode: '0755' }
   
-  - name: place initial user script
-    copy:
-      src: remove_devops.sh
-      dest: /home/devops/vagrant-deploy/remove_devops.sh
-      owner: devops
-      group: devops
-      mode: '0755'
+  # - name: place initial user script
+  #   copy:
+  #     src: remove_devops.sh
+  #     dest: /home/devops/vagrant-deploy/remove_devops.sh
+  #     owner: devops
+  #     group: devops
+  #     mode: '0755'
 
-  - name: place initial user script
-    copy:
-      src: setup_initial_user.sh
-      dest: /home/devops/vagrant-deploy/reset_environment.sh
-      owner: devops
-      group: devops
-      mode: '0755'
+  # - name: place initial user script
+  #   copy:
+  #     src: setup_initial_user.sh
+  #     dest: /home/devops/vagrant-deploy/reset_environment.sh
+  #     owner: devops
+  #     group: devops
+  #     mode: '0755'
 
-  - name: place initial user script
-    copy:
-      src: setup_initial_user.sh
-      dest: /home/devops/vagrant-deploy/setup_initial_user.sh
-      owner: devops
-      group: devops
-      mode: '0755'
+  # - name: place initial user script
+  #   copy:
+  #     src: setup_initial_user.sh
+  #     dest: /home/devops/vagrant-deploy/setup_initial_user.sh
+  #     owner: devops
+  #     group: devops
+  #     mode: '0755'
   
   # ISSUE: The IP address configured for the host-only network is not within the allowed range
   # SOLUTION: https://superuser.com/questions/1691783/cannot-create-a-private-network-from-vagrant-in-virtualbox-after-updating-it
