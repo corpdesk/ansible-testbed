@@ -9,6 +9,7 @@
 
   vars:
     host_dir: sub-hosts/"{{ ansible_ssh_host }}"
+    deploy_app: mysql-cluster
 
   # roles: 
   # - robertdebock.virtualbox
@@ -66,7 +67,7 @@
 
   # - name: configure haproxy.cfg file
   #   copy:
-  #     src: sub-hosts/{{ ansible_ssh_host }}/haproxy.cfg
+  #     src: sub-hosts/{{ ansible_ssh_host }}/{{ deploy_app }}/haproxy.cfg
   #     dest: /etc/haproxy/haproxy.cfg
 
   # - name: " haproxy service start"
@@ -91,36 +92,36 @@
 
   - name: Remove ansible.cfg file
     ansible.builtin.file:
-      path: /home/devops/vagrant-deploy/ansible.cfg
+      path: /home/devops/vagrant-deploy/{{ deploy_app }}/ansible.cfg
       state: absent
 
   - name: Remove hosts.ini file
     ansible.builtin.file:
-      path: /home/devops/vagrant-deploy/hosts.ini
+      path: /home/devops/vagrant-deploy/{{ deploy_app }}/hosts.ini
       state: absent
 
   - name: Remove setup_initial_user.yaml file
     ansible.builtin.file:
-      path: /home/devops/vagrant-deploy/setup_initial_user.yaml
+      path: /home/devops/vagrant-deploy/{{ deploy_app }}/setup_initial_user.yaml
       state: absent
 
   # - name: place setup_initial_user.yaml file
   #   copy:
-  #     src: sub-hosts/{{ ansible_ssh_host }}/setup_initial_user.yaml
-  #     dest: /home/devops/vagrant-deploy/setup_initial_user.yaml
+  #     src: sub-hosts/{{ ansible_ssh_host }}/{{ deploy_app }}/setup_initial_user.yaml
+  #     dest: /home/devops/vagrant-deploy/{{ deploy_app }}/setup_initial_user.yaml
   #     owner: devops
   #     group: devops
   #     mode: '0755'
 
   - name: Remove vagrant file
     file:
-      path: /home/devops/vagrant-deploy/Vagrantfile
+      path: /home/devops/vagrant-deploy/{{ deploy_app }}/Vagrantfile
       state: absent
 
   # - name: deploy vagrant config
   #   copy:
-  #     src: sub-hosts/{{ ansible_ssh_host }}/Vagrantfile
-  #     dest: /home/devops/vagrant-deploy/Vagrantfile
+  #     src: sub-hosts/{{ ansible_ssh_host }}/{{ deploy_app }}/Vagrantfile
+  #     dest: /home/devops/vagrant-deploy/{{ deploy_app }}/Vagrantfile
   #     owner: devops
   #     group: devops
   #     mode: '0755'
@@ -128,27 +129,27 @@
   - name: upload setup files
     copy: src={{ item.src }} dest={{ item.dest }}
     with_items:
-      - { src: '../ansible.cfg', dest: '/home/devops/vagrant-deploy/ansible.cfg', owner: devops, mode: '0755' }
-      - { src: '../hosts.ini', dest: '/home/devops/vagrant-deploy/hosts.ini', owner: devops, mode: '0755' }
+      - { src: '/Users/goremo/ansible-testbed/initial-user/ansible.cfg', dest: '/home/devops/vagrant-deploy/{{ deploy_app }}/ansible.cfg', owner: devops, mode: '0755' }
+      - { src: '/Users/goremo/ansible-testbed/initial-user/hosts.ini', dest: '/home/devops/vagrant-deploy/{{ deploy_app }}/hosts.ini', owner: devops, mode: '0755' }
   
   - name: upload setup_initial_user.yaml
     copy:
-      src: "{{ host_dir }}"/setup_initial_user.yaml
-      dest: /home/devops/vagrant-deploy/setup_initial_user.yaml
+      src: sub-hosts/{{ ansible_ssh_host }}/{{ deploy_app }}/setup_initial_user.yaml
+      dest: /home/devops/vagrant-deploy/{{ deploy_app }}/setup_initial_user.yaml
       owner: devops
       mode: '0755'
 
-  - name: configure Vagrantfile
+  - name: upload Vagrantfile
     copy:
-      src: "{{ host_dir }}"/Vagrantfile
-      dest: /home/devops/vagrant-deploy/Vagrantfile
+      src: sub-hosts/{{ ansible_ssh_host }}/{{ deploy_app }}/Vagrantfile
+      dest: /home/devops/vagrant-deploy/{{ deploy_app }}/Vagrantfile
       owner: devops
       mode: '0755'
   
   # - name: place initial user script
   #   copy:
   #     src: remove_devops.sh
-  #     dest: /home/devops/vagrant-deploy/remove_devops.sh
+  #     dest: /home/devops/vagrant-deploy/{{ deploy_app }}/remove_devops.sh
   #     owner: devops
   #     group: devops
   #     mode: '0755'
@@ -156,7 +157,7 @@
   # - name: place initial user script
   #   copy:
   #     src: setup_initial_user.sh
-  #     dest: /home/devops/vagrant-deploy/reset_environment.sh
+  #     dest: /home/devops/vagrant-deploy/{{ deploy_app }}/reset_environment.sh
   #     owner: devops
   #     group: devops
   #     mode: '0755'
@@ -164,7 +165,7 @@
   # - name: place initial user script
   #   copy:
   #     src: setup_initial_user.sh
-  #     dest: /home/devops/vagrant-deploy/setup_initial_user.sh
+  #     dest: /home/devops/vagrant-deploy/{{ deploy_app }}/setup_initial_user.sh
   #     owner: devops
   #     group: devops
   #     mode: '0755'
@@ -195,13 +196,13 @@
 
   # - name: remove previous .vagrant
   #   ansible.builtin.file:
-  #     path: /home/devops/vagrant-deploy/.vagrant
+  #     path: /home/devops/vagrant-deploy/{{ deploy_app }}/.vagrant
   #     state: absent
 
   # - name: move to vagrant-deploy and initilize vagrant
   #   shell:
   #     cmd: vagrant init
-  #     chdir: /home/devops/vagrant-deploy/
+  #     chdir: /home/devops/vagrant-deploy/{{ deploy_app }}/
 
   - name: Restart network manager for virtualbox 
     shell:
@@ -211,13 +212,13 @@
   - name: move to vagrant-deploy and stop vms for this host
     shell:
       cmd: vagrant destroy -f
-      chdir: /home/devops/vagrant-deploy/
+      chdir: /home/devops/vagrant-deploy/{{ deploy_app }}/
     become_user: devops
     ignore_errors: true
   
   - name: Recursively remove .vagrant dir
     ansible.builtin.file:
-      path: /home/devops/vagrant-deploy/.vagrant
+      path: /home/devops/vagrant-deploy/{{ deploy_app }}/.vagrant
       state: absent
 
   - name: Restart network manager for virtualbox 
@@ -262,26 +263,26 @@
   # - name: download vagrant box from local repository
   #   shell:
   #     cmd: wget http://192.168.1.107/os/ubuntu-22.04.box -O ubuntu-22.04.box
-  #     chdir: /home/devops/vagrant-deploy/
+  #     chdir: /home/devops/vagrant-deploy/{{ deploy_app }}/
   #   become_user: devops
 
   - name: download vagrant box from local repository
     get_url: 
       url: http://192.168.1.107/os/ubuntu-22.04.box 
-      dest: /home/devops/vagrant-deploy/ubuntu-22.04.box
+      dest: /home/devops/vagrant-deploy/{{ deploy_app }}/ubuntu-22.04.box
       force: yes
 
   - name: remove the vagrant box
     shell:
       cmd: vagrant box remove -f bento/ubuntu-22.04 --box-version 0
-      chdir: /home/devops/vagrant-deploy/
+      chdir: /home/devops/vagrant-deploy/{{ deploy_app }}/
     become_user: devops
     ignore_errors: yes
 
   - name: add the vagrant box
     shell:
       cmd: vagrant box add --name bento/ubuntu-22.04 ubuntu-22.04.box
-      chdir: /home/devops/vagrant-deploy/
+      chdir: /home/devops/vagrant-deploy/{{ deploy_app }}/
     become_user: devops
     ignore_errors: yes
 
@@ -300,7 +301,7 @@
   # - name: launch vms for this host
   #   shell:
   #     cmd: vagrant up --provision
-  #     chdir: /home/devops/vagrant-deploy/
+  #     chdir: /home/devops/vagrant-deploy/{{ deploy_app }}/
   #   become_user: devops
 
   # replace existing
@@ -308,7 +309,7 @@
 
   # - name: move to vagrant-deploy and launch vms for this host
   #   shell:
-  #     cmd: sh /home/devops/vagrant-deploy/start_vagrant.sh
+  #     cmd: sh /home/devops/vagrant-deploy/{{ deploy_app }}/start_vagrant.sh
   #     become_user: devops
 
   # - import_tasks: ../haproxy/install_haproxy.yaml
@@ -317,5 +318,5 @@
   # - name: Change the working directory to somedir/ before executing the command
   #   ansible.builtin.shell: somescript.sh
   #   args:
-  #     chdir: /home/devops/vagrant-deploy/
+  #     chdir: /home/devops/vagrant-deploy/{{ deploy_app }}/
 
