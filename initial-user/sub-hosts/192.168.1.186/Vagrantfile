@@ -16,7 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"
   config.vm.provision "ansible" do |ans|    
-    ans.playbook = "setup_initial_user.yml"
+    ans.playbook = "setup_initial_user.yaml"
   end
 
   # network setup
