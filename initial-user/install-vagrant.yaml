@@ -86,7 +86,12 @@
       name: vagrant
       state: present
 
-  - name: deploy vagrant config
+  - name: Remove setup_initial_user.yaml file
+    ansible.builtin.file:
+      path: /home/devops/vagrant-deploy/setup_initial_user.yaml
+      state: absent
+
+  - name: place setup_initial_user.yaml file
     copy:
       src: sub-hosts/{{ ansible_ssh_host }}/setup_initial_user.yaml
       dest: /home/devops/vagrant-deploy/setup_initial_user.yaml
@@ -231,7 +236,7 @@
       dest: /home/devops/vagrant-deploy/ubuntu-22.04.box
       force: yes
 
-  - name: add the vagrant box
+  - name: remove the vagrant box
     shell:
       cmd: vagrant box remove -f bento/ubuntu-22.04 --box-version 0
       chdir: /home/devops/vagrant-deploy/

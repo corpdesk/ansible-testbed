@@ -27,9 +27,7 @@
     - name: Create vagrant-deploy directory
       ansible.builtin.file:
         path: /home/devops/vagrant-deploy
-        recurse: yes
-        owner: "{{ initial_user }}"
-        group: "{{ initial_user }}"
-        state: present
+        state: directory
+        mode: '0755'
 
     
