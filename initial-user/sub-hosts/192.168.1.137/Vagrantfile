@@ -21,6 +21,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.linked_clone = true
   end
 
+  config.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"   
+  config.vm.provision "ansible" do |ans|    
+    ans.playbook = "vagrant_playbook.yml"
+  end
+
   # vagrant server 11.
   config.vm.define "app1" do |app|
     app.vm.hostname = "orc-app1.test"

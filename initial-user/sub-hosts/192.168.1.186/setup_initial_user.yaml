@@ -1,0 +1,35 @@
+---
+# vagranthost186 is collection of machines hosted by a vagranthost machine
+- hosts: vagranthost186
+
+  become: true
+
+  vars:
+    initial_user: devops
+    # hash created by:
+    # python -c 'import crypt; print crypt.crypt("yU0B14NC1PdE", "$1$SomeSalt$")'
+    # as used earlier in shell script: sudo useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
+    # recommended: openssl passwd -salt SomeSalt -1 yU0B14NC1PdE
+    initial_user_psd: $1$SomeSalt$0oo6CxMs3z1YsInZJzth.0
+
+  tasks:
+
+    - name: Update apt-get repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+    - name: Creating user "{{ initial_user }}" with admin access
+      user: 
+        name: "{{ initial_user }}"
+        password: "{{ initial_user_psd }}"
+        groups: admin append=yes
+      when:  assigned_role  == "yes"
+
+    - name: Create vagrant-deploy directory
+      ansible.builtin.file:
+        path: /home/devops/vagrant-deploy
+        recurse: yes
+        owner: "{{ initial_user }}"
+        group: "{{ initial_user }}"
+        state: present
+
+    

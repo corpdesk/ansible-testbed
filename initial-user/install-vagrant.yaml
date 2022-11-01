@@ -86,6 +86,14 @@
       name: vagrant
       state: present
 
+  - name: deploy vagrant config
+    copy:
+      src: sub-hosts/{{ ansible_ssh_host }}/setup_initial_user.yaml
+      dest: /home/devops/vagrant-deploy/setup_initial_user.yaml
+      owner: devops
+      group: devops
+      mode: '0755'
+
   - name: Remove vagrant file
     file:
       path: /home/devops/vagrant-deploy/Vagrantfile
