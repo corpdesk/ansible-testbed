@@ -203,6 +203,7 @@
       cmd: vagrant destroy -f
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
+    ignore_errors: true
   
   - name: Recursively remove .vagrant dir
     ansible.builtin.file:
