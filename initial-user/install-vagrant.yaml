@@ -127,22 +127,21 @@
 
   - name: upload setup files
     copy: src={{ item.src }} dest={{ item.dest }}
-    delegate_to: '{{item}}'
     with_items:
       - { src: '../ansible.cfg', dest: '/home/devops/vagrant-deploy/ansible.cfg', owner: devops, mode: '0755' }
       - { src: '../hosts.ini', dest: '/home/devops/vagrant-deploy/hosts.ini', owner: devops, mode: '0755' }
   
   - name: configure haproxy.cfg file
     copy:
-      src: "{{ host_dir }}"/setup_initial_user.yaml
+      src: {{ host_dir }}/setup_initial_user.yaml
       dest: /home/devops/vagrant-deploy/setup_initial_user.yaml
       owner: devops, 
       mode: '0755'
 
   - name: configure haproxy.cfg file
     copy:
-      src: '{{ host_dir }}/Vagrantfile'
-      dest: '/home/devops/vagrant-deploy/Vagrantfile'
+      src: {{ host_dir }}/Vagrantfile
+      dest: /home/devops/vagrant-deploy/Vagrantfile
       owner: devops, 
       mode: '0755'
   
