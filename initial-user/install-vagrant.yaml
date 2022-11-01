@@ -273,16 +273,19 @@
       cmd: vagrant box add --name bento/ubuntu-22.04 ubuntu-22.04.box
       chdir: /home/devops/vagrant-deploy/
     become_user: devops
+    ignore_errors: yes
 
   - name: replace existing, if any
     shell:
       cmd: cp -TRv ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/0 ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/202206.13.0
     become_user: devops
+    ignore_errors: yes
 
   - name: set metadata_url
     shell:
       cmd: echo -n "https://vagrantcloud.com/bento/ubuntu-22.04" > ~/.vagrant.d/boxes/bento-VAGRANTSLASH-ubuntu-22.04/metadata_url
     become_user: devops
+    ignore_errors: yes
 
   # - name: launch vms for this host
   #   shell:
