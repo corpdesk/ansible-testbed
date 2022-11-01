@@ -131,14 +131,14 @@
       - { src: '../ansible.cfg', dest: '/home/devops/vagrant-deploy/ansible.cfg', owner: devops, mode: '0755' }
       - { src: '../hosts.ini', dest: '/home/devops/vagrant-deploy/hosts.ini', owner: devops, mode: '0755' }
   
-  - name: configure haproxy.cfg file
+  - name: upload setup_initial_user.yaml
     copy:
       src: "{{ host_dir }}"/setup_initial_user.yaml
       dest: /home/devops/vagrant-deploy/setup_initial_user.yaml
       owner: devops, 
       mode: '0755'
 
-  - name: configure haproxy.cfg file
+  - name: configure Vagrantfile
     copy:
       src: "{{ host_dir }}"/Vagrantfile
       dest: /home/devops/vagrant-deploy/Vagrantfile
