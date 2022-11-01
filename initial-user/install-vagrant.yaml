@@ -7,6 +7,9 @@
   remote_user: devops
   become: yes
 
+  vars:
+    host_dir: sub-hosts/"{{ ansible_ssh_host }}"
+
   # roles: 
   # - robertdebock.virtualbox
   # - darkwizard242.vagrant
@@ -128,8 +131,8 @@
     with_items:
       - { src: '../ansible.cfg', dest: '/home/devops/vagrant-deploy/ansible.cfg', owner: devops, mode: '0755' }
       - { src: '../hosts.ini', dest: '/home/devops/vagrant-deploy/hosts.ini', owner: devops, mode: '0755' }
-      - { src: 'sub-hosts/{{ ansible_ssh_host }}/setup_initial_user.yaml', dest: '/home/devops/vagrant-deploy/setup_initial_user.yaml', owner: devops, mode: '0755' }
-      - { src: 'sub-hosts/{{ ansible_ssh_host }}/Vagrantfile', dest: '/home/devops/vagrant-deploy/Vagrantfile', owner: devops, mode: '0755' }
+      - { src: '{{ host_dir }}/setup_initial_user.yaml', dest: '/home/devops/vagrant-deploy/setup_initial_user.yaml', owner: devops, mode: '0755' }
+      - { src: '{{ host_dir }}/Vagrantfile', dest: '/home/devops/vagrant-deploy/Vagrantfile', owner: devops, mode: '0755' }
   
   # - name: place initial user script
   #   copy:
