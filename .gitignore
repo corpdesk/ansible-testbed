@@ -2,3 +2,5 @@ deploy-apps/mysql8/roles/
 deploy-apps/gluster_02/roles
 initial-user/roles
 initial-user/roles/ansible-nginx-revproxy
+deploy-apps/mysql-02/roles
+*/.vagrant

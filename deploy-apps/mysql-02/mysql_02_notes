@@ -1,0 +1,26 @@
+https://garutilorenzo.github.io/ansible-role-linux-mysql/
+https://github.com/garutilorenzo/ansible-role-linux-mysql
+// ----------------------
+https://github.com/dev-sec/ansible-mysql-hardening
+https://galaxy.ansible.com/devsec/hardening
+ansible-galaxy install -p ./roles dev-sec.mysql-hardening
+ansible-galaxy install -p ./roles community.mysql.mysql_user
+
+testing: mysql -u root -p
+
+CREATE USER '<user>'@'%' IDENTIFIED BY '<pswd>';
+FLUSH PRIVILEGES;
+GRANT ALL PRIVILEGES ON *.* TO '<user>'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+// ------------------
+https://gist.github.com/rimiti/b1d2410504f8e6cb0b754f3dfd8d999f
+https://dev.mysql.com/doc/refman/8.0/en/checking-gpg-signature.html
+
+1. wget https://dev.mysql.com/get/mysql-apt-config_0.8.23-1_all.deb
+2. sudo dpkg -i mysql-apt-config_0.8.23-1_all.deb
+sudo apt-key export 3A798D29 | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/mysql-key.gpg
+sudo apt update && sudo apt upgrade
+sudo apt install mysql-shell
+
+

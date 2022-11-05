@@ -1,3 +1,5 @@
 option 1:
 https://nap.so/posts/ansible-mysql-server-digitalocean/
 
+ansible-galaxy install -p ./roles geerlingguy.mysql
+

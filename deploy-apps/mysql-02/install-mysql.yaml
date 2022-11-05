@@ -1,0 +1,95 @@
+---
+- hosts: multipass
+  remote_user: devops
+  become: yes
+
+  tasks:
+
+  # --------------------
+  - name: Update apt-get repo and cache
+    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+  # - name: Upgrade all apt packages
+  #   apt: upgrade=dist force_apt_get=yes
+
+  - name: Install mysql-server-8.0
+    ansible.builtin.apt:
+      name: mysql-server-8.0
+      state: present
+
+- hosts: multipass
+  remote_user: devops
+  become: yes
+
+  roles:
+      - dev-sec.mysql-hardening
+
+  tasks:
+
+  - name: Restarted service mysql after hardening
+    ansible.builtin.service:
+      name: mysql
+      state: restarted
+
+
+- hosts: multipass
+  remote_user: devops
+  become: yes
+
+  tasks:
+
+  - name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
+    community.mysql.mysql_user:
+      name: goremo
+      password: yU0B14NC1PdE
+      host: '%'
+      priv: '*.*:ALL,GRANT'
+      state: present
+
+  
+  # # ---------------------------------------------------------------------------
+  - name: Try to specify preference for mysql
+    shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-8.0 | debconf-set-selections
+    become: yes
+
+  # # Download mysql debian package
+  # To get the latest MySQL APT Repository go to:
+  # https://dev.mysql.com/downloads/repo/apt/
+  # By testing the download, one can extract the latest repository url:
+  # https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb
+  # Other info:
+  # MySQL APT Repository
+  # (mysql-apt-config_0.8.24-1_all.deb)
+  # MD5: 9aaa5526ad7676baadcdee91982c861c
+  - name: Add mysql apt-config debian
+    apt: deb=https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb update-cache=yes
+    become: yes
+  # # ---------------------------------------------------------------------------
+
+  - name: Update apt-get repo and cache
+    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+  - name: Install mysql-shell
+    ansible.builtin.apt:
+      name: mysql-shell
+      state: present
+
+  - name: Ensure mysql remote connection is enabled
+    replace:
+      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: '^bind-address.*'
+      replace: 'bind-address         = 0.0.0.0'
+      backup: yes
+
+  - name: Ensure mysql remote connection is enabled
+    replace:
+      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: '^mysqlx-bind-address.*'
+      replace: 'mysqlx-bind-address  = 0.0.0.0'
+      backup: yes
+
+  - name: Restarted service mysql after allowing remote connection
+    ansible.builtin.service:
+      name: mysql
+      state: restarted
+

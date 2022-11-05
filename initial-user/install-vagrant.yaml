@@ -3,13 +3,14 @@
 # ansible-galaxy install -p ./roles darkwizard242.vagrant
 # ansible-galaxy install -p ./roles install hispanico.nginx_revproxy
 # ansible-playbook -i hosts.ini install-vagrant.yaml -kK -vvv
-- hosts: vagranthosts
+- hosts: multipass
   remote_user: devops
   become: yes
 
   vars:
     host_dir: sub-hosts/"{{ ansible_ssh_host }}"
-    deploy_app: mysql-cluster
+    # deploy_app: mysql-cluster
+    deploy_app: gluster-fs
 
   # roles: 
   # - robertdebock.virtualbox
@@ -92,7 +93,7 @@
 
   - name: Creates directory vagrant-deploy
     file:
-      path: /home/devops/vagrant-deploy/mysql-cluster
+      path: /home/devops/vagrant-deploy/{{ deploy_app }}
       owner: devops
       mode: '0755'
       state: directory
