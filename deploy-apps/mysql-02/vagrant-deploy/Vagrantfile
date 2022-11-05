@@ -30,8 +30,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # vagrant server 11.
-  config.vm.define "server-101-172" do |app|
-    app.vm.hostname = "orc-server-101-172.test"
+  config.vm.define "server-101-173" do |app|
+    app.vm.hostname = "orc-server-101-173.test"
     app.vm.network :public_network, ip: "192.168.1.173"
   end
 
