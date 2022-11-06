@@ -112,5 +112,15 @@
     shell: mysqlsh --file ~/init_cluster.js
     become_user: devops
 
+  - name: Restarted service mysql after cluster configuration
+    ansible.builtin.service:
+      name: mysql
+      state: restarted
+    become: yes
+
+  - name: Re-run init cluster after restart to confirm compliance
+    shell: mysqlsh --file ~/init_cluster.js
+    become_user: devops
+
   
 
