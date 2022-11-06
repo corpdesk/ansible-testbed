@@ -13,6 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "remove_devops.sh", destination: "remove_devops.sh"
   config.vm.provision "file", source: "reset_environment.sh", destination: "reset_environment.sh"
   config.vm.provision "file", source: "setup_initial_user.sh", destination: "setup_initial_user.sh"
+  config.vm.provision "file", source: "init_cluster.js", destination: "init_cluster.js"
   config.vm.provision :shell, :inline => "sudo sh setup_initial_user.sh"
 
   # config.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"

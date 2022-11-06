@@ -17,10 +17,28 @@ FLUSH PRIVILEGES;
 https://gist.github.com/rimiti/b1d2410504f8e6cb0b754f3dfd8d999f
 https://dev.mysql.com/doc/refman/8.0/en/checking-gpg-signature.html
 
+
+
 1. wget https://dev.mysql.com/get/mysql-apt-config_0.8.23-1_all.deb
 2. sudo dpkg -i mysql-apt-config_0.8.23-1_all.deb
 sudo apt-key export 3A798D29 | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/mysql-key.gpg
 sudo apt update && sudo apt upgrade
 sudo apt install mysql-shell
+
+// -----------------------
+
+edit /etc/hosts file:
+replace 
+127.0.2.1 orc-server-101-173.test orc-server-101-173 with 
+192.168.1.173 orc-server-101-173.test orc-server-101-173
+
+- name: setup mysql host-name in /etc/hosts
+    replace:
+      path: /etc/mysql/mysql.conf.d/mysqld.cnf
+      regexp: '*orc-server-101-173.*'
+      replace: '192.168.1.173 orc-server-101-173.test orc-server-101-173'
+      backup: yes
+
+
 
 

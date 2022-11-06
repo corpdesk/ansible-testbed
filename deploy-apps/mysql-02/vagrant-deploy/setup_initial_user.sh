@@ -25,6 +25,7 @@ else
     sudo mkdir /home/devops/vagrant-deploy
     sudo chmod -R 755 /home/devops/vagrant-deploy
     chown -R devops /home/devops/vagrant-deploy
+    
 fi
 
 

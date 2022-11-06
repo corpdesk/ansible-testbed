@@ -93,3 +93,24 @@
       name: mysql
       state: restarted
 
+  - name: setup mysql host-name in /etc/hosts
+    replace:
+      path: /etc/hosts
+      regexp: '^(.*)orc-server-101-173(.*)$'
+      replace: '192.168.1.173 orc-server-101-173.test orc-server-101-173'
+      backup: yes
+    become: yes
+
+  # sudo chmod -R 755 /home/devops/vagrant-deploy
+  # chown -R devops /home/devops/vagrant-deploy
+  # sudo cp init_cluster.js /home/devops/init_cluster.js
+  - name: Move init file
+    shell: cp -f /home/vagrant/init_cluster.js /home/devops/init_cluster.js && chown -R devops /home/devops/init_cluster.js
+    become: yes
+
+  - name: Init cluster
+    shell: mysqlsh --file ~/init_cluster.js
+    become_user: devops
+
+  
+
