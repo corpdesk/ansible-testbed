@@ -1,6 +1,17 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# TODO:
+# Currently the machine ips are listed manually. This should be
+# replaced by a loop that reads from external file and shared by
+# all the deployment application files that requires ip information.
+# This would probably be a json file.  The same file should be the sources for
+# ansible inventory, all other Vagrantfiles, /etc/hosts files etc.
+#
+# Since Vagrantfile is a rubi file, rubi can be used to optimise it for automation
+# At its best, it should not be hand scripted by machine scripted based on a common
+# json file that describes the 'cd-cloud' architechural design
+
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -31,32 +42,32 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # vagrant server 11.
-  config.vm.define "server-101-173" do |app|
-    app.vm.hostname = "orc-server-101-173.test"
+  config.vm.define "cd-db-186-192.168.1.173" do |app|
+    app.vm.hostname = "cd-db-186-192.168.1.173"
     app.vm.network :public_network, ip: "192.168.1.173"
   end
 
-  # # vagrant server 12
-  # config.vm.define "server-143-242" do |app|
-  #   app.vm.hostname = "orc-server-143-242.test"
-  #   app.vm.network :public_network, ip: "192.168.1.242"
-  # end
+  # vagrant server 12
+  config.vm.define "cd-db-186-192.168.1.174" do |app|
+    app.vm.hostname = "cd-db-186-192.168.1.174"
+    app.vm.network :public_network, ip: "192.168.1.174"
+  end
+
+  # vagrant server 13
+  config.vm.define "cd-db-186-192.168.1.175" do |app|
+    app.vm.hostname = "cd-db-186-192.168.1.175"
+    app.vm.network :public_network, ip: "192.168.1.175"
+  end
 
   # # vagrant server 13
-  # config.vm.define "server-143-243" do |app|
-  #   app.vm.hostname = "orc-server-143-243.test"
-  #   app.vm.network :public_network, ip: "192.168.1.243"
-  # end
-
-  # # vagrant server 13
-  # config.vm.define "server-143-244" do |app|
-  #   app.vm.hostname = "orc-server-143-244.test"
+  # config.vm.define "cd-db-186-244" do |app|
+  #   app.vm.hostname = "cd-db-186-244"
   #   app.vm.network :public_network, ip: "192.168.1.244"
   # end
 
   # # vagrant server 13
-  # config.vm.define "server-143-245" do |app|
-  #   app.vm.hostname = "orc-server-143-245.test"
+  # config.vm.define "cd-db-186-245" do |app|
+  #   app.vm.hostname = "cd-db-186-245"
   #   app.vm.network :public_network, ip: "192.168.1.245"
   # end
 

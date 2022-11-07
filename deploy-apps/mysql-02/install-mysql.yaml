@@ -96,8 +96,8 @@
   - name: setup mysql host-name in /etc/hosts
     replace:
       path: /etc/hosts
-      regexp: '^(.*)orc-server-101-173(.*)$'
-      replace: '192.168.1.173 orc-server-101-173.test orc-server-101-173'
+      regexp: '^(.*)orc-server-101-{{ ansible_ssh_host }}(.*)$'
+      replace: "{{ ansible_ssh_host }} orc-server-101-{{ ansible_ssh_host }}.test orc-server-101-{{ ansible_ssh_host }}"
       backup: yes
     become: yes
 
