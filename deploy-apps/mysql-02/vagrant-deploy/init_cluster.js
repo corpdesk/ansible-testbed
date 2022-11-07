@@ -98,6 +98,7 @@ function configureItem(item) {
     print(row);
 }
 
+// Ref: https://dev.mysql.com/doc/refman/5.7/en/replication-mode-change-online-enable-gtids.html
 function enableGtid(sess) {
     // To enable GTID transactions:
     // 1. On each server, execute:
@@ -150,6 +151,7 @@ function enableGtid(sess) {
         }
     }
     // 7. On each server, add gtid_mode=ON and enforce_gtid_consistency=ON to my.cnf. 
+    // to implement with ansible
 }
 
 function serverIsReady(chk){
