@@ -10,9 +10,20 @@ const server = "goremo@localhost:3306";
 const dbPass = "yU0B14NC1PdE";
 const key = { password: dbPass };
 
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+        currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+}
+
 
 try {
     print("try-01")
+    var chk2 = dba.configureInstance(server, {password:dbPass, interactive: false,restart: true})
+    sleep(5000); // source: https://www.sitepoint.com/delay-sleep-pause-wait/
+    print(`chk2:${chk2}`)
     print('\nChecking instance...');
     print("try-02")
     var chk = dba.checkInstanceConfiguration(server, key);
@@ -28,6 +39,9 @@ try {
             print(chk.config_errors.length);
             print("try-05")
             const sess = mysql.getClassicSession(server, dbPass);
+            // var chk2 = dba.configureInstance(server, {password:dbPass, interactive: false,restart: true})
+            // sleep(5000); // source: https://www.sitepoint.com/delay-sleep-pause-wait/
+            // print(`chk2:${chk2}`)
             print("try-06")
             shell.setSession(sess);
             print("try-07")
@@ -62,7 +76,7 @@ try {
                         print(`for-if-02`)
                     }
                     print(`Trying to correct the config: ${option} with value=${required}`)
-                    var resultSet = sess.runSql(`SET PERSIST ${option} = ${required};`);
+                    sess.runSql(`SET PERSIST ${option} = ${required};`);
                 }
 
             }

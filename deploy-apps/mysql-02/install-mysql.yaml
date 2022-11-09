@@ -8,6 +8,7 @@
   # --------------------
   - name: Update apt-get repo and cache
     apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+    ignore_errors: true
 
   # - name: Upgrade all apt packages
   #   apt: upgrade=dist force_apt_get=yes
@@ -36,6 +37,9 @@
   remote_user: devops
   become: yes
 
+  vars:
+    inventory_zone: "cd-db-186"
+
   tasks:
 
   - name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
@@ -47,32 +51,58 @@
       state: present
 
   
-  # # ---------------------------------------------------------------------------
-  - name: Try to specify preference for mysql
-    shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-8.0 | debconf-set-selections
-    become: yes
+  # # # ---------------------------------------------------------------------------
+  # - name: Try to specify preference for mysql
+  #   shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-8.0 | debconf-set-selections
+  #   become: yes
 
-  # # Download mysql debian package
-  # To get the latest MySQL APT Repository go to:
-  # https://dev.mysql.com/downloads/repo/apt/
-  # By testing the download, one can extract the latest repository url:
-  # https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb
-  # Other info:
-  # MySQL APT Repository
-  # (mysql-apt-config_0.8.24-1_all.deb)
-  # MD5: 9aaa5526ad7676baadcdee91982c861c
-  - name: Add mysql apt-config debian
-    apt: deb=https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb update-cache=yes
-    become: yes
-  # # ---------------------------------------------------------------------------
+  # # # Download mysql debian package
+  # # To get the latest MySQL APT Repository go to:
+  # # https://dev.mysql.com/downloads/repo/apt/
+  # # By testing the download, one can extract the latest repository url:
+  # # https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb
+  # # Other info:
+  # # MySQL APT Repository
+  # # (mysql-apt-config_0.8.24-1_all.deb)
+  # # MD5: 9aaa5526ad7676baadcdee91982c861c
+  # - name: Add mysql apt-config debian
+  #   apt: deb=https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb update-cache=yes
+  #   become: yes
+  # # # ---------------------------------------------------------------------------
 
-  - name: Update apt-get repo and cache
-    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  # - name: Update apt-get repo and cache
+  #   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+  #   ignore_errors: true
 
-  - name: Install mysql-shell
+  # - name: Install mysql-shell
+  #   ansible.builtin.apt:
+  #     name: mysql-shell
+  #     state: present
+
+  - name: Install snapd
     ansible.builtin.apt:
-      name: mysql-shell
+      name: snapd
       state: present
+
+  # - name: Install mysql-shell via snap
+  #   shell: snap install mysql-shell --channel=latest/edge
+  #   become: yes
+
+  # # this is working but it is not compiled with js yet
+  # - name: Install "foo" with options
+  #   community.general.snap:
+  #     name: mysql-shell
+  #     channel: latest/edge
+
+  - name: download mysql-shell deb pkg
+    get_url: 
+      url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
+      dest: /home/devops/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
+      force: yes
+
+  - name: Install a .deb package
+    ansible.builtin.apt:
+      deb: /home/devops/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
 
   - name: Ensure mysql remote connection is enabled
     replace:
@@ -81,7 +111,7 @@
       replace: 'bind-address         = 0.0.0.0'
       backup: yes
 
-  - name: Ensure mysql remote connection is enabled
+  - name: Ensure mysqlx remote connection is enabled
     replace:
       path: /etc/mysql/mysql.conf.d/mysqld.cnf
       regexp: '^mysqlx-bind-address.*'
@@ -93,13 +123,40 @@
       name: mysql
       state: restarted
 
-  - name: setup mysql host-name in /etc/hosts
+  # - name: setup mysql host-name in /etc/hosts
+  #   replace:
+  #     path: /etc/hosts
+  #     regexp: '^(.*)cd-db-186-{{ ansible_ssh_host }}(.*)$'
+  #     replace: "{{ ansible_ssh_host }} cd-db-186-{{ ansible_ssh_host }}"
+  #     backup: yes
+  #   become: yes
+
+  # - name: add hostname
+  #   lineinfile:
+  #     path: /etc/hosts
+  #     state: present
+  #     line: "{{ item }}"
+  #   with_items:
+  #   - '# additional hostname:'
+  #   - "{{ ansible_ssh_host }} cd-db-186-{{ ansible_ssh_host }}"
+  #   - '#'
+
+  - name: remove 127.0.2.* reference in /etc/hosts
     replace:
       path: /etc/hosts
-      regexp: '^(.*)cd-db-186-{{ ansible_ssh_host }}(.*)$'
-      replace: "{{ ansible_ssh_host }} cd-db-186-{{ ansible_ssh_host }}"
+      regexp: '^127\.0\.2\.(.*)$'
+      replace: ""
       backup: yes
     become: yes
+
+  - name: apply appropriate hostnames based on expected cluster nodes
+    lineinfile: 
+      dest: /etc/hosts
+      line: '{{ item }}'
+    with_items:
+      - "192.168.1.171 {{inventory_zone}}-171"
+      - "192.168.1.172 {{inventory_zone}}-172"
+      - "192.168.1.173 {{inventory_zone}}-173" 
 
   # sudo chmod -R 755 /home/devops/vagrant-deploy
   # chown -R devops /home/devops/vagrant-deploy
@@ -108,23 +165,29 @@
     shell: cp -f /home/vagrant/init_cluster.js /home/devops/init_cluster.js && chown -R devops /home/devops/init_cluster.js
     become: yes
 
+  - name: Move cluster build file
+    shell: cp -f /home/vagrant/build_cluster.js /home/devops/build_cluster.js && chown -R devops /home/devops/build_cluster.js
+    become: yes
+
+  # ---------------------------------------------------
+  # INIT CLUSTER 
   - name: Init cluster
     shell: mysqlsh --file ~/init_cluster.js
     become_user: devops
 
-  # // On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to my.cnf. 
-  # ToDo: should be implemented with 'when' on condition that instance is ready for clusters
-  # Ref: https://dev.mysql.com/doc/refman/5.7/en/replication-mode-change-online-enable-gtids.html
-  - name: On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to config file
-    lineinfile:
-      path: /etc/mysql/mysql.conf.d/mysqld.cnf
-      state: present
-      line: "{{ item }}"
-    with_items:
-    - '# gtid_mode setting for innodb cluster:'
-    - 'gtid_mode=ON'
-    - 'enforce_gtid_consistency=ON'
-    - '#'
+  # # // On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to my.cnf. 
+  # # ToDo: should be implemented with 'when' on condition that instance is ready for clusters
+  # # Ref: https://dev.mysql.com/doc/refman/5.7/en/replication-mode-change-online-enable-gtids.html
+  # - name: On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to config file
+  #   lineinfile:
+  #     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+  #     state: present
+  #     line: "{{ item }}"
+  #   with_items:
+  #   - '# gtid_mode setting for innodb cluster:'
+  #   - 'gtid_mode=ON'
+  #   - 'enforce_gtid_consistency=ON'
+  #   - '#'
 
   - name: Restarted service mysql after cluster configuration
     ansible.builtin.service:
@@ -135,6 +198,14 @@
   - name: Re-run init cluster after restart to confirm compliance
     shell: mysqlsh --file ~/init_cluster.js
     become_user: devops
+
+  ## ---------------------------------------------------
+  ## BUILD CLUSTER 
+  # - name: Run build cluster after cluster initialization
+  #   shell: mysqlsh --file ~/build_cluster.js
+  #   become_user: devops
+
+  
 
   
 

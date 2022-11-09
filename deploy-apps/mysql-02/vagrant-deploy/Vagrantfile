@@ -25,6 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "reset_environment.sh", destination: "reset_environment.sh"
   config.vm.provision "file", source: "setup_initial_user.sh", destination: "setup_initial_user.sh"
   config.vm.provision "file", source: "init_cluster.js", destination: "init_cluster.js"
+  config.vm.provision "file", source: "build_cluster.js", destination: "build_cluster.js"
   config.vm.provision :shell, :inline => "sudo sh setup_initial_user.sh"
 
   # config.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"
@@ -42,34 +43,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # vagrant server 11.
-  config.vm.define "cd-db-186-192.168.1.171" do |app|
-    app.vm.hostname = "cd-db-186-192.168.1.171"
+  config.vm.define "cd-db-186-171" do |app|
+    app.vm.hostname = "cd-db-186-171"
     app.vm.network :public_network, ip: "192.168.1.171"
   end
 
   # vagrant server 11.
-  config.vm.define "cd-db-186-192.168.1.172" do |app|
-    app.vm.hostname = "cd-db-186-192.168.1.172"
+  config.vm.define "cd-db-186-172" do |app|
+    app.vm.hostname = "cd-db-186-172"
     app.vm.network :public_network, ip: "192.168.1.172"
   end
 
   # vagrant server 11.
-  config.vm.define "cd-db-186-192.168.1.173" do |app|
-    app.vm.hostname = "cd-db-186-192.168.1.173"
+  config.vm.define "cd-db-186-173" do |app|
+    app.vm.hostname = "cd-db-186-173"
     app.vm.network :public_network, ip: "192.168.1.173"
   end
 
-  # vagrant server 12
-  config.vm.define "cd-db-186-192.168.1.174" do |app|
-    app.vm.hostname = "cd-db-186-192.168.1.174"
-    app.vm.network :public_network, ip: "192.168.1.174"
-  end
+  # # vagrant server 12
+  # config.vm.define "cd-db-186-174" do |app|
+  #   app.vm.hostname = "cd-db-186-174"
+  #   app.vm.network :public_network, ip: "192.168.1.174"
+  # end
 
-  # vagrant server 13
-  config.vm.define "cd-db-186-192.168.1.175" do |app|
-    app.vm.hostname = "cd-db-186-192.168.1.175"
-    app.vm.network :public_network, ip: "192.168.1.175"
-  end
+  # # vagrant server 13
+  # config.vm.define "cd-db-186-175" do |app|
+  #   app.vm.hostname = "cd-db-186-175"
+  #   app.vm.network :public_network, ip: "192.168.1.175"
+  # end
 
   # # vagrant server 13
   # config.vm.define "cd-db-186-244" do |app|
