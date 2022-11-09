@@ -39,6 +39,35 @@ replace
       replace: '192.168.1.173 orc-server-101-173.test orc-server-101-173'
       backup: yes
 
+09/11/2022
+
+- Deploy vm servers working:
+  project-folder: initial-user
+  playbook: initial-user/install-vagrant.yaml
+
+- ansible mysql cluster working
+  project-folder: deploy-apps/mysql-02
+  playbook: deploy-apps/mysql-02/install-mysql.yaml
+
+ToDo:
+1. find out how to set and use string of array as a variable in ansible to sort below:
+
+- name: add hostnames
+    lineinfile: 
+      dest: /etc/hosts
+      line: '{{ item }}'
+    with_items:
+      - "192.168.1.171 {{inventory_zone}}-171"
+      - "192.168.1.172 {{inventory_zone}}-172"
+      - "192.168.1.173 {{inventory_zone}}-173" 
+
+2. any download should be set to use local custom repostiory.
+    - eg: 
+
+3, inventory should come from one source and feed both playbook and vagrantfile
+
+  
+
 
 
 
