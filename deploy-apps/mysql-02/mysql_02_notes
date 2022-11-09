@@ -51,11 +51,9 @@ replace
 
 ToDo:
 1. find out how to set and use string of array as a variable in ansible to sort below:
+Ref: https://stackoverflow.com/questions/70830956/how-to-pass-the-specific-array-value-to-the-variable-in-ansible
 
-- name: add hostnames
-    lineinfile: 
-      dest: /etc/hosts
-      line: '{{ item }}'
+    line: '{{ item }}'
     with_items:
       - "192.168.1.171 {{inventory_zone}}-171"
       - "192.168.1.172 {{inventory_zone}}-172"
@@ -63,8 +61,14 @@ ToDo:
 
 2. any download should be set to use local custom repostiory.
     - eg: 
+      # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
+      url: "{{ local_repository }}/mysql-shell/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb"
 
 3, inventory should come from one source and feed both playbook and vagrantfile
+
+4. execute mysql-shell files with arguments eg, inventory, primary-ip, 
+
+5. test mysql-server download file for local repostiory method
 
   
 

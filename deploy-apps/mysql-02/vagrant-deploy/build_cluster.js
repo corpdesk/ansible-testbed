@@ -66,7 +66,11 @@ function setupCluster() {
         port: 3306
     });
 
+    sleep(2000);
+
     var cluster = dba.createCluster(clusterName);
+
+    sleep(2000);
 
     print('Adding instances to the cluster.\n');
 
@@ -76,6 +80,7 @@ function setupCluster() {
             password: dbPass,
             recoveryMethod: 'clone'
         });
+        sleep(15000);
     }
     print('\nInstances successfully added to the cluster.\n');
 

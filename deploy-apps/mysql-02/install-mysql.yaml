@@ -3,6 +3,14 @@
   remote_user: devops
   become: yes
 
+  vars:
+    # mysql versioning system: https://dev.mysql.com/doc/refman/{{v_major}}.{{v_minor}}/en/which-version.html
+    v_major: "8"
+    v_minor: "0"
+    v_release: "31"
+    v_platform: "1ubuntu22.04_amd64"
+    
+
   tasks:
 
   # --------------------
@@ -10,12 +18,13 @@
     apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
     ignore_errors: true
 
+  # Currently switched off dued to internet cost and time taken
   # - name: Upgrade all apt packages
   #   apt: upgrade=dist force_apt_get=yes
 
-  - name: Install mysql-server-8.0
+  - name: "Install mysql-server-{{v_major}}.{{v_minor}}"
     ansible.builtin.apt:
-      name: mysql-server-8.0
+      name: mysql-server-{{v_major}}.{{v_minor}}
       state: present
 
 - hosts: vagranthost186-02
@@ -38,14 +47,23 @@
   become: yes
 
   vars:
-    inventory_zone: "cd-db-186"
+    # array of vm hosts
+    zone_ids: ["186","173","137"]
+    # selected hosts: should be derived from zone_ids
+    zone_id: "186"
+    inventory_zone: "cd-db-{{ zone_id }}"
+    local_repository: "http://192.168.1.107"
+    cluster_hosts: [ "192.168.1.171 {{inventory_zone}}-171","192.168.1.172 {{inventory_zone}}-172","192.168.1.173 {{inventory_zone}}-173" ]
+    # ToDo: apply ansible-vault for credentials
+    mysql_admin: goremo
+    mysql_admin_pw: yU0B14NC1PdE
 
   tasks:
 
   - name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
     community.mysql.mysql_user:
-      name: goremo
-      password: yU0B14NC1PdE
+      name: {{ mysql_admin }}
+      password: {{ mysql_admin_pw }}
       host: '%'
       priv: '*.*:ALL,GRANT'
       state: present
@@ -53,7 +71,7 @@
   
   # # # ---------------------------------------------------------------------------
   # - name: Try to specify preference for mysql
-  #   shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-8.0 | debconf-set-selections
+  #   shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-{{v_major}}.{{v_minor}} | debconf-set-selections
   #   become: yes
 
   # # # Download mysql debian package
@@ -96,13 +114,14 @@
 
   - name: download mysql-shell deb pkg
     get_url: 
-      url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
-      dest: /home/devops/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
+      # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
+      url: "{{ local_repository }}/mysql-shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb"
+      dest: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
       force: yes
 
   - name: Install a .deb package
     ansible.builtin.apt:
-      deb: /home/devops/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
+      deb: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
 
   - name: Ensure mysql remote connection is enabled
     replace:
@@ -126,8 +145,8 @@
   # - name: setup mysql host-name in /etc/hosts
   #   replace:
   #     path: /etc/hosts
-  #     regexp: '^(.*)cd-db-186-{{ ansible_ssh_host }}(.*)$'
-  #     replace: "{{ ansible_ssh_host }} cd-db-186-{{ ansible_ssh_host }}"
+  #     regexp: '^(.*)cd-db-{{ zone_id }}-{{ ansible_ssh_host }}(.*)$'
+  #     replace: "{{ ansible_ssh_host }} cd-db-{{ zone_id }}-{{ ansible_ssh_host }}"
   #     backup: yes
   #   become: yes
 
@@ -138,7 +157,7 @@
   #     line: "{{ item }}"
   #   with_items:
   #   - '# additional hostname:'
-  #   - "{{ ansible_ssh_host }} cd-db-186-{{ ansible_ssh_host }}"
+  #   - "{{ ansible_ssh_host }} cd-db-{{ zone_id }}-{{ ansible_ssh_host }}"
   #   - '#'
 
   - name: remove 127.0.2.* reference in /etc/hosts
@@ -153,10 +172,10 @@
     lineinfile: 
       dest: /etc/hosts
       line: '{{ item }}'
-    with_items:
-      - "192.168.1.171 {{inventory_zone}}-171"
-      - "192.168.1.172 {{inventory_zone}}-172"
-      - "192.168.1.173 {{inventory_zone}}-173" 
+    with_items: '{{ cluster_hosts }}'
+      # - "192.168.1.171 {{inventory_zone}}-171"
+      # - "192.168.1.172 {{inventory_zone}}-172"
+      # - "192.168.1.173 {{inventory_zone}}-173" 
 
   # sudo chmod -R 755 /home/devops/vagrant-deploy
   # chown -R devops /home/devops/vagrant-deploy
@@ -195,15 +214,30 @@
       state: restarted
     become: yes
 
+  # ToDo: execute with arguments or import file eg: inventory, primary-ip
   - name: Re-run init cluster after restart to confirm compliance
     shell: mysqlsh --file ~/init_cluster.js
     become_user: devops
 
-  ## ---------------------------------------------------
-  ## BUILD CLUSTER 
+  # ## ---------------------------------------------------
+  # ## BUILD CLUSTER 
   # - name: Run build cluster after cluster initialization
   #   shell: mysqlsh --file ~/build_cluster.js
   #   become_user: devops
+
+- hosts: mysql-primary
+  remote_user: devops
+  become: yes
+
+  tasks:
+
+  ## ---------------------------------------------------
+  ## BUILD CLUSTER 
+  # ToDo: execute with arguments or import file eg: inventory, primary-ip
+  - name: Run build cluster after cluster initialization
+    shell: mysqlsh --file ~/build_cluster.js
+    become_user: devops
+    
 
   
 
