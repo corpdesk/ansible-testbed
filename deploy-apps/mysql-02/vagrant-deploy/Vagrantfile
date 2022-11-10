@@ -20,6 +20,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
+  zone="186"
+  initial_ip_no = 176
+  vm_count = 3
+
   # setup devops user
   config.vm.provision "file", source: "remove_devops.sh", destination: "remove_devops.sh"
   config.vm.provision "file", source: "reset_environment.sh", destination: "reset_environment.sh"
@@ -41,24 +45,31 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.memory = 2048
     v.linked_clone = true
   end
-
-  # vagrant server 11.
-  config.vm.define "cd-db-186-171" do |app|
-    app.vm.hostname = "cd-db-186-171"
-    app.vm.network :public_network, ip: "192.168.1.171"
+  
+  (176..178).each do |i|
+    config.vm.define "cd-db-#{zone}-#{i}" do |app|
+      app.vm.hostname = "cd-db-#{zone}-#{i}"
+      app.vm.network :public_network, ip: "192.168.1.#{i}"
+    end
   end
 
-  # vagrant server 11.
-  config.vm.define "cd-db-186-172" do |app|
-    app.vm.hostname = "cd-db-186-172"
-    app.vm.network :public_network, ip: "192.168.1.172"
-  end
+  # # vagrant server 11.
+  # config.vm.define "cd-db-186-171" do |app|
+  #   app.vm.hostname = "cd-db-186-171"
+  #   app.vm.network :public_network, ip: "192.168.1.171"
+  # end
 
-  # vagrant server 11.
-  config.vm.define "cd-db-186-173" do |app|
-    app.vm.hostname = "cd-db-186-173"
-    app.vm.network :public_network, ip: "192.168.1.173"
-  end
+  # # vagrant server 11.
+  # config.vm.define "cd-db-186-172" do |app|
+  #   app.vm.hostname = "cd-db-186-172"
+  #   app.vm.network :public_network, ip: "192.168.1.172"
+  # end
+
+  # # vagrant server 11.
+  # config.vm.define "cd-db-186-173" do |app|
+  #   app.vm.hostname = "cd-db-186-173"
+  #   app.vm.network :public_network, ip: "192.168.1.173"
+  # end
 
   # # vagrant server 12
   # config.vm.define "cd-db-186-174" do |app|
