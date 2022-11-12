@@ -1,0 +1,11 @@
+---
+
+- set_fact:
+    mysql_ip_address: "{{ item }}"
+  when: "item | ipaddr( mysql_subnet )"
+  with_items: "{{ ansible_all_ipv4_addresses }}"
+
+- name: 'set fact: list gr_seeds'
+  set_fact:
+    gr_seeds: >-
+      {{ groups['mysql'] | join(':33061,') }}:33061

@@ -17,6 +17,8 @@ FLUSH PRIVILEGES;
 https://gist.github.com/rimiti/b1d2410504f8e6cb0b754f3dfd8d999f
 https://dev.mysql.com/doc/refman/8.0/en/checking-gpg-signature.html
 
+ansible-playbook -i hosts.ini install-mysql.yaml -kK -vvv
+
 
 
 1. wget https://dev.mysql.com/get/mysql-apt-config_0.8.23-1_all.deb
@@ -58,11 +60,18 @@ Ref: https://stackoverflow.com/questions/70830956/how-to-pass-the-specific-array
       - "192.168.1.171 {{inventory_zone}}-171"
       - "192.168.1.172 {{inventory_zone}}-172"
       - "192.168.1.173 {{inventory_zone}}-173" 
+    
+    # inventory can be fetched from db
+    # example: https://www.cdata.com/kb/tech/mysql-odbc-ruby.rst
 
 2. any download should be set to use local custom repostiory.
-    - eg: 
+    - eg:
+      # url: https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-server_8.0.31-1ubuntu22.04_amd64.deb-bundle.tar 
       # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
       url: "{{ local_repository }}/mysql-shell/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb"
+    - create mysql-shell directory
+    - download the required files
+        - mysql-shell
 
 3, inventory should come from one source and feed both playbook and vagrantfile
 

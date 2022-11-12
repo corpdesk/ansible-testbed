@@ -1,0 +1,26 @@
+# mysql versioning system: https://dev.mysql.com/doc/refman/{{v_major}}.{{v_minor}}/en/which-version.html
+v_major: "8"
+v_minor: "0"
+v_release: "31"
+v_platform: "1ubuntu22.04_amd64"
+
+# array of vm hosts
+zone_ids: ["107", "173", "137"]
+# selected hosts: should be derived from zone_ids
+zone_id: "107"
+inventory_zone: "cd-db-{{ zone_id }}"
+local_repository: "http://192.168.1.107/app-repo"
+cluster_hosts:
+  # [
+  #   "192.168.1.171 {{inventory_zone}}-171",
+  #   "192.168.1.172 {{inventory_zone}}-172",
+  #   "192.168.1.173 {{inventory_zone}}-173",
+  # ]
+  [
+    "192.168.1.176 {{inventory_zone}}-176",
+    "192.168.1.177 {{inventory_zone}}-177",
+    "192.168.1.178 {{inventory_zone}}-178",
+  ]
+# ToDo: apply ansible-vault for credentials
+mysql_admin: goremo
+mysql_admin_pw: yU0B14NC1PdE

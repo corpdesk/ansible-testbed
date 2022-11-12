@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+NNODES=5
+
+$script = <<-SCRIPT
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUBqCres9ReNXhD04UAPzyT9Mc3vu5Xxmj/yD22XjVnXItALfJpmBRaoo+DKE6GLFuxoOnfJBuACxhmc6K8lGt2FjAFEJZ9ZF7/fxSBu8egAX+GWzAgOboSlXgRr950md6BzV3HSjBi5twAZowsk9adMbq6dqGvga6IOgGWlPf4mh1g7bTcI2wGZCcUtNcTMhBPVHXF0mJfJ3mh/4UF4dpHchvlDV6p0Llm0JFTrIosF+xAKq9k6yhwt0qw2VuKOji4FaxagrY0DFOkXB2yWDZPMaqEwKZWmsk9btSarqVd4ZuWOXoXveFkaTdhoA0t0Oqps+xiFXhGJGIcfDtGwvZ goremo@Georges-MacBook-Pro.local" >> /home/vagrant/.ssh/authorized_keys
+SCRIPT
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  (0..NNODES - 1).each do |i|
+    config.vm.define "my-ubuntu-#{i}" do |node|
+      # node.vm.box = "ubuntu/jammy64"
+      node.vm.box = "bento/ubuntu-22.04"
+      node.vm.hostname = "my-ubuntu-#{i}"
+      config.vm.provider "virtualbox" do |v|
+          v.memory = 2048
+          v.cpus = 2
+      end
+      node.vm.network "private_network", ip: "192.168.56.11#{i}"
+      node.vm.provision "shell", inline: $script
+      node.vm.provision "shell", inline: "echo hello from node #{i}"
+    end
+  end
+end

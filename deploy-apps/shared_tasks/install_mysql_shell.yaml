@@ -1,0 +1,19 @@
+
+# ./roles/my_role/tasks/configure.yml
+
+# - name: configure the application
+#   copy: 
+#     src: my_app.conf
+#     dest: /etc/my_app.conf
+#   become: true
+
+    - name: download mysql-shell deb pkg
+      ansible.builtin.get_url:
+      # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
+      url: "{{ local_repository }}/mysql-shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb"
+      dest: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb
+      force: yes
+
+    - name: Install a .deb package
+      ansible.builtin.apt:
+      deb: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb

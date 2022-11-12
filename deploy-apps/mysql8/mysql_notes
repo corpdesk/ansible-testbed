@@ -3,3 +3,6 @@ https://nap.so/posts/ansible-mysql-server-digitalocean/
 
 ansible-galaxy install -p ./roles geerlingguy.mysql
 
+Check if it is possible to use mysql-shell to manage the cluster
+https://dev.mysql.com/doc/mysql-shell/8.0/en/monitoring-innodb-cluster.html
+

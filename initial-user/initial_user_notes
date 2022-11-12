@@ -107,6 +107,9 @@ sudo apt install sshpass -y
 sshpass -p "yU0B14NC1PdE" ssh -o StrictHostKeyChecking=no ubuntu@192.168.1.137
 
 
+ansible-playbook -i hosts.ini install-vagrant.yaml -kK -vvv
+
+
 
 
 

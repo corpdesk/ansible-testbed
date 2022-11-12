@@ -1,0 +1,22 @@
+---
+dependencies: []
+
+galaxy_info:
+  description: 'Install and configure MySQL Server and MySQL InnoDB Cluster'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+    - name: Fedora
+      versions:
+        - 35
+  galaxy_tags:
+    - mysql
+    - innodb-cluster
+    - innodb
+    - mysql-replication
+    - mysql-ha
+    - cluster
+    - multinode
+    - infrastructure

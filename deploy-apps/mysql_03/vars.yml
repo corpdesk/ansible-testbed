@@ -1,0 +1,12 @@
+---
+disable_firewall: yes
+disable_selinux: yes
+mysql_resolv_mode: hosts
+mysql_subnet: 192.168.56.0/24
+mysql_listen_all_interfaces: yes
+
+mysql_root_pw: 'zDB591Bm5VX2lKFa1+1fmbChWlhYCeXUQyR73ljpM6k' # <- openssl rand -base64 32 | sed 's/=//'
+mysql_replication_mode: 'InnoDB Cluster'
+mysql_gr_name: 'fa075ac4-6186-46c4-a0fc-2894d853f664' # <- uuidgen
+mysql_gr_vcu: 'ad4d5617-2a6f-4c29-8a48-ccc2465133be' #  <- uuidgen
+mysql_innodb_cluster_name: 'cluster_lab' 

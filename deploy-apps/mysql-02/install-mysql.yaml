@@ -1,245 +1,249 @@
 ---
-- hosts: vagranthost186-02
+# ----------------------------------------------------------
+# SECTION ONE: install mysql
+- hosts: vagranthost107-02
   remote_user: devops
   become: yes
 
-  vars:
-    # mysql versioning system: https://dev.mysql.com/doc/refman/{{v_major}}.{{v_minor}}/en/which-version.html
-    v_major: "8"
-    v_minor: "0"
-    v_release: "31"
-    v_platform: "1ubuntu22.04_amd64"
-    
+  vars_files:
+    - ../shared_vars/mysql_cluster_vars.yaml
+  # vars:
+  #   # mysql versioning system: https://dev.mysql.com/doc/refman/{{v_major}}.{{v_minor}}/en/which-version.html
+  #   v_major: "8"
+  #   v_minor: "0"
+  #   v_release: "31"
+  #   v_platform: "1ubuntu22.04_amd64"
 
   tasks:
+    # --------------------
+    - name: Update apt-get repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      ignore_errors: true
 
-  # --------------------
-  - name: Update apt-get repo and cache
-    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
-    ignore_errors: true
+    # Currently switched off dued to internet cost and time taken
+    # - name: Upgrade all apt packages
+    #   apt: upgrade=dist force_apt_get=yes
 
-  # Currently switched off dued to internet cost and time taken
-  # - name: Upgrade all apt packages
-  #   apt: upgrade=dist force_apt_get=yes
+    - name: "Install mysql-server-{{v_major}}.{{v_minor}}"
+      ansible.builtin.apt:
+        name: mysql-server-{{v_major}}.{{v_minor}}
+        state: present
 
-  - name: "Install mysql-server-{{v_major}}.{{v_minor}}"
-    ansible.builtin.apt:
-      name: mysql-server-{{v_major}}.{{v_minor}}
-      state: present
+# ----------------------------------------------------------
+# SECTION TWO: harden mysql
 
-- hosts: vagranthost186-02
+- hosts: vagranthost107-02
   remote_user: devops
   become: yes
 
   roles:
-      - dev-sec.mysql-hardening
+    - dev-sec.mysql-hardening
 
   tasks:
+    - name: Restarted service mysql after hardening
+      ansible.builtin.service:
+        name: mysql
+        state: restarted
 
-  - name: Restarted service mysql after hardening
-    ansible.builtin.service:
-      name: mysql
-      state: restarted
-
-
-- hosts: vagranthost186-02
+# ----------------------------------------------------------
+# SECTION TWO: create db users, install mysql-shell, setup cluster
+- hosts: vagranthost107-02
   remote_user: devops
   become: yes
 
-  vars:
-    # array of vm hosts
-    zone_ids: ["186","173","137"]
-    # selected hosts: should be derived from zone_ids
-    zone_id: "186"
-    inventory_zone: "cd-db-{{ zone_id }}"
-    local_repository: "http://192.168.1.107"
-    cluster_hosts: [ "192.168.1.171 {{inventory_zone}}-171","192.168.1.172 {{inventory_zone}}-172","192.168.1.173 {{inventory_zone}}-173" ]
-    # ToDo: apply ansible-vault for credentials
-    mysql_admin: goremo
-    mysql_admin_pw: yU0B14NC1PdE
+  vars_files:
+    - ../shared_vars/mysql_cluster_vars.yaml
+  # vars:
+  #   # array of vm hosts
+  #   zone_ids: ["107","173","137"]
+  #   # selected hosts: should be derived from zone_ids
+  #   zone_id: "107"
+  #   inventory_zone: "cd-db-{{ zone_id }}"
+  #   local_repository: "http://192.168.1.107"
+  #   cluster_hosts: [ "192.168.1.171 {{inventory_zone}}-171","192.168.1.172 {{inventory_zone}}-172","192.168.1.173 {{inventory_zone}}-173" ]
+  #   # ToDo: apply ansible-vault for credentials
+  #   mysql_admin: goremo
+  #   mysql_admin_pw: yU0B14NC1PdE
 
   tasks:
+    - name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
+      community.mysql.mysql_user:
+        name: "{{ mysql_admin }}"
+        password: "{{ mysql_admin_pw }}"
+        host: "%"
+        priv: "*.*:ALL,GRANT"
+        state: present
 
-  - name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
-    community.mysql.mysql_user:
-      name: {{ mysql_admin }}
-      password: {{ mysql_admin_pw }}
-      host: '%'
-      priv: '*.*:ALL,GRANT'
-      state: present
+    # # # ---------------------------------------------------------------------------
+    # - name: Try to specify preference for mysql
+    #   shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-{{v_major}}.{{v_minor}} | debconf-set-selections
+    #   become: yes
 
-  
-  # # # ---------------------------------------------------------------------------
-  # - name: Try to specify preference for mysql
-  #   shell: echo mysql-apt-config mysql-apt-config/select-server select mysql-{{v_major}}.{{v_minor}} | debconf-set-selections
-  #   become: yes
+    # # # Download mysql debian package
+    # # To get the latest MySQL APT Repository go to:
+    # # https://dev.mysql.com/downloads/repo/apt/
+    # # By testing the download, one can extract the latest repository url:
+    # # https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb
+    # # Other info:
+    # # MySQL APT Repository
+    # # (mysql-apt-config_0.8.24-1_all.deb)
+    # # MD5: 9aaa5526ad7676baadcdee91982c861c
+    # - name: Add mysql apt-config debian
+    #   apt: deb=https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb update-cache=yes
+    #   become: yes
+    # # # ---------------------------------------------------------------------------
 
-  # # # Download mysql debian package
-  # # To get the latest MySQL APT Repository go to:
-  # # https://dev.mysql.com/downloads/repo/apt/
-  # # By testing the download, one can extract the latest repository url:
-  # # https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb
-  # # Other info:
-  # # MySQL APT Repository
-  # # (mysql-apt-config_0.8.24-1_all.deb)
-  # # MD5: 9aaa5526ad7676baadcdee91982c861c
-  # - name: Add mysql apt-config debian
-  #   apt: deb=https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb update-cache=yes
-  #   become: yes
-  # # # ---------------------------------------------------------------------------
+    # - name: Update apt-get repo and cache
+    #   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+    #   ignore_errors: true
 
-  # - name: Update apt-get repo and cache
-  #   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
-  #   ignore_errors: true
+    # - name: Install mysql-shell
+    #   ansible.builtin.apt:
+    #     name: mysql-shell
+    #     state: present
 
-  # - name: Install mysql-shell
-  #   ansible.builtin.apt:
-  #     name: mysql-shell
-  #     state: present
+    # - name: Install snapd
+    #   ansible.builtin.apt:
+    #     name: snapd
+    #     state: present
 
-  - name: Install snapd
-    ansible.builtin.apt:
-      name: snapd
-      state: present
+    # - name: Install mysql-shell via snap
+    #   shell: snap install mysql-shell --channel=latest/edge
+    #   become: yes
 
-  # - name: Install mysql-shell via snap
-  #   shell: snap install mysql-shell --channel=latest/edge
-  #   become: yes
+    # # this is working but it is not compiled with js yet
+    # - name: Install "foo" with options
+    #   community.general.snap:
+    #     name: mysql-shell
+    #     channel: latest/edge
 
-  # # this is working but it is not compiled with js yet
-  # - name: Install "foo" with options
-  #   community.general.snap:
-  #     name: mysql-shell
-  #     channel: latest/edge
+    - name: download mysql-shell deb pkg
+      get_url:
+        # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
+        url: "{{ local_repository }}/mysql-shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb"
+        dest: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb
+        force: yes
 
-  - name: download mysql-shell deb pkg
-    get_url: 
-      # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
-      url: "{{ local_repository }}/mysql-shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb"
-      dest: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
-      force: yes
+    - name: Install a .deb package
+      ansible.builtin.apt:
+        deb: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb
 
-  - name: Install a .deb package
-    ansible.builtin.apt:
-      deb: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
+    - name: Ensure mysql remote connection is enabled
+      replace:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: "^bind-address.*"
+        replace: "bind-address         = 0.0.0.0"
+        backup: yes
 
-  - name: Ensure mysql remote connection is enabled
-    replace:
-      path: /etc/mysql/mysql.conf.d/mysqld.cnf
-      regexp: '^bind-address.*'
-      replace: 'bind-address         = 0.0.0.0'
-      backup: yes
+    - name: Ensure mysqlx remote connection is enabled
+      replace:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: "^mysqlx-bind-address.*"
+        replace: "mysqlx-bind-address  = 0.0.0.0"
+        backup: yes
 
-  - name: Ensure mysqlx remote connection is enabled
-    replace:
-      path: /etc/mysql/mysql.conf.d/mysqld.cnf
-      regexp: '^mysqlx-bind-address.*'
-      replace: 'mysqlx-bind-address  = 0.0.0.0'
-      backup: yes
+    - name: Restart service mysql after allowing remote connection
+      ansible.builtin.service:
+        name: mysql
+        state: restarted
 
-  - name: Restarted service mysql after allowing remote connection
-    ansible.builtin.service:
-      name: mysql
-      state: restarted
+    # - name: setup mysql host-name in /etc/hosts
+    #   replace:
+    #     path: /etc/hosts
+    #     regexp: '^(.*)cd-db-{{ zone_id }}-{{ ansible_ssh_host }}(.*)$'
+    #     replace: "{{ ansible_ssh_host }} cd-db-{{ zone_id }}-{{ ansible_ssh_host }}"
+    #     backup: yes
+    #   become: yes
 
-  # - name: setup mysql host-name in /etc/hosts
-  #   replace:
-  #     path: /etc/hosts
-  #     regexp: '^(.*)cd-db-{{ zone_id }}-{{ ansible_ssh_host }}(.*)$'
-  #     replace: "{{ ansible_ssh_host }} cd-db-{{ zone_id }}-{{ ansible_ssh_host }}"
-  #     backup: yes
-  #   become: yes
+    # - name: add hostname
+    #   lineinfile:
+    #     path: /etc/hosts
+    #     state: present
+    #     line: "{{ item }}"
+    #   with_items:
+    #   - '# additional hostname:'
+    #   - "{{ ansible_ssh_host }} cd-db-{{ zone_id }}-{{ ansible_ssh_host }}"
+    #   - '#'
 
-  # - name: add hostname
-  #   lineinfile:
-  #     path: /etc/hosts
-  #     state: present
-  #     line: "{{ item }}"
-  #   with_items:
-  #   - '# additional hostname:'
-  #   - "{{ ansible_ssh_host }} cd-db-{{ zone_id }}-{{ ansible_ssh_host }}"
-  #   - '#'
+    - name: remove 127.0.2.* reference in /etc/hosts
+      replace:
+        path: /etc/hosts
+        regexp: '^127\.0\.2\.(.*)$'
+        replace: ""
+        backup: yes
+      become: yes
 
-  - name: remove 127.0.2.* reference in /etc/hosts
-    replace:
-      path: /etc/hosts
-      regexp: '^127\.0\.2\.(.*)$'
-      replace: ""
-      backup: yes
-    become: yes
+    - name: apply appropriate hostnames based on expected cluster nodes
+      lineinfile:
+        dest: /etc/hosts
+        line: "{{ item }}"
+      with_items:
+        "{{ cluster_hosts }}"
+        # - "192.168.1.171 {{inventory_zone}}-171"
+        # - "192.168.1.172 {{inventory_zone}}-172"
+        # - "192.168.1.173 {{inventory_zone}}-173"
 
-  - name: apply appropriate hostnames based on expected cluster nodes
-    lineinfile: 
-      dest: /etc/hosts
-      line: '{{ item }}'
-    with_items: '{{ cluster_hosts }}'
-      # - "192.168.1.171 {{inventory_zone}}-171"
-      # - "192.168.1.172 {{inventory_zone}}-172"
-      # - "192.168.1.173 {{inventory_zone}}-173" 
+    # sudo chmod -R 755 /home/devops/vagrant-deploy
+    # chown -R devops /home/devops/vagrant-deploy
+    # sudo cp init_cluster.js /home/devops/init_cluster.js
+    - name: Move init file
+      shell: cp -f /home/vagrant/init_cluster.js /home/devops/init_cluster.js && chown -R devops /home/devops/init_cluster.js
+      become: yes
 
-  # sudo chmod -R 755 /home/devops/vagrant-deploy
-  # chown -R devops /home/devops/vagrant-deploy
-  # sudo cp init_cluster.js /home/devops/init_cluster.js
-  - name: Move init file
-    shell: cp -f /home/vagrant/init_cluster.js /home/devops/init_cluster.js && chown -R devops /home/devops/init_cluster.js
-    become: yes
+    - name: Move cluster build file
+      shell: cp -f /home/vagrant/build_cluster.js /home/devops/build_cluster.js && chown -R devops /home/devops/build_cluster.js
+      become: yes
 
-  - name: Move cluster build file
-    shell: cp -f /home/vagrant/build_cluster.js /home/devops/build_cluster.js && chown -R devops /home/devops/build_cluster.js
-    become: yes
+    # ---------------------------------------------------
+    # INIT CLUSTER
+    - name: Init cluster
+      shell: mysqlsh --file ~/init_cluster.js
+      become_user: devops
 
-  # ---------------------------------------------------
-  # INIT CLUSTER 
-  - name: Init cluster
-    shell: mysqlsh --file ~/init_cluster.js
-    become_user: devops
+    # # // On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to my.cnf.
+    # # ToDo: should be implemented with 'when' on condition that instance is ready for clusters
+    # # Ref: https://dev.mysql.com/doc/refman/5.7/en/replication-mode-change-online-enable-gtids.html
+    # - name: On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to config file
+    #   lineinfile:
+    #     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    #     state: present
+    #     line: "{{ item }}"
+    #   with_items:
+    #   - '# gtid_mode setting for innodb cluster:'
+    #   - 'gtid_mode=ON'
+    #   - 'enforce_gtid_consistency=ON'
+    #   - '#'
 
-  # # // On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to my.cnf. 
-  # # ToDo: should be implemented with 'when' on condition that instance is ready for clusters
-  # # Ref: https://dev.mysql.com/doc/refman/5.7/en/replication-mode-change-online-enable-gtids.html
-  # - name: On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to config file
-  #   lineinfile:
-  #     path: /etc/mysql/mysql.conf.d/mysqld.cnf
-  #     state: present
-  #     line: "{{ item }}"
-  #   with_items:
-  #   - '# gtid_mode setting for innodb cluster:'
-  #   - 'gtid_mode=ON'
-  #   - 'enforce_gtid_consistency=ON'
-  #   - '#'
+    - name: Restarted service mysql after cluster configuration
+      ansible.builtin.service:
+        name: mysql
+        state: restarted
+      become: yes
 
-  - name: Restarted service mysql after cluster configuration
-    ansible.builtin.service:
-      name: mysql
-      state: restarted
-    become: yes
+    # ToDo: execute with arguments or import file eg: inventory, primary-ip
+    - name: Re-run init cluster after restart to confirm compliance
+      shell: mysqlsh --file ~/init_cluster.js
+      become_user: devops
 
-  # ToDo: execute with arguments or import file eg: inventory, primary-ip
-  - name: Re-run init cluster after restart to confirm compliance
-    shell: mysqlsh --file ~/init_cluster.js
-    become_user: devops
+    - name: Restart service mysql after initializing replication
+      ansible.builtin.service:
+        name: mysql
+        state: restarted
+      become: yes
 
   # ## ---------------------------------------------------
-  # ## BUILD CLUSTER 
+  # ## BUILD CLUSTER
   # - name: Run build cluster after cluster initialization
   #   shell: mysqlsh --file ~/build_cluster.js
   #   become_user: devops
 
 - hosts: mysql-primary
   remote_user: devops
-  become: yes
 
   tasks:
-
-  ## ---------------------------------------------------
-  ## BUILD CLUSTER 
-  # ToDo: execute with arguments or import file eg: inventory, primary-ip
-  - name: Run build cluster after cluster initialization
-    shell: mysqlsh --file ~/build_cluster.js
-    become_user: devops
-    
-
-  
-
-  
-
+    ## ---------------------------------------------------
+    ## BUILD CLUSTER
+    # ToDo: execute with arguments or import file eg: inventory, primary-ip
+    - name: Run build cluster after cluster initialization
+      shell: mysqlsh --file ~/build_cluster.js
+      become_user: devops
