@@ -1,10 +1,11 @@
-Based on: https://github.com/garutilorenzo/ansible-role-linux-mysql
 [![GitHub issues](https://img.shields.io/github/issues/garutilorenzo/ansible-role-linux-mysql)](https://github.com/garutilorenzo/ansible-role-linux-mysql/issues)
 ![GitHub](https://img.shields.io/github/license/garutilorenzo/ansible-role-linux-mysql)
 [![GitHub forks](https://img.shields.io/github/forks/garutilorenzo/ansible-role-linux-mysql)](https://github.com/garutilorenzo/ansible-role-linux-mysql/network)
 [![GitHub stars](https://img.shields.io/github/stars/garutilorenzo/ansible-role-linux-mysql)](https://github.com/garutilorenzo/ansible-role-linux-mysql/stargazers)
 
 # Install and configure MySQL Server and MySQL InnoDB Cluster
+
+Based on: https://github.com/garutilorenzo/ansible-role-linux-mysql
 
 This role will install and configure MySQL server or MySQL in HA mode using [MySQL InnoDB Cluster](https://dev.mysql.com/doc/refman/8.0/en/mysql-innodb-cluster-introduction.html) or [GTID replication](https://dev.mysql.com/doc/mysql-replication-excerpt/5.6/en/replication-gtids.html)
 
