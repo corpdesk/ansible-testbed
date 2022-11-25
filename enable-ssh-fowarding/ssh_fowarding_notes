@@ -1,0 +1,12 @@
+PROCEDURE:
+- controller to setup ssh access at github with a paraphrase
+- controller to launch ssh-agent
+- controller to add public key at github to ssh-agent
+- configure ssh-configure (should be automated with shell for ansible)
+    - vim  ~/.ssh/config
+    - autogenerate a new config file
+    - replace existing file
+    - list all servers where ssh fowarding will be required
+    - allow ssh fowarding in the above
+- controller to use the same public key at all VMs where private git repository is expected to be cloned via ssh forwarding.
+

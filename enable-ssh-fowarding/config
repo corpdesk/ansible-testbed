@@ -1,0 +1,23 @@
+# cd repository
+Host *.github.com
+  ForwardAgent yes
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+
+# demo host for cd-api
+# ssh-agent fowarding used to clone cd-api
+Host cd-node-01.a2hosted.com
+  ForwardAgent yes
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+
+# vm host for cd-api
+# ssh-agent fowarding used to clone cd-api
+Host cd-node-01.a2hosted.com
+  ForwardAgent yes
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+

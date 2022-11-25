@@ -1,0 +1,41 @@
+1. setup machine farm:
+    - use shell to create inventory related files from json file
+        - hosts.json
+        - using jq to read json file: https://www.baeldung.com/linux/jq-command-json
+        - hosts.ini
+        - ./vagrant-deploy/Vagrantfile
+        - ~/.ssh/config
+    - rollout vagrant servers as per ansible inventory
+        - setup initial user in vm hosts
+        - on each vm, set up ssh-agent fowarding in readiness for cloning private repository
+        - rollout vms
+        
+    - security:
+        - firewall
+    - test:
+        - all server are reachable in network
+    
+
+2. setup storage services:
+    - install mysql-cluster
+    - security:
+        - firewall
+    - install gluster
+    - security:
+        - firewall
+    - install redis cluster
+    - security:
+        - firewall
+
+3. set-up cd-api cluster
+    - install mysql-router
+    - install npm
+    - clone private repository
+    - setup connection to storage services
+    - security:
+        - firewall
+
+
+4. set-up module federation cluster
+    - clone private repository
+    - deploy dist directory
