@@ -1,12 +1,38 @@
 #!/bin/bash
 
+rm hosts.ini
 # use jq to get group names
-g=jq '.groups' hosts.json
+groups=$(jq ".groups" hosts.json)
 i=0
-for group in $g
+for group in $groups
 do
-    jq ".groups[$i].name" hosts.json >> hosts.ini
-    $i=$i + 1
+    g=$(jq ".groups[$i].name" hosts.json)
+    echo "$g"
+    if [ "$g" == null ]
+    then
+        echo ""
+    else
+        echo "[$g]" >> hosts.ini
+        # hosts=$(jq ".hosts" hosts.json)
+        hosts=$(jq ".hosts[] | select(.color=='yellow')" hosts.json)
+        # ------------------------------
+        for host in $hosts
+        do
+            # get parents
+            p=$(jq ".hosts[$i].group_parents" hosts.json)
+            h=$(jq ".hosts[$i].ip" hosts.json)
+            echo "$h"
+            if [ "$h" == null ]
+            then
+                echo ""
+            else
+                echo "$h" >> hosts.ini
+            fi
+            i=$i+1;
+        done
+        # ------------------------------
+    fi
+    i=$i+1;
 done
 # ...then loop through
 # append group name
