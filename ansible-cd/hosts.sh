@@ -1,27 +1,39 @@
 #!/bin/bash
 
-rm hosts.ini
+# delete file if exists
+rm -f hosts.ini
+
 # use jq to get group names
 groups=$(jq ".groups" hosts.json)
+
+# count groups
 groupsLen=$(echo "$groups" | jq '. | length')
+
+# initiate group counter
 i=0
-# for group in $groups
+
+# loop through the groups
 while [ $i -le $groupsLen ]
 do
+    # get value of the current group
     g=$(jq ".groups[$i].name" hosts.json)
     echo "value of g1 is $g"
+
+    # filter off null groups and process valid groups
     if [ "$g" = null ]
     then
         echo ""
     else
         echo "[$g]" >> hosts.ini
         echo "$g"
+
+        # get all the hosts
         hosts=$(jq ".hosts" hosts.json)
+        # count available hosts
         hostsLen=$(echo "$hosts" | jq '. | length')
         j=0
-        # hosts=$(jq ".hosts[] | select(.color=='yellow')" hosts.json)
         # ------------------------------
-        # for host in $hosts
+        # loop through $hosts
         while [ $j -le $hostsLen ]
         do
             echo "value of i is $i"
@@ -37,17 +49,14 @@ do
                 # check if this host belongs to this parent_group
                 # select from gp where group.name == group
                 echo "value of gp is $gp"
-                # jq '.[] | select(.color=="yellow")' fruits.json
                 isChild=$(echo "$gp" | jq ".[] | select(.name==$g)")
                 echo "value of isChild is $isChild"
                 isChildLen=$(echo "$isChild" | jq '. | length')
                 echo "value of isChildLen is $isChildLen"
-                if [ $isChildLen > 0 ]
+                if [ $isChildLen -gt 0 ]
                 then
                     echo "valude of isChild2 is $isChild"
                     h=$(jq ".hosts[$j].ip" hosts.json)
-                    echo "$h"
-                    echo "---------------:"
                     echo "$h" >> hosts.ini
                     
                 else
@@ -57,15 +66,16 @@ do
             j=$(($j + 1))
         done
         
-        # ------------------------------
     fi
     # create a space before the next group
     echo " " >> hosts.ini
-    i=$(($i + 1))
+    i=$(("$i" + 1))
 done
-# ...then loop through
-# append group name
-# get all the items under the group
-# loop through the result and append the ip and hostanem
-# append line
-# echo 'I=eth0' >> net.eth0.config.sh
+
+{ 
+    echo "[multi:vars]"; 
+    echo "ansible_user=vagrant"; 
+    echo "ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key"; 
+    echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'";
+    echo " "
+}  >> hosts.ini
