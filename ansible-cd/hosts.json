@@ -35,7 +35,7 @@
             "is_vm": false,
             "cd_app": null,
             "group_parents": [
-                "vm-host"
+                {"name": "vm-host"}
             ],
             "port": null
         },
@@ -46,7 +46,7 @@
             "is_vm": false,
             "cd_app": null,
             "group_parents": [
-                "vm-host"
+                {"name": "vm-host"}
             ],
             "port": null
         },
@@ -57,7 +57,7 @@
             "is_vm": false,
             "cd_app": null,
             "group_parents": [
-                "vm-host"
+                {"name": "vm-host"}
             ],
             "port": null
         },
@@ -68,7 +68,8 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front"
+                {"name": "cd-front"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -79,7 +80,8 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front"
+                {"name": "cd-front"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -90,7 +92,8 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front"
+                {"name": "cd-front"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -101,7 +104,8 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front"
+                {"name": "cd-front"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -112,7 +116,8 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front"
+                {"name": "cd-front"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -123,8 +128,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "db",
-                "fs"
+                {"name": "db"},
+                {"name": "fs"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -135,8 +141,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "db",
-                "fs"
+                {"name": "db"},
+                {"name": "fs"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -147,8 +154,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "db",
-                "fs"
+                {"name": "db"},
+                {"name": "fs"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -159,8 +167,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front",
-                "cache"
+                {"name": "cd-front"},
+                {"name": "cache"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -171,8 +180,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front",
-                "cache"
+                {"name": "cd-front"},
+                {"name": "cache"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -183,8 +193,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "db",
-                "fs"
+                {"name": "db"},
+                {"name": "fs"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -195,8 +206,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "db",
-                "fs"
+                {"name": "db"},
+                {"name": "fs"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -207,8 +219,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "db",
-                "fs"
+                {"name": "db"},
+                {"name": "fs"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -219,8 +232,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front",
-                "cache"
+                {"name": "cd-front"},
+                {"name": "cache"},
+                {"name": "vm"}
             ],
             "port": null
         },
@@ -231,8 +245,9 @@
             "is_vm": true,
             "cd_app": null,
             "group_parents": [
-                "cd-front",
-                "cache"
+                {"name": "cd-front"},
+                {"name": "cache"},
+                {"name": "vm"}
             ],
             "port": null
         }
