@@ -1,3 +1,5 @@
+#!/bin/bash
+
 targetFile="Vagrantfile";
 vmBox="bento/ubuntu-22.04";
 vmMem="2048";
