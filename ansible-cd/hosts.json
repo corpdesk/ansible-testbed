@@ -4,9 +4,9 @@
         "configInventorySh":"config_inventory.sh",
         "configHostsSh":"config_hosts.sh",
         "configSshSh":"config_ssh.sh",
+        "sshConfigFile":"config",
         "configVagrantSh":"config_vagrant.sh",
-        "hostInventory":"inventory.ini",
-        "sshConfigFile":"config"
+        "hostInventory":"inventory.ini"
     },
     "groups": [
         {

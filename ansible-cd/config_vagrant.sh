@@ -1,8 +1,9 @@
 #!/bin/bash
-# Script variables:
+# Script input variables:
 #   - ip Range
-#   - lIp
-#   - hIp
+#       - lIp
+#       - hIp
+#   - zone
 
 targetFile="Vagrantfile";
 vmBox="bento/ubuntu-22.04";
@@ -15,7 +16,7 @@ hIp=178;
 rm -f $targetFile;
 
 { 
-    echo "# -*- mode: ruby -*-";
+    echo "# -*- mode: ruby -*-";       
     echo "# vi: set ft=ruby :";
 
     echo "VAGRANTFILE_API_VERSION = \"2\"";

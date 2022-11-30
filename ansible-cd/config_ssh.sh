@@ -1,16 +1,16 @@
 #!/bin/bash
 
 hostData="hosts.json";
-sshConfigFile=$(jq ".files.sshConfigFile" "$hostData");
+sshConfigFile=$(jq -r ".files.sshConfigFile" "$hostData");
 eTime=$(date +%s);
 # sshConfigFile="\~/.ssh/config";
 # sshConfigFile="config";
-IdentityFile="\~/.ssh/id_ed25519_mac_01_github";
+IdentityFile="~/.ssh/id_ed25519_mac_01_github";
 
 # back up file if exists
 if [ -e "$sshConfigFile" ]
 then
-    cp "$sshConfigFile" "$sshConfigFile.\"$eTime\".bk"
+    cp "$sshConfigFile" "$sshConfigFile.$eTime.bk"
     rm -f $sshConfigFile;
 else
     echo "cannot copy. The file \"$sshConfigFile\" does not exist"

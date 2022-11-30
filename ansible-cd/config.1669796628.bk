@@ -2,89 +2,89 @@ Host 192.168.1.201
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.202
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.203
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.204
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.205
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.206
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.207
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.208
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.209
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.210
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.211
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.212
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.213
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.214
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
 Host 192.168.1.215
   ForwardAgent yes
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/id_ed25519_mac_01_github
+  IdentityFile \~/.ssh/id_ed25519_mac_01_github
  
