@@ -18,7 +18,7 @@ i=0
 while [ $i -lt $groupsLen ]
 do
     # get value of the current group
-    g=$(jq ".groups[$i].name" "$hostData")
+    g=$(jq -r ".groups[$i].name" "$hostData")
     echo "value of g1 is $g"
     
     # filter off null groups and process valid groups
@@ -56,7 +56,7 @@ do
                 # check if this host belongs to this parent_group
                 # select from gp where group.name == group
                 echo "value of gp is $gp"
-                isChild=$(echo "$gp" | jq ".[] | select(.name==$g)")
+                isChild=$(echo "$gp" | jq ".[] | select(.name==\"$g\")")
                 isChildName=$(echo "$isChild" | jq ".name")
                 echo "value of isChild is $isChild"
                 if [ $isChildName ]
@@ -67,7 +67,7 @@ do
                     if [ $isChildLen -gt 0 ]
                     then
                         echo "valude of isChild2 is $isChild"
-                        h=$(jq ".hosts[$j].ip" "$hostData")
+                        h=$(jq -r ".hosts[$j].ip" "$hostData")
                         echo "$h" >> $hostInventory
                         
                     else
@@ -93,3 +93,5 @@ done
     echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'";
     echo " "
 }  >> $hostInventory
+
+cp  $hostInventory ../initial-user/$hostInventory
