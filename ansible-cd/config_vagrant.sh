@@ -1,4 +1,8 @@
 #!/bin/bash
+# Script variables:
+#   - ip Range
+#   - lIp
+#   - hIp
 
 targetFile="Vagrantfile";
 vmBox="bento/ubuntu-22.04";

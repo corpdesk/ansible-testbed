@@ -13,7 +13,7 @@ groupsLen=$(echo "$groups" | jq '. | length')
 i=0
 
 # loop through the groups
-while [ $i -le $groupsLen ]
+while [ $i -lt $groupsLen ]
 do
     # get value of the current group
     g=$(jq ".groups[$i].name" hosts.json)
@@ -34,7 +34,7 @@ do
         j=0
         # ------------------------------
         # loop through $hosts
-        while [ $j -le $hostsLen ]
+        while [ $j -lt $hostsLen ]
         do
             echo "value of i is $i"
             echo "value of j is $j"

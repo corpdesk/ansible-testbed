@@ -1,32 +1,35 @@
 #!/bin/bash
 
-
-# configFile="\~/.ssh/config";
-configFile="config";
+hostData="hosts.json";
+sshConfigFile=$(jq ".files.sshConfigFile" "$hostData");
+eTime=$(date +%s);
+# sshConfigFile="\~/.ssh/config";
+# sshConfigFile="config";
 IdentityFile="\~/.ssh/id_ed25519_mac_01_github";
 
 # back up file if exists
-if [ -e "$configFile" ]
+if [ -e "$sshConfigFile" ]
 then
-    cp "$configFile" "$configFile.bk"
-    rm -f $configFile;
+    cp "$sshConfigFile" "$sshConfigFile.\"$eTime\".bk"
+    rm -f $sshConfigFile;
 else
-    echo "cannot copy. The file $configFile does not exist"
+    echo "cannot copy. The file \"$sshConfigFile\" does not exist"
 fi
 
 # get all the hosts
-hosts=$(jq ".hosts" hosts.json)
+hosts=$(jq ".hosts" "$hostData")
 hostsLen=$(echo "$hosts" | jq '. | length');
 echo "value of hostsLen is $hostsLen";
 i=0;
-while [ "$i" -le $hostsLen ]
+while [ "$i" -lt $hostsLen ]
 do
     # use -r to remove the double quotes
     ip=$( echo "$hosts" | jq -r ".[$i].ip")
     isVm=$( echo "$hosts" | jq ".[$i].is_vm")
+    isActive=$( echo "$hosts" | jq ".[$i].is_active")
     echo "the value of ip is $ip";
     # echo "the value of isVm is $isVm";
-    if [ $isVm = true ]
+    if [ $isVm = true ] && [ $isActive = true ]
     then
         echo "is vm"
         {
@@ -35,9 +38,9 @@ do
             echo "  AddKeysToAgent yes";
             echo "  UseKeychain yes";
             echo "  IdentityFile $IdentityFile";
-        } >> config
+        } >> $sshConfigFile
         # create a space before the next setting
-        echo " " >> $configFile
+        echo " " >> $sshConfigFile
     else
         echo "is not vm"
     fi
