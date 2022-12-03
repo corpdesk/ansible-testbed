@@ -150,8 +150,8 @@
 
   - name: upload Vagrantfile
     copy:
-      src: sub-hosts/{{ ansible_ssh_host }}/{{ deploy_app }}/Vagrantfile
-      dest: /home/devops/vagrant-deploy/{{ deploy_app }}/Vagrantfile
+      src: sub-hosts/{{ ansible_ssh_host }}/Vagrantfile
+      dest: /home/devops/vagrant-deploy/Vagrantfile
       force: yes
       owner: devops
       mode: '0755'
@@ -159,7 +159,7 @@
   - name: place initial user script
     copy:
       src: remove_devops.sh
-      dest: /home/devops/vagrant-deploy/{{ deploy_app }}/remove_devops.sh
+      dest: /home/devops/vagrant-deploy/remove_devops.sh
       force: yes
       owner: devops
       group: devops
@@ -168,7 +168,7 @@
   - name: place initial user script
     copy:
       src: setup_initial_user.sh
-      dest: /home/devops/vagrant-deploy/{{ deploy_app }}/reset_environment.sh
+      dest: /home/devops/vagrant-deploy/reset_environment.sh
       force: yes
       owner: devops
       group: devops
@@ -177,7 +177,7 @@
   - name: place initial user script
     copy:
       src: setup_initial_user.sh
-      dest: /home/devops/vagrant-deploy/{{ deploy_app }}/setup_initial_user.sh
+      dest: /home/devops/vagrant-deploy/setup_initial_user.sh
       force: yes
       owner: devops
       group: devops
@@ -225,13 +225,13 @@
   - name: move to vagrant-deploy and stop vms for this host
     shell:
       cmd: vagrant destroy -f
-      chdir: /home/devops/vagrant-deploy/{{ deploy_app }}/
+      chdir: /home/devops/vagrant-deploy/
     become_user: devops
     ignore_errors: true
   
   - name: Recursively remove .vagrant dir
     ansible.builtin.file:
-      path: /home/devops/vagrant-deploy/{{ deploy_app }}/.vagrant
+      path: /home/devops/vagrant-deploy/.vagrant
       state: absent
 
   - name: Restart network manager for virtualbox 

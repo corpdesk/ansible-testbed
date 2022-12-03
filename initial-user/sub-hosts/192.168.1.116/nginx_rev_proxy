@@ -1,0 +1,55 @@
+stream {
+  upstream ssh-01 {
+    server 192.168.60.201:22;
+  }
+
+  server {
+    listen 7201;
+    proxy_pass ssh-01;
+  }
+
+  upstream mysql-01 {
+    server 192.168.60.201:3306;
+  }
+
+  server {
+    listen 7122;
+    proxy_pass mysql-01;
+  }
+
+  upstream ssh-02 {
+    server 192.168.60.202:22;
+  }
+
+  server {
+    listen 6202;
+    proxy_pass ssh-02;
+  }
+
+  upstream mysql-02 {
+    server 192.168.60.202:3306;
+  }
+
+  server {
+    listen 7222;
+    proxy_pass mysql-02;
+  }
+
+  upstream ssh-03 {
+    server 192.168.60.203:22;
+  }
+
+  server {
+    listen 6203;
+    proxy_pass ssh-03;
+  }
+
+  upstream mysql-03 {
+    server 192.168.60.203:3306;
+  }
+
+  server {
+    listen 7322;
+    proxy_pass mysql-02;
+  }
+}
