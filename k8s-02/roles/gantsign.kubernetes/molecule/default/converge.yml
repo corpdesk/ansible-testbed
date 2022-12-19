@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+
+  pre_tasks:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+      changed_when: no
+
+  roles:
+    - role: ansible-role-kubernetes
+      # Can't test admin/development as kubeadm requires systemd to install
+      kubernetes_node_type: master

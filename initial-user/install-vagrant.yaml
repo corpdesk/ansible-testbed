@@ -99,6 +99,11 @@
       mode: '0755'
       state: directory
 
+  # vagrant plugin install vagrant-disksize
+  - name: install plugin for disk resizing
+    shell:
+      cmd: vagrant plugin install vagrant-disksize
+
   # - name: Remove ansible.cfg file
   #   ansible.builtin.file:
   #     path: /home/devops/vagrant-deploy/{{ deploy_app }}/ansible.cfg

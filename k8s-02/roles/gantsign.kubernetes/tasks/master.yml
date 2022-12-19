@@ -1,0 +1,9 @@
+---
+- name: install kubernetes (master)
+  become: yes
+  apt:
+    name:
+      - kubelet
+      - kubectl
+      - kubernetes-cni
+    state: present

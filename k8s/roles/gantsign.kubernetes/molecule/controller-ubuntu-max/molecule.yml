@@ -1,0 +1,25 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
+
+platforms:
+  - name: ansible-role-kubernetes-controller-ubuntu-max
+    image: ubuntu:20.04
+
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ../controller/converge.yml
+
+verifier:
+  name: testinfra
+  directory: ../controller/tests

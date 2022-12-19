@@ -8,7 +8,9 @@
 targetFile="Vagrantfile";
 subhostDir="../initial-user/sub-hosts";
 vmBox="bento/ubuntu-22.04";
-vmMem="2048";
+vmMem=2048;
+vmDisk="50Gb";
+vmCups=2;
 netBase="192.168.1";
 
 # /////////////////////////////////////////////////
@@ -73,9 +75,11 @@ do
             
             echo "  # network setup";
             echo "  config.vm.network \"public_network\", bridge: \"wlp2s0: Wi-Fi (AirPort)\", auto_config: true";
+            echo "  config.vm.disk :disk, size: \"$vmDisk\", primary: true";
             
             echo "  config.vm.provider :virtualbox do |v|";
             echo "    v.memory = $vmMem";
+            echo "    v.cpus = $vmCups";
             echo "    v.linked_clone = true";
             echo "  end";
             

@@ -1,0 +1,22 @@
+---
+# Node type: determines what features are installed.
+# - controller:
+#     - kubectl
+# - worker:
+#     - kubelet
+#     - kubernetes-cni
+# - master:
+#     - kubelet
+#     - kubectl
+#     - kubernetes-cni
+# - admin:
+#     - kubelet
+#     - kubectl
+#     - kubeadm
+#     - kubernetes-cni
+
+kubernetes_node_type: worker
+# kubernetes_node_type: admin
+
+# The ID of the APT key for the Kubernetes repository (optional)
+# kubernetes_apt_key_id:

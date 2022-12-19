@@ -1,0 +1,11 @@
+---
+- name: install kubernetes (admin)
+  become: yes
+  apt:
+    name:
+      - kubelet
+      - kubectl
+      - kubeadm
+      - kubernetes-cni
+    state: present
+  when: kubernetes_node_type == 'admin'

@@ -1,0 +1,8 @@
+---
+- name: install kubernetes (worker)
+  become: yes
+  apt:
+    name:
+      - kubelet
+      - kubernetes-cni
+    state: present

@@ -1,0 +1,17 @@
+https://docs.k0sproject.io/v0.10.0/examples/ansible-playbook/
+
+ansible-galaxy install gantsign.kubernetes -p ~/ansible-testbed/k8s/roles/
+
+ansible-playbook -i hosts.ini installk8s.yaml -kK -vvv
+yU0B14NC1PdE
+
+vms:
+1. haproxy
+2. controller-0
+3. controller-1
+4. controller-2
+5. worker-0
+6. worker-1
+7. worker-2
+
+

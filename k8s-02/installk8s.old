@@ -1,0 +1,9 @@
+---
+- hosts: workers
+
+  remote_user: devops
+  become: yes
+
+  roles:
+    - role: gantsign.kubernetes
+      kubernetes_node_type: worker
