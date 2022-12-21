@@ -7,3 +7,4 @@
 sudo apt update
 sudo apt upgrade
 sudo apt install vagrant -y
+vagrant plugin install vagrant-scp

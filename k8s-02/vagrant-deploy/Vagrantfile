@@ -29,7 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.cpus = 2
     v.linked_clone = true
   end
-  (201..207).each do |i|
+  (201..204).each do |i|
     config.vm.define "cd-db-#{zone}-#{i}" do |app|
       app.vm.hostname = "cd-db-#{zone}-#{i}"
       app.vm.network :public_network, ip: "192.168.1.#{i}"

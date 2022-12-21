@@ -6,12 +6,463 @@ ansible-playbook -i hosts.ini installk8s.yaml -kK -vvv
 yU0B14NC1PdE
 
 vms:
-1. haproxy
-2. controller-0
-3. controller-1
-4. controller-2
-5. worker-0
-6. worker-1
-7. worker-2
+1. haproxy          cd-db-emp-06-201    192.168.1.201
+2. controller-0     cd-db-emp-06-202    192.168.1.202
+3. controller-1     cd-db-emp-06-203    192.168.1.203
+4. controller-2     cd-db-emp-06-204    192.168.1.204
+5. cd-db-emp-06-205         cd-db-emp-06-205    192.168.1.205
+6. cd-db-emp-06-206         cd-db-emp-06-206    192.168.1.206
+7. cd-db-emp-06-207         cd-db-emp-06-207    192.168.1.207
+
+# copy files to instances
+# - https://medium.com/@smartsplash/using-scp-and-vagrant-scp-in-virtualbox-to-copy-from-guest-vm-to-host-os-and-vice-versa-9d2c828b6197
+# - https://stackoverflow.com/questions/16704059/easiest-way-to-copy-a-single-file-from-host-to-vagrant-guest
+
+vagrant plugin install vagrant-scp
+vagrant scp <some_local_file_or_dir> [vm_name]:<somewhere_on_the_vm>
+scp vag_scp_test.txt devops@192.168.1.202:
+
+add config to /etc/haproxy/haproxy.cfg
+
+frontend k8s
+        bind 192.168.1.201:6443
+        mode tcp
+        default_backend k8s
+
+backend k8s
+        balance roundrobin
+        mode tcp
+        option tcplog   
+        option tcp-check
+        server cd-db-emp-06-202 192.168.1.202:6443 check
+        server cd-db-emp-06-203 192.168.1.203:6443 check
+        server cd-db-emp-06-204 192.168.1.204:6443 check
+
+# ////////////////////////////////////////////
+# CONFIRM ALL NODES CAN SEE EACH OTHER
+# - https://kubernetes.io/docs/tasks/access-application-cluster/configure-dns-cluster/
+# - https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengconfiguringdnsserver.htm
+# - https://www.youtube.com/watch?v=1K9Tky4CMcY
+# - https://www.youtube.com/watch?v=P2kiinwg00c
+# - https://www.youtube.com/watch?v=juJvB2-TOr8
+# - https://www.youtube.com/watch?v=W5xHec3_Tts
+# - https://www.youtube.com/watch?v=qRiLmLACYSY
+# OPTION 1: implement dns
+# - https://www.howtogeek.com/devops/how-to-run-your-own-dns-server-on-your-local-network/
+
+# OPTION 2: setup hosts file
+# add the lines below to all /etc/hosts file
+192.168.1.201 cd-db-emp-06-201
+192.168.1.202 cd-db-emp-06-202
+192.168.1.203 cd-db-emp-06-203
+192.168.1.204 cd-db-emp-06-204
+192.168.1.205 cd-db-emp-06-205
+192.168.1.206 cd-db-emp-06-205
+192.168.1.205 cd-db-emp-06-207
+
+# IMPORTANT CONSIDERATION
+# enventually it should be possible to automate initialization, modifacations so that 
+# even addition of extra servers to kubernates can be automated
+
+#////////////////////////////////////////////
+
+# --------------------------------------------------
+# PKI Setup
+#   -OPTION 1
+controller-01
+sudo apt install golang-go
+go get github.com/cloudflare/cfssl/cmd/cfssl
+go get github.com/cloudflare/cfssl/cmd/cfssljson
+
+# go install github.com/cloudflare/cfssl/cmd/...@latest
+add the line below to ~/.bashrc file
+export PATH="/go/bin:$PATH"
+
+# -------------------------------------
+#   OPTION 2
+wget -q --show-progress --https-only --timestamping \
+  https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssl \
+  https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssljson
+chmod +x cfssl cfssljson
+sudo mv cfssl cfssljson /usr/local/bin/
+
+# -------------------------------------------
+# install kubectl: OPTION 1
+curl -LO https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl
+curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+# install kubectl: OPTION 2:
+VERSION=1.26.0
+wget "https://storage.googleapis.com/kubernetes-release/release/v$VERSION/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+
+
+#------------------------------------------
+# GENERATE TLS CERTS
+# Certificate Authority that can be used to generate additional TLS certificates.
+# Generate the CA configuration file, certificate, and private key:
+# Results: ca-key.pem, ca.pem
+
+{
+
+cat > ca-config.json <<EOF
+{
+  "signing": {
+    "default": {
+      "expiry": "8760h"
+    },
+    "profiles": {
+      "kubernetes": {
+        "usages": ["signing", "key encipherment", "server auth", "client auth"],
+        "expiry": "8760h"
+      }
+    }
+  }
+}
+EOF
+
+cat > ca-csr.json <<EOF
+{
+  "CN": "Kubernetes",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "Kubernetes",
+      "OU": "CA",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+
+}
+
+# ------------------------------------------------------
+# Admin Client Certificate
+# Results:admin-key.pem, admin.pem
+{
+
+cat > admin-csr.json <<EOF
+{
+  "CN": "admin",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "system:masters",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  admin-csr.json | cfssljson -bare admin
+
+}
+
+
+
+
+# ------------------------------------------------------
+# Kubelet Client Certificates
+# Using Node Authorization
+# Node authorization is a special-purpose authorization mode that specifically authorizes API requests made by kubelets
+# Expected results: cd-db-emp-06-205-key.pem, cd-db-emp-06-205.pem,cd-db-emp-06-206-key.pem, cd-db-emp-06-206.pem, cd-db-emp-06-207-key.pem, cd-db-emp-06-207.pem
+
+i=0;
+while [ $i -lt 3 ]
+do
+    echo "$i";
+    instance=$( jq '.' ../workers.json | jq .[$i].hostname)
+    instanceIp=$( jq '.' ../workers.json | jq .[$i].ip)
+    echo "$instanceIp";
+    #-------------------------------------------------------
+    cat > ${instance}-csr.json <<EOF
+    {
+    "CN": "system:node:${instance}",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+        "C": "US",
+        "L": "Portland",
+        "O": "system:nodes",
+        "OU": "Kubernetes The Hard Way",
+        "ST": "Oregon"
+        }
+    ]
+    }
+    EOF
+
+    EXTERNAL_IP=$instanceIp
+
+    cfssl gencert \
+    -ca=ca.pem \
+    -ca-key=ca-key.pem \
+    -config=ca-config.json \
+    -hostname=${instance},${EXTERNAL_IP}\
+    -profile=kubernetes \
+    ${instance}-csr.json | cfssljson -bare ${instance}
+    #-------------------------------------------------------
+    i=$(( $i + 1 ))
+done
+
+# Controller Manager Client Certificate
+# Generate the kube-controller-manager client certificate and private key
+# Expected results: kube-controller-manager-key.pem, kube-controller-manager.pem
+{
+
+cat > kube-controller-manager-csr.json <<EOF
+{
+  "CN": "system:kube-controller-manager",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "system:kube-controller-manager",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+
+}
+
+# Kube Proxy Client Certificate
+# Generate the kube-proxy client certificate and private key:
+# Results: kube-proxy-key.pem, kube-proxy.pem
+{
+
+cat > kube-proxy-csr.json <<EOF
+{
+  "CN": "system:kube-proxy",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "system:node-proxier",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  kube-proxy-csr.json | cfssljson -bare kube-proxy
+
+}
+
+# The Scheduler Client Certificate
+# Generate the kube-scheduler client certificate and private key:
+# Results:kube-scheduler-key.pem, kube-scheduler.pem
+
+{
+
+cat > kube-scheduler-csr.json <<EOF
+{
+  "CN": "system:kube-scheduler",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "system:kube-scheduler",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+
+}
+
+# Kubernetes API Server Certificate
+# The kubernetes-the-hard-way static IP address will be included in the list of subject alternative names for the Kubernetes API Server certificate. This will ensure the certificate can be validated by remote clients.
+# Generate the Kubernetes API Server certificate and private key:
+# The Kubernetes API server is automatically assigned the kubernetes internal dns name, which will be linked to the first IP address (10.32.0.1) from the address range (10.32.0.0/24) reserved for internal cluster services during the control plane bootstrapping lab.
+# Results: kubernetes-key.pem, kubernetes.pem
+{
+
+KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
+  --region $(gcloud config get-value compute/region) \
+  --format 'value(address)')
+
+KUBERNETES_HOSTNAMES=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local
+
+cat > kubernetes-csr.json <<EOF
+{
+  "CN": "kubernetes",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "Kubernetes",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=10.32.0.1,10.240.0.10,10.240.0.11,10.240.0.12,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,${KUBERNETES_HOSTNAMES} \
+  -profile=kubernetes \
+  kubernetes-csr.json | cfssljson -bare kubernetes
+
+}
+
+
+# The Service Account Key Pair
+# The Kubernetes Controller Manager leverages a key pair to generate and sign service account tokens as described in the managing service accounts documentation.
+# Generate the service-account certificate and private key:
+# Results: service-account-key.pem, service-account.pem
+{
+
+cat > service-account-csr.json <<EOF
+{
+  "CN": "service-accounts",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "Kubernetes",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  service-account-csr.json | cfssljson -bare service-account
+
+}
+
+#------------------------------------
+i=0;
+while [ $i -lt 3 ]
+do
+    echo "$i";
+    instance=$( jq '.' ../workers.json | jq .[$i].hostname)
+    instanceIp=$( jq '.' ../workers.json | jq .[$i].ip)
+    echo "$instanceIp";
+    #-------------------------------------------------------
+    # scp ca.pem ${instance}-key.pem ${instance}.pem ${instance}:~/root
+    vagrant scp ca.pem ${instance}-key.pem ${instance}.pem ${instance}:
+    #-------------------------------------------------------
+    i=$(( $i + 1 ))
+done
+
+
+# Distribute the Client and Server Certificates
+# Copy the appropriate certificates and private keys to each worker instance:
+
+# for instance in worker-0 worker-1 worker-2; do
+#   gcloud compute scp ca.pem ${instance}-key.pem ${instance}.pem ${instance}:~/
+# done
+i=0;
+while [ $i -lt 3 ]
+do
+    echo "$i";
+    instance=$( jq '.' ../workers.json | jq .[$i].hostname)
+    echo "$instanceIp";
+    #-------------------------------------------------------
+    vagrant scp ca.pem ${instance}-key.pem ${instance}.pem ${instance}:
+    #-------------------------------------------------------
+    i=$(( $i + 1 ))
+done
+
+# Copy the appropriate certificates and private keys to each controller instance:
+
+# for instance in controller-0 controller-1 controller-2; do
+#   gcloud compute scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
+#     service-account-key.pem service-account.pem ${instance}:~/
+# done
+
+i=0;
+while [ $i -lt 3 ]
+do
+    echo "$i";
+    instance=$( jq '.' ../controllers.json | jq .[$i].hostname)
+    echo "$instanceIp";
+    #-------------------------------------------------------
+    vagrant scp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem \
+    service-account-key.pem service-account.pem ${instance}:
+    #-------------------------------------------------------
+    i=$(( $i + 1 ))
+done
+
+# The kube-proxy, kube-controller-manager, kube-scheduler, and kubelet client certificates will be used to generate client authentication configuration files in the next lab.
+
+
+
 
 

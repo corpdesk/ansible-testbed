@@ -102,7 +102,7 @@
   # vagrant plugin install vagrant-disksize
   - name: install plugin for disk resizing
     shell:
-      cmd: vagrant plugin install vagrant-disksize
+      cmd: vagrant plugin install vagrant-disksize vagrant-scp
 
   # - name: Remove ansible.cfg file
   #   ansible.builtin.file:
