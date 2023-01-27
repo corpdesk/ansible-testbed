@@ -22,7 +22,7 @@ sudo ufw allow from 192.168.1.0/24 to any port 8443
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 # sudo apt update -y
 sudo apt-get install git net-tools openssh-server tree fish jq zfsutils-linux -y
-sudo snap install lxd
+sudo snap install lxd --channel=latest/stable
 sudo service ssh restart
 sudo ufw allow from 192.168.1.0/24 to any port 22
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
