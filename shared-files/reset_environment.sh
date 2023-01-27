@@ -9,6 +9,7 @@ sudo sh remove_devops.sh
 
 # allow rsync
 sudo ufw allow from 192.168.1.0/24 to any port 873
+sudo ufw allow from 192.168.1.0/24 to any port 8443
 
 # Reset: remove previous versions
 # sudo rm /var/nfs/share/ansibleServer.pub
@@ -20,7 +21,7 @@ sudo ufw allow from 192.168.1.0/24 to any port 873
 # The -E switch enables extended regexp support for sed.
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 # sudo apt update -y
-sudo apt-get install git net-tools openssh-server tree fish jq  -y
+sudo apt-get install git net-tools openssh-server tree fish jq zfsutils-linux lxd -y
 sudo service ssh restart
 sudo ufw allow from 192.168.1.0/24 to any port 22
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
