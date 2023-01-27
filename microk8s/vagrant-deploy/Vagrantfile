@@ -1,0 +1,38 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # General Vagrant VM configuration.e
+  config.vm.box = "bento/ubuntu-22.04"
+  config.ssh.insert_key = false
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  zone="emp-06"
+  # setup devops user
+  config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "remove_devops.sh"
+  config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "reset_environment.sh"
+  config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "setup_initial_user.sh"
+  # config.vm.provision "file", source: "init_cluster.js", destination: "init_cluster.js"
+  # config.vm.provision "file", source: "build_cluster.js", destination: "build_cluster.js"
+  config.vm.provision :shell, :inline => "sudo sh setup_initial_user.sh"
+  #   config.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"
+  #   config.vm.provision "ansible" do |ans| 
+  #     ans.playbook = "setup_initial_user.yaml"
+  #     ans.inventory_path = "hosts.ini"
+  #   end
+  
+  
+  # network setup
+  config.vm.network "public_network", bridge: "wlp2s0: Wi-Fi (AirPort)", auto_config: true
+  config.vm.disk :disk, size: "20GB", primary: true
+  config.vm.provider :virtualbox do |v|
+    v.memory = 4096
+    v.cpus = 2
+    v.linked_clone = true
+  end
+  (120..122).each do |i|
+    config.vm.define "cd-db-#{zone}-#{i}" do |app|
+      app.vm.hostname = "cd-db-#{zone}-#{i}"
+      app.vm.network :public_network, ip: "192.168.1.#{i}"
+    end
+  end
+end
