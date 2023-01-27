@@ -1,0 +1,248 @@
+{
+    "files":{
+        "hostData":"hosts.json",
+        "configInventorySh":"config_inventory.sh",
+        "configHostsSh":"config_hosts.sh",
+        "configSshSh":"config_ssh.sh",
+        "sshConfigFile":"config",
+        "configVagrantSh":"config_vagrant.sh",
+        "hostInventory":"inventory.ini"
+    },
+    "groups": [
+        {
+            "name": "vm-host",
+            "is_active": true
+        },
+        {
+            "name": "vm",
+            "is_active": true
+        },
+        {
+            "name": "db",
+            "is_active": true
+        },
+        {
+            "name": "fs",
+            "is_active": true
+        },
+        {
+            "name": "cache",
+            "is_active": true
+        },
+        {
+            "name": "k8s-deployer",
+            "is_active": true
+        },
+        {
+            "name": "k8s-master",
+            "is_active": true
+        },
+        {
+            "name": "k8s-worker",
+            "is_active": true
+        },
+        {
+            "name": "k8s-ha-proxy",
+            "is_active": true
+        },
+        {
+            "name": "k8s-ngx-proxy",
+            "is_active": true
+        },
+        {
+            "name": "k3s-deployer",
+            "is_active": true
+        },
+        {
+            "name": "k3s-master",
+            "is_active": true
+        },
+        {
+            "name": "k3s-worker",
+            "is_active": true
+        },
+        {
+            "name": "k3s-ha-proxy",
+            "is_active": true
+        },
+        {
+            "name": "k3s-ngx-proxy",
+            "is_active": true
+        }
+    ],
+    "zones": [
+        {
+            "name": "107",
+            "hostname":"mac-01"
+        },
+        {
+            "name": "186",
+            "hostname":"emp-06"
+        },
+        {
+            "name": "117",
+            "hostname":"emp-07"
+        },
+        {
+            "name": "184",
+            "hostname":"lxd-server-01"
+        },
+        {
+            "name": "158",
+            "hostname":"lxd-server-02"
+        }
+    ],
+    "hosts": [
+        {
+            "host_name": "mac-01",
+            "ip": "192.168.1.107",
+            "is_vm_host": true,
+            "is_vm": false,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "vm-host"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "emp-06",
+            "ip": "192.168.1.186",
+            "is_vm_host": true,
+            "is_vm": false,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "vm-host"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "emp-07",
+            "ip": "192.168.1.117",
+            "is_vm_host": true,
+            "is_vm": false,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "vm-host"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "lxd-server-01",
+            "ip": "192.168.1.184",
+            "is_vm_host": true,
+            "is_vm": false,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "vm-host"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "lxd-server-02",
+            "ip": "192.168.1.158",
+            "is_vm_host": true,
+            "is_vm": false,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "vm-host"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "k3s-01-deployer",
+            "ip": "240.117.0.157",
+            "is_vm_host": false,
+            "is_vm": true,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "k8s-deployer"},
+                {"name": "vm"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "k3s-01-master-0",
+            "ip": "240.158.0.137",
+            "is_vm_host": false,
+            "is_vm": true,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "k8s-master"},
+                {"name": "vm"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "k3s-01-master-1",
+            "ip": "240.186.0.156",
+            "is_vm_host": false,
+            "is_vm": true,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "k8s-master"},
+                {"name": "vm"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "k3s-01-master-2",
+            "ip": "240.117.0.121",
+            "is_vm_host": false,
+            "is_vm": true,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "k8s-master"},
+                {"name": "vm"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "k3s-01-worker-0",
+            "ip": "240.158.0.46",
+            "is_vm_host": false,
+            "is_vm": true,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "k8s-worker"},
+                {"name": "vm"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "k3s-01-worker-1",
+            "ip": "240.186.0.206",
+            "is_vm_host": false,
+            "is_vm": true,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "k8s-worker"},
+                {"name": "vm"}
+            ],
+            "port": null
+        },
+        {
+            "host_name": "k3s-01-worker-2",
+            "ip": "240.184.0.116",
+            "is_vm_host": false,
+            "is_vm": true,
+            "is_active": true,
+            "cd_app": null,
+            "group_parents": [
+                {"name": "k8s-worker"},
+                {"name": "vm"}
+            ],
+            "port": null
+        }
+    ]
+}

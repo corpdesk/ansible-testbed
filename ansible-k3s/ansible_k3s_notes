@@ -1,0 +1,40 @@
+vms created by lxd --vm:
+- lxc launch ubuntu:22.04 ubuntu --vm
+
+Based on ansible-tesbed/ansible-cd:
+- This project assumes an lxd cluster has already been setup.
+- confirm that newly created containers can ping each other
+- Use the hosts.json to create lxd containers:
+    - populate hosts.json is based on https://github.com/georemo/kubernetes-hard-way-ansible.git
+    - at the moment we dont have controll over new lxd ips so the ip fields can be done after creation of containers
+- for each host:
+    - check if expected container exists
+    - if container_not_exist(), then, create_container(hostname)
+- update hosts.json with ips:
+    - currently done manually
+    - should be automated
+- check connectivity:
+    - check connectivity via ping (name and ip)
+    - check ssh connectivity (name and ip)
+- iniitial actions on deployer:
+    - do initial installations for deployer
+    - install ansible
+    - do ssh-copy from deployer
+    - confirm ansible ping
+    - confirm ansible sudo actions is possible
+    - review ansible host.ini file in view of new ips, expected ansible user
+
+- on each host(ssh):
+    - create initial user
+    - setup ssh connectivity
+    - install necessary apps (git,net-tools etc)
+    - 
+
+- on deployer:
+    - install ansible
+    - git clone https://github.com/georemo/ansible-testbed
+    - git clone https://github.com/georemo/kubernetes-hard-way-ansible.git
+    - test ssh
+    - test ansible
+    - run https://github.com/georemo/kubernetes-hard-way-ansible.git
+

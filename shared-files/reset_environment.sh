@@ -19,7 +19,8 @@ sudo ufw allow from 192.168.1.0/24 to any port 873
 # The #? is an extended regular expression that matches the line whether it's commented or not. 
 # The -E switch enables extended regexp support for sed.
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sudo apt-get install net-tools openssh-server tree fish  -y
+# sudo apt update -y
+sudo apt-get install git net-tools openssh-server tree fish jq  -y
 sudo service ssh restart
 sudo ufw allow from 192.168.1.0/24 to any port 22
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup

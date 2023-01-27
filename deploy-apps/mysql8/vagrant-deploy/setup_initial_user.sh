@@ -10,7 +10,7 @@ sudo sh reset_environment.sh
 # check if ubuntu-box exists, if not download
 if [ -d "/home/devops/" ] 
 then
-    # echo "user devops esists" 
+    # echo "user devops exists" 
     sleep 0
 else
     # sudo useradd -m -s /bin/bash devops

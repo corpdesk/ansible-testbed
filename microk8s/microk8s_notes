@@ -1,0 +1,8 @@
+https://microk8s.io/docs/getting-started
+
+vms created by lxd --vm:
+- lxc launch ubuntu:22.04 ubuntu --vm
+
+init_file="init_script.sh"
+lxc file push $init_file $hn/home/$user/
+lxc exec $hn -- chown $user /home/$user/$init_file

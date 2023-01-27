@@ -4,3 +4,5 @@ initial-user/roles
 initial-user/roles/ansible-nginx-revproxy
 deploy-apps/mysql-02/roles
 */.vagrant
+# any .vagrant directory
+.vagrant/
