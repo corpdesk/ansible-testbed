@@ -7,6 +7,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
   zone="emp-06"
+  task="lxd"
   # setup devops user
   config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "remove_devops.sh"
   config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "reset_environment.sh"
@@ -29,9 +30,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.cpus = 2
     v.linked_clone = true
   end
-  (120..122).each do |i|
-    config.vm.define "cd-db-#{zone}-#{i}" do |app|
-      app.vm.hostname = "cd-db-#{zone}-#{i}"
+  
+  (123..124).each do |i|
+    config.vm.define "#{zone}-#{task}-#{i}" do |app|
+      app.vm.hostname = "#{zone}-#{task}--#{i}"
       app.vm.network :public_network, ip: "192.168.1.#{i}"
     end
   end
