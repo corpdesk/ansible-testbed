@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # local variables
-lxc_container="microk8-lxd-01-node-3"
+lxc_container="haproxy-01"
 networkId="192.168.1"
 hostId="16"
 parentBridge="wlp2s0"
