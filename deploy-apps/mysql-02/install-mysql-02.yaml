@@ -1,0 +1,96 @@
+---
+# ----------------------------------------------------------
+# SECTION ONE: install mysql
+- hosts: emp-06
+  remote_user: emp-06
+  become: yes
+
+  vars_files:
+    - ../../shared_vars/mysql_cluster_vars.yaml
+
+  tasks:
+    # --------------------
+    - name: Update apt-get repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+      ignore_errors: true
+
+    # Can be switched off in consideration of internet cost and time taken
+    - name: Upgrade all apt packages
+      apt: upgrade=dist force_apt_get=yes
+
+    - name: "Install mysql-server-{{v_major}}.{{v_minor}}"
+      ansible.builtin.apt:
+        name: mysql-server-{{v_major}}.{{v_minor}}
+        state: present
+
+# ----------------------------------------------------------
+# SECTION TWO: harden mysql
+
+- hosts: emp-06
+  remote_user: emp-06
+  become: yes
+
+  roles:
+    - dev-sec.mysql-hardening
+
+  tasks:
+    - name: Restarted service mysql after hardening
+      ansible.builtin.service:
+        name: mysql
+        state: restarted
+
+# ----------------------------------------------------------
+# SECTION TWO: create db users, install mysql-shell, setup cluster
+- hosts: emp-06
+  remote_user: emp-06
+  become: yes
+
+  vars_files:
+    - ../../shared_vars/mysql_cluster_vars.yaml
+
+  tasks:
+    - name: Create database user with password and all database privileges and 'WITH GRANT OPTION'
+      community.mysql.mysql_user:
+        name: "{{ mysql_admin }}"
+        password: "{{ mysql_admin_pw }}"
+        host: "%"
+        priv: "*.*:ALL,GRANT"
+        state: present
+
+    - name: download mysql-shell deb pkg
+      get_url:
+        # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
+        url: "{{ local_repository }}/mysql-shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb"
+        dest: /home/emp-06/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb
+        force: yes
+
+    - name: Install a .deb package
+      ansible.builtin.apt:
+        deb: /home/emp-06/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb
+
+    - name: Ensure mysql remote connection is enabled
+      replace:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: "^bind-address.*"
+        replace: "bind-address         = 0.0.0.0"
+        backup: yes
+
+    - name: Ensure mysqlx remote connection is enabled
+      replace:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: "^mysqlx-bind-address.*"
+        replace: "mysqlx-bind-address  = 0.0.0.0"
+        backup: yes
+
+    - name: Restart service mysql after allowing remote connection
+      ansible.builtin.service:
+        name: mysql
+        state: restarted
+
+    - name: remove 127.0.2.* reference in /etc/hosts
+      replace:
+        path: /etc/hosts
+        regexp: '^127\.0\.2\.(.*)$'
+        replace: ""
+        backup: yes
+      become: yes
