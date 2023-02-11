@@ -1,0 +1,48 @@
+10 Feb 2023:
+How to get LXD containers get IP from the LAN with routed network:
+https://blog.simos.info/how-to-get-lxd-containers-get-ip-from-the-lan-with-routed-network/
+
+
+config:
+  user.network-config: |
+	version: 2
+	ethernets:
+    	eth0:
+        	addresses:
+        	- 192.168.1.200/32
+        	nameservers:
+            	addresses:
+            	- 8.8.8.8
+            	search: []
+        	routes:
+        	-   to: 0.0.0.0/0
+            	via: 192.168.1.1
+            	on-link: true
+description: Default LXD profile
+devices:
+  eth0:
+	ipv4.address: 192.168.1.200
+	nictype: routed
+	parent: wlp2s0
+	type: nic
+name: routed_192.168.1.200
+used_by:
+- /1.0/instances/a2
+
+# ############################################
+lxc profile create routed
+lxc profile edit routed
+lxc profile copy routed routed_192.168.1.200
+EDITOR=nano lxc profile edit routed_192.168.1.200
+lxc profile copy routed routed_192.168.1.201
+EDITOR=nano lxc profile edit routed_192.168.1.201
+lxc launch ubuntu:18.04 myrouted --profile default --profile routed_192.168.1.200
+
+# ############################################
+Try automation:
+Create template file: routed_192.168.1.x.template
+Set variables for the template
+generateFile routed_192.168.1.x.yaml
+lxc profile create routed_192.168.1.x
+sudo lxc profile edit routed_192.168.1.x < routed_192.168.1.x.yaml
+lxc launch ubuntu:22.04 a1 --profile default --profile routed_192.168.1.x
