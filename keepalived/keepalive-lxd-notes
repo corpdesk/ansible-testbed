@@ -1,0 +1,10 @@
+https://askubuntu.com/questions/769253/running-keepalived-with-vrrp-in-unprivileged-lxc-container
+
+FRR:
+http://docs.frrouting.org/en/latest/vrrp.html
+https://stgraber.org/2020/12/16/inexpensive-highly-available-lxd-cluster-redundancy/
+
+https://www.questioncomputer.com/ospf-on-ubuntu-22-04-and-rocky-linux-9-with-frr-8-4-free-range-routing/
+
+Floating ip and lxd:
+https://discuss.linuxcontainers.org/t/lxd-floating-ip-addresses/11801

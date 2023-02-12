@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
         hap1_config.vm.hostname = "hap1"
         # hap1_config.vm.network "private_network", ip: "192.168.1.242"
         hap1_config.vm.network :public_network, ip: "192.168.1.242"
-        hap1_config.vm.provision :shell, path: "haproxy.sh", env: {"PRIORITY" => "101"}
+        hap1_config.vm.provision :shell, path: "../haproxy.sh", env: {"PRIORITY" => "101"}
     end
     
     # Configs for haproxy 2 (backup)
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
     #     end
     #     web1_config.vm.hostname = "web1"
     #     web1_config.vm.network "private_network", ip: "192.168.1.21"
-    #     web1_config.vm.provision :shell, path: "webserver.sh"
+    #     web1_config.vm.provision :shell, path: "../webserver.sh"
     # end
     
     # # Configs for web server 2
@@ -48,6 +48,6 @@ Vagrant.configure("2") do |config|
     #     end
     #     web2_config.vm.hostname = "web2"
     #     web2_config.vm.network "private_network", ip: "192.168.1.22"
-    #     web2_config.vm.provision :shell, path: "webserver.sh"
+    #     web2_config.vm.provision :shell, path: "../webserver.sh"
     # end
 end

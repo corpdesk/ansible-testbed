@@ -1,16 +1,26 @@
 #!/usr/bin/env bash
 
-networkId="192.168.1"
-# first id can be used to compute a serial of hosts
-firstHostId="10" 
-floatingIp="$networkId.241"
-mysqlNodePort="30772"
-mysqlClusterName="mycluster"
-nic="eth1" # This may be eth0 if lxd or eth1 if vagrant...confirm in any case
+# vrrd.sh Usage:
+# $1 - priority
+# $2 - nic
+# $3 - networkId
+# $4 - fId : floating ip hostId
+# $5 - targetPort
+priority=$1
+nic=$2 # This may be eth0 if lxd or eth1 if vagrant...confirm in any case
+networkId=$3
+fId=$4
+targetPort=$5
+mode=$6
+nodes=$(cat /tmp/nodes.data)
 
+
+floatingIp="$networkId.$fId"
+
+hn=$(hostname)
 # BEGIN ########################################################################
 echo -e "-- ---------- --\n"
-echo -e "-- BEGIN ${HOSTNAME} --\n"
+echo -e "-- BEGIN $hn --\n"
 echo -e "-- ---------- --\n"
  
 # VARIABLES ####################################################################
@@ -40,24 +50,22 @@ global
  
 defaults
     log global
-    mode tcp
+    mode $mode
     option dontlognull
     retries 3
     option redispatch
     timeout connect 5000ms
     timeout client 50000ms
     timeout server 50000ms
- 
-frontend mysql-request
-    bind *:$mysqlNodePort
-    mode tcpmycluster
-    default_backend nodeports
 
-backend nodeports
+frontend vrrp-request
+    bind *:$targetPort
+    mode $mode
+    default_backend nodes
+
+backend nodes
     balance roundrobin
-    server $mysqlClusterName-0 $networkId.10:$mysqlNodePort check
-    server $mysqlClusterName-1 $networkId.11:$mysqlNodePort check
-    server $mysqlClusterName-2 $networkId.12:$mysqlNodePort check
+    $nodes
 EOF
  
 echo -e "-- Validating HAProxy configuration\n"
@@ -87,7 +95,7 @@ vrrp_instance VI_1 {
     interface $nic
     state MASTER
     virtual_router_id 51
-    priority ${PRIORITY}
+    priority $priority
     virtual_ipaddress {
         $floatingIp
     }
@@ -102,5 +110,5 @@ service keepalived start
  
 # END ##########################################################################
 echo -e "-- -------- --"
-echo -e "-- END ${HOSTNAME} --"
+echo -e "-- END $hn --"
 echo -e "-- -------- --"
