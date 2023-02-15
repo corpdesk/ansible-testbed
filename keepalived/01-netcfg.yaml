@@ -1,0 +1,21 @@
+# This file describes the network interfaces available on your system
+# For more information, see netplan(5).
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp4s0:
+      dhcp4: no
+  bridges:
+    br0:
+      interfaces: [ enp4s0 ]
+      dhcp4: no
+      addresses: [192.168.1.118/24]
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8]
+      dhcp6: no
+      link-local: [ ]
+      parameters:
+        stp: true
+        forward-delay: 4

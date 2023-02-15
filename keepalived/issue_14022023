@@ -1,0 +1,43 @@
+Issue: cannot access lxd from remote machine
+
+----------------------------
+CREATE
+----------------------------
+lxc launch ubuntu:22.04 a1
+lxc network attach lxdbr0 a1 eth0 eth0 
+lxc config device set a1 eth0 ipv4.address 192.168.2.237
+lxc exec a1 -- reboot
+sleep 15
+lxc config device add a1 eth1 nic nictype=bridged parent=wlp2s0 name=eth1
+
+Suggestions:
+https://serverfault.com/questions/759381/how-to-make-lxd-containers-accessible-to-the-lan
+
+1. created bridg br0
+    - Ref: https://askubuntu.com/questions/1412503/setting-up-a-bridge-for-host-and-vm/1412973#1412973
+    - see: <project-root>/keepalived/01-netcfg.yaml
+    - warnings: emp-07@emp-07 ~> sudo netplan apply
+
+        ** (generate:330391): WARNING **: 22:41:04.319: `gateway4` has been deprecated, use default routes instead.
+        See the 'Default routes' section of the documentation for more details.
+
+        ** (process:330360): WARNING **: 22:41:05.126: `gateway4` has been deprecated, use default routes instead.
+        See the 'Default routes' section of the documentation for more details.
+
+        ** (process:330360): WARNING **: 22:41:06.455: `gateway4` has been deprecated, use default routes instead.
+        See the 'Default routes' section of the documentation for more details.
+
+        ** (process:330360): WARNING **: 22:41:06.455: `gateway4` has been deprecated, use default routes instead.
+        See the 'Default routes' section of the documentation for more details.
+    - however:
+    - bridge is available:
+        225: br0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+        link/ether 1e:76:c5:ce:7f:13 brd ff:ff:ff:ff:ff:ff
+        inet 192.168.1.118/24 brd 192.168.1.255 scope global noprefixroute br0
+        valid_lft forever preferred_lft forever
+    - to do: comply with neplant and use routes instead of gateway4
+    - One other tip when working on netplan files, yamllint can save you a lot of trouble.
+        sudo apt install yamllint
+
+
+2.

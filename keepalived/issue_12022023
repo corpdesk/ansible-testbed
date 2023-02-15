@@ -541,6 +541,16 @@ lxc config device set a1 eth0 ipv4.address 192.168.2.237
 lxc exec a1 -- reboot
 sleep 15
 lxc list a1
+--------------------------
+# Test3:
+lxc launch ubuntu:22.04 a1
+lxc network attach lxdbr0 a1 eth0 eth0 
+lxc config device set a1 eth0 ipv4.address 192.168.1.236
+lxc exec a1 -- reboot
+sleep 15
+lxc list a1
+
+
 
 
 
