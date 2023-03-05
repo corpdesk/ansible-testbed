@@ -1,0 +1,139 @@
+Issue: cannot access lxd from remote machine
+
+----------------------------
+CREATE
+----------------------------
+lxc launch ubuntu:22.04 a1
+lxc network attach lxdbr0 a1 eth0 eth0 
+lxc config device set a1 eth0 ipv4.address 192.168.2.237
+lxc exec a1 -- reboot
+sleep 15
+lxc config device add a1 eth1 nic nictype=bridged parent=wlp2s0 name=eth1
+
+Suggestions:
+https://serverfault.com/questions/759381/how-to-make-lxd-containers-accessible-to-the-lan
+
+1. created bridg br0
+    - Ref: https://askubuntu.com/questions/1412503/setting-up-a-bridge-for-host-and-vm/1412973#1412973
+    - see: <project-root>/keepalived/01-netcfg.yaml
+    - warnings: emp-07@emp-07 ~> sudo netplan apply
+
+        ** (generate:330391): WARNING **: 22:41:04.319: `gateway4` has been deprecated, use default routes instead.
+        See the 'Default routes' section of the documentation for more details.
+
+        ** (process:330360): WARNING **: 22:41:05.126: `gateway4` has been deprecated, use default routes instead.
+        See the 'Default routes' section of the documentation for more details.
+
+        ** (process:330360): WARNING **: 22:41:06.455: `gateway4` has been deprecated, use default routes instead.
+        See the 'Default routes' section of the documentation for more details.
+
+        ** (process:330360): WARNING **: 22:41:06.455: `gateway4` has been deprecated, use default routes instead.
+        See the 'Default routes' section of the documentation for more details.
+    - however:
+    - bridge is available:
+        225: br0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+        link/ether 1e:76:c5:ce:7f:13 brd ff:ff:ff:ff:ff:ff
+        inet 192.168.1.118/24 brd 192.168.1.255 scope global noprefixroute br0
+        valid_lft forever preferred_lft forever
+    - to do: comply with neplant and use routes instead of gateway4
+    - One other tip when working on netplan files, yamllint can save you a lot of trouble.
+        sudo apt install yamllint
+
+
+2.
+--------------------------------------------------
+create net bridge that is accessible in LAN
+--------------------------------------------
+https://www.cyberciti.biz/faq/ubuntu-20-04-add-network-bridge-br0-with-nmcli-command/
+
+I would like to create a bridge that can be used by lxc containers in any machine in a local area network.
+I am testing with two machines:
+emp-06 192.168.1.186
+emp-07 192.168.1.117
+The wifi gateway is setup as 192.168.1.1
+Both the machines are able to ping eachother and transact any network requrement as expected.
+Issue: I have created a bridge br0.  When the bridge is turned on, both machines are not able to communicate with each other.
+
+-----------------------
+setting up the bridge:
+-----------------------
+emp-07@emp-07 ~> sudo nmcli con add ifname br0 type bridge con-name br0
+Connection 'br0' (244d421c-a521-408e-a2ab-c3990fec2b57) successfully added.
+emp-07@emp-07 ~> sudo nmcli con add type bridge-slave ifname enp0s31f6 master br0
+Connection 'bridge-slave-enp0s31f6' (feb08973-88f7-442a-997d-f79332007641) successfully added.
+emp-07@emp-07 ~> sudo nmcli con up br0
+Connection successfully activated (master waiting for slaves) (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/9)
+
+emp-07@emp-07 ~> sudo nmcli connection modify br0 ipv4.addresses '192.168.1.2/24'
+[sudo] password for emp-07: 
+emp-07@emp-07 ~> sudo nmcli connection modify br0 ipv4.gateway '192.168.1.1'
+emp-07@emp-07 ~> sudo nmcli connection modify br0 ipv4.dns '8.8.8.8'
+emp-07@emp-07 ~> sudo nmcli connection modify br0 ipv4.dns-search 'emp-07'
+emp-07@emp-07 ~> sudo nmcli connection modify br0 ipv4.method manual
+
+
+-----------------------
+checking bridge status:
+-----------------------
+emp-07@emp-07 ~> nmcli device
+DEVICE           TYPE         STATE                                  CONNECTION   
+wlp2s0           wifi         connected                              wii-got-04   
+lxdbr0           bridge       connected (externally)                 lxdbr0       
+mpbr0            bridge       connected (externally)                 mpbr0        
+br0              bridge       connected                              br0          
+docker0          bridge       connected (externally)                 docker0      
+virbr0           bridge       connected (externally)                 virbr0       
+weave            bridge       connected (externally)                 weave
+
+emp-07@emp-07 ~> nmcli -f bridge con show br0
+bridge.mac-address:                     --
+bridge.stp:                             yes
+bridge.priority:                        32768
+bridge.forward-delay:                   15
+bridge.hello-time:                      2
+bridge.max-age:                         20
+bridge.ageing-time:                     300
+bridge.group-forward-mask:              0
+bridge.multicast-snooping:              yes
+bridge.vlan-filtering:                  no
+bridge.vlan-default-pvid:               1
+bridge.vlans:                           --
+
+
+---------------------------------------
+testing connectivity when bridge is UP:
+---------------------------------------
+emp-07@emp-07 ~> sudo nmcli con up br0
+Connection successfully activated (master waiting for slaves) (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/12)
+emp-07@emp-07 ~> ping 192.168.1.186
+PING 192.168.1.186 (192.168.1.186) 56(84) bytes of data.
+From 192.168.1.2 icmp_seq=1 Destination Host Unreachable
+From 192.168.1.2 icmp_seq=2 Destination Host Unreachable
+From 192.168.1.2 icmp_seq=3 Destination Host Unreachable
+^C
+--- 192.168.1.186 ping statistics ---
+5 packets transmitted, 0 received, +3 errors, 100% packet loss, time 4097ms
+pipe 3
+
+
+---------------------------------------
+testing connectivity when bridge is DOWN:
+---------------------------------------
+emp-07@emp-07 ~ [1]> sudo nmcli con down br0
+Connection 'br0' successfully deactivated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/12)
+emp-07@emp-07 ~> ping 192.168.1.186
+PING 192.168.1.186 (192.168.1.186) 56(84) bytes of data.
+64 bytes from 192.168.1.186: icmp_seq=1 ttl=64 time=347 ms
+64 bytes from 192.168.1.186: icmp_seq=2 ttl=64 time=375 ms
+64 bytes from 192.168.1.186: icmp_seq=3 ttl=64 time=109 ms
+^C
+--- 192.168.1.186 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 109.382/277.062/374.768/119.107 ms
+emp-07@emp-07 ~> 
+
+
+
+
+more about nmcli
+https://opensource.com/article/20/7/nmcli
