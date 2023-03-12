@@ -1,0 +1,173 @@
+https://www.tutorialworks.com/kubernetes-imagepullbackoff/
+https://stackoverflow.com/questions/68854858/aks-fails-to-pull-image-failed-size-validation
+https://www.datree.io/resources/kubernetes-error-codes-failed-to-pull-image
+https://bugs.launchpad.net/launchpad/+bug/1898480
+https://developer.ibm.com/tutorials/debug-and-log-your-kubernetes-app/
+
+kubectl logs <your-pod-name> -vv
+
+Failed to pull image "mysql/mysql-operator:8.0.32-2.0.8": 
+rpc error: code = 
+FailedPrecondition desc = 
+failed to pull and unpack image "docker.io/mysql/mysql-operator:8.0.32-2.0.8": 
+failed commit on ref "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe": 
+"layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe" 
+failed size validation: 232618 != 1541: failed precondition
+
+-------------------------------------------------------------------
+available:
+docker pull mysql/mysql-operator:latest
+docker pull mysql/mysql-operator:8.0.32-2.0.8
+docker pull mysql/mysql-operator:8.0.31-2.0.7
+
+-------------------------------------------------------------------
+
+emp-07@emp-07:~/ansible-testbed$ fish
+Welcome to fish, the friendly interactive shell
+Type help for instructions on how to use fish
+emp-07@emp-07 ~/ansible-testbed (main)> cd mysql-cluster/
+emp-07@emp-07 ~/a/mysql-cluster (main)> sh k8s-mysql-cluster-init.sh 
+customresourcedefinition.apiextensions.k8s.io/innodbclusters.mysql.oracle.com created                                                                      
+customresourcedefinition.apiextensions.k8s.io/mysqlbackups.mysql.oracle.com created
+customresourcedefinition.apiextensions.k8s.io/clusterkopfpeerings.zalando.org created
+customresourcedefinition.apiextensions.k8s.io/kopfpeerings.zalando.org created
+clusterrole.rbac.authorization.k8s.io/mysql-operator created
+clusterrole.rbac.authorization.k8s.io/mysql-sidecar created
+clusterrolebinding.rbac.authorization.k8s.io/mysql-operator-rolebinding created
+clusterkopfpeering.zalando.org/mysql-operator created
+namespace/mysql-operator created
+serviceaccount/mysql-operator-sa created
+deployment.apps/mysql-operator created
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+mysql-operator   0/1     1            0           1s
+^C⏎                                                                                                                                                                                   
+emp-07@emp-07 ~/a/mysql-cluster (main) [SIGINT]> lxc shell microk8s-10
+root@microk8s-10:~# fish
+Welcome to fish, the friendly interactive shell
+Type help for instructions on how to use fish
+root@microk8s-10 ~# microk8s kubectl get deployment mysql-operator --namespace mysql-operator
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+mysql-operator   0/1     1            0           3m39s
+root@microk8s-10 ~# microk8s kubectl get events
+No resources found in default namespace.
+root@microk8s-10 ~# microk8s kubectl get pods
+No resources found in default namespace.
+root@microk8s-10 ~# microk8s kubectl get nodes
+NAME          STATUS   ROLES    AGE    VERSION
+microk8s-10   Ready    <none>   173m   v1.26.1
+microk8s-11   Ready    <none>   115m   v1.26.1
+microk8s-12   Ready    <none>   80m    v1.26.1
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+LAST SEEN   TYPE     REASON              OBJECT                                MESSAGE
+5m12s       Normal   ScalingReplicaSet   deployment/mysql-operator             Scaled up replica set mysql-operator-9897675fc to 1
+5m12s       Normal   SuccessfulCreate    replicaset/mysql-operator-9897675fc   Created pod: mysql-operator-9897675fc-d4bn5
+5m11s       Normal   Scheduled           pod/mysql-operator-9897675fc-d4bn5    Successfully assigned mysql-operator/mysql-operator-9897675fc-d4bn5 to microk8s-12
+5m9s        Normal   Pulling             pod/mysql-operator-9897675fc-d4bn5    Pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+LAST SEEN   TYPE      REASON    OBJECT                               MESSAGE
+14s         Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Failed to pull image "mysql/mysql-operator:8.0.32-2.0.8": rpc error: code = FailedPrecondition desc = failed to pull and unpack image "docker.io/mysql/mysql-operator:8.0.32-2.0.8": failed commit on ref "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe": "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe" failed size validation: 232618 != 1541: failed precondition
+14s         Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Error: ErrImagePull
+14s         Normal    BackOff   pod/mysql-operator-9897675fc-d4bn5   Back-off pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+14s         Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Error: ImagePullBackOff
+0s          Normal    Pulling   pod/mysql-operator-9897675fc-d4bn5   Pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+LAST SEEN   TYPE      REASON    OBJECT                               MESSAGE
+98s         Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Failed to pull image "mysql/mysql-operator:8.0.32-2.0.8": rpc error: code = FailedPrecondition desc = failed to pull and unpack image "docker.io/mysql/mysql-operator:8.0.32-2.0.8": failed commit on ref "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe": "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe" failed size validation: 232618 != 1541: failed precondition
+98s         Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Error: ErrImagePull
+98s         Normal    BackOff   pod/mysql-operator-9897675fc-d4bn5   Back-off pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+98s         Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Error: ImagePullBackOff
+84s         Normal    Pulling   pod/mysql-operator-9897675fc-d4bn5   Pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+root@microk8s-10 ~# ping google.com
+PING google.com (172.217.170.174) 56(84) bytes of data.
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=1 ttl=116 time=135 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=2 ttl=116 time=147 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=3 ttl=116 time=190 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=4 ttl=116 time=458 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=5 ttl=116 time=403 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=6 ttl=116 time=487 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=7 ttl=116 time=404 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=8 ttl=116 time=368 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=9 ttl=116 time=502 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=10 ttl=116 time=476 ms
+64 bytes from mba01s09-in-f14.1e100.net (172.217.170.174): icmp_seq=11 ttl=116 time=363 ms
+^C
+--- google.com ping statistics ---
+11 packets transmitted, 11 received, 0% packet loss, time 10014ms
+rtt min/avg/max/mdev = 134.696/357.409/501.796/130.747 ms
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+LAST SEEN   TYPE      REASON    OBJECT                               MESSAGE
+2m24s       Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Failed to pull image "mysql/mysql-operator:8.0.32-2.0.8": rpc error: code = FailedPrecondition desc = failed to pull and unpack image "docker.io/mysql/mysql-operator:8.0.32-2.0.8": failed commit on ref "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe": "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe" failed size validation: 232618 != 1541: failed precondition
+2m24s       Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Error: ErrImagePull
+2m24s       Normal    BackOff   pod/mysql-operator-9897675fc-d4bn5   Back-off pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+2m24s       Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Error: ImagePullBackOff
+2m10s       Normal    Pulling   pod/mysql-operator-9897675fc-d4bn5   Pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+LAST SEEN   TYPE      REASON    OBJECT                               MESSAGE
+4m6s        Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Failed to pull image "mysql/mysql-operator:8.0.32-2.0.8": rpc error: code = FailedPrecondition desc = failed to pull and unpack image "docker.io/mysql/mysql-operator:8.0.32-2.0.8": failed commit on ref "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe": "layer-sha256:2b7fe0727fec5569b29a94d677ca2a6946e9b6747c7645e3b685be54a399b8fe" failed size validation: 232618 != 1541: failed precondition
+4m6s        Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Error: ErrImagePull
+4m6s        Normal    BackOff   pod/mysql-operator-9897675fc-d4bn5   Back-off pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+4m6s        Warning   Failed    pod/mysql-operator-9897675fc-d4bn5   Error: ImagePullBackOff
+3m52s       Normal    Pulling   pod/mysql-operator-9897675fc-d4bn5   Pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+No resources found in mysql-operator namespace.
+root@microk8s-10 ~# microk8s kubectl get pods
+No resources found in default namespace.
+root@microk8s-10 ~# microk8s kubectl get deployment mysql-operator --namespace mysql-operator
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+mysql-operator   0/1     1            0           18m
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+No resources found in mysql-operator namespace.
+root@microk8s-10 ~# microk8s kubectl get events
+No resources found in default namespace.
+root@microk8s-10 ~# exit
+root@microk8s-10:~# exit
+logout
+emp-07@emp-07 ~/a/mysql-cluster (main)> lxc stop microk8s-10 microk8s-11 microk8s-12
+emp-07@emp-07 ~/a/mysql-cluster (main)> lxc start microk8s-10 microk8s-11 microk8s-12
+emp-07@emp-07 ~/a/mysql-cluster (main)> lxc shell microk8s-10
+root@microk8s-10:~# fish
+Welcome to fish, the friendly interactive shell
+Type help for instructions on how to use fish
+root@microk8s-10 ~# microk8s kubectl get events
+LAST SEEN   TYPE      REASON                    OBJECT             MESSAGE
+2m27s       Normal    Starting                  node/microk8s-12   
+2m27s       Normal    Starting                  node/microk8s-12   Starting kubelet.
+2m27s       Warning   InvalidDiskCapacity       node/microk8s-12   invalid capacity 0 on image filesystem
+2m27s       Normal    NodeHasSufficientMemory   node/microk8s-12   Node microk8s-12 status is now: NodeHasSufficientMemory
+2m27s       Normal    NodeHasNoDiskPressure     node/microk8s-12   Node microk8s-12 status is now: NodeHasNoDiskPressure
+2m27s       Normal    NodeHasSufficientPID      node/microk8s-12   Node microk8s-12 status is now: NodeHasSufficientPID
+2m27s       Normal    NodeAllocatableEnforced   node/microk8s-12   Updated Node Allocatable limit across pods
+2m26s       Warning   Rebooted                  node/microk8s-12   Node microk8s-12 has been rebooted, boot id: 4e3dd1e5-e4d1-428c-9aa5-e564a61f054e
+2m26s       Normal    NodeNotReady              node/microk8s-12   Node microk8s-12 status is now: NodeNotReady
+2m21s       Normal    Starting                  node/microk8s-11   Starting kubelet.
+2m21s       Warning   InvalidDiskCapacity       node/microk8s-11   invalid capacity 0 on image filesystem
+2m21s       Normal    Starting                  node/microk8s-11   
+2m21s       Normal    NodeHasSufficientMemory   node/microk8s-11   Node microk8s-11 status is now: NodeHasSufficientMemory
+2m21s       Normal    NodeHasNoDiskPressure     node/microk8s-11   Node microk8s-11 status is now: NodeHasNoDiskPressure
+2m21s       Normal    NodeHasSufficientPID      node/microk8s-11   Node microk8s-11 status is now: NodeHasSufficientPID
+2m21s       Normal    NodeAllocatableEnforced   node/microk8s-11   Updated Node Allocatable limit across pods
+2m21s       Warning   Rebooted                  node/microk8s-11   Node microk8s-11 has been rebooted, boot id: e1bac490-39da-4fe7-92cf-0042919030d3
+2m21s       Normal    NodeNotReady              node/microk8s-11   Node microk8s-11 status is now: NodeNotReady
+2m20s       Normal    NodeReady                 node/microk8s-11   Node microk8s-11 status is now: NodeReady
+2m19s       Normal    Starting                  node/microk8s-10   Starting kubelet.
+2m19s       Warning   InvalidDiskCapacity       node/microk8s-10   invalid capacity 0 on image filesystem
+2m19s       Normal    Starting                  node/microk8s-10   
+2m19s       Normal    NodeHasSufficientMemory   node/microk8s-10   Node microk8s-10 status is now: NodeHasSufficientMemory
+2m19s       Normal    NodeHasNoDiskPressure     node/microk8s-10   Node microk8s-10 status is now: NodeHasNoDiskPressure
+2m19s       Normal    NodeHasSufficientPID      node/microk8s-10   Node microk8s-10 status is now: NodeHasSufficientPID
+2m18s       Warning   Rebooted                  node/microk8s-10   Node microk8s-10 has been rebooted, boot id: 4d8a6853-edf9-486c-86df-0bb3889581a4
+2m18s       Normal    NodeNotReady              node/microk8s-10   Node microk8s-10 status is now: NodeNotReady
+2m18s       Normal    NodeAllocatableEnforced   node/microk8s-10   Updated Node Allocatable limit across pods
+2m17s       Normal    NodeReady                 node/microk8s-10   Node microk8s-10 status is now: NodeReady
+2m16s       Normal    NodeReady                 node/microk8s-12   Node microk8s-12 status is now: NodeReady
+81s         Normal    RegisteredNode            node/microk8s-12   Node microk8s-12 event: Registered Node microk8s-12 in Controller
+81s         Normal    RegisteredNode            node/microk8s-10   Node microk8s-10 event: Registered Node microk8s-10 in Controller
+81s         Normal    RegisteredNode            node/microk8s-11   Node microk8s-11 event: Registered Node microk8s-11 in Controller
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+LAST SEEN   TYPE     REASON           OBJECT                               MESSAGE
+2m49s       Normal   SandboxChanged   pod/mysql-operator-9897675fc-d4bn5   Pod sandbox changed, it will be killed and re-created.
+2m44s       Normal   Pulling          pod/mysql-operator-9897675fc-d4bn5   Pulling image "mysql/mysql-operator:8.0.32-2.0.8"
+root@microk8s-10 ~# microk8s kubectl get events --namespace mysql-operator
+LAST SEEN   TYPE     REASON           OBJECT                               MESSAGE
+3m34s       Normal   SandboxChanged   pod/mysql-operator-9897675fc-d4bn5   Pod sandbox changed, it will be killed and re-created.
+3m29s       Normal   Pulling          pod/mysql-operator-9897675fc-d4bn5   Pulling image "mysql/mysql-operator:8.0.32-2.0.8"

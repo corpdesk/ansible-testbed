@@ -1,5 +1,6 @@
 ---
 links:
+    - https://stackoverflow.com/questions/60970433/ufw-firewall-blocks-kubernetes-with-calico
     - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
     - https://www.mirantis.com/blog/how-install-kubernetes-kubeadm/
     - https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
