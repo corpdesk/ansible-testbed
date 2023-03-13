@@ -17,7 +17,7 @@ app="microk8s"
 profileSetting=""
 # host variables
 lxc_container=""
-networkId="192.168.2"
+networkId="192.168.3"
 
 # lxd image
 lxc_image="ubuntu:22.04"

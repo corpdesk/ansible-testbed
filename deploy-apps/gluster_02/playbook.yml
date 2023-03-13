@@ -7,3 +7,14 @@
   roles:
     - robertdebock.bootstrap
     - robertdebock.glusterfs
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: apply appropriate hostnames based on expected cluster nodes
+      lineinfile:
+        dest: /etc/hosts
+        line: "{{ item }}"
+      with_items:
+        "{{ cluster_hosts }}"
