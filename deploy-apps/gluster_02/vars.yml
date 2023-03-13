@@ -1,0 +1,28 @@
+---
+disable_firewall: yes
+disable_selinux: yes
+mysql_resolv_mode: hosts
+mysql_subnet: 192.168.2.0/24
+mysql_listen_all_interfaces: yes
+r_user: devops
+
+v_major: "8"
+v_minor: "0"
+v_release: "32"
+v_platform: "1ubuntu22.04_amd64"
+local_repository: "http://192.168.2.238/app-repo"
+
+
+mysql_root_pw: '26IdRAU2WvrM196QALMx4/M+8aaSh5AoQcYK/mgrteU' # <- openssl rand -base64 32 | sed 's/=//'
+mysql_admin: 'cd'
+mysql_admin_pw: 'yU0B14NC1PdE'
+mysql_replication_mode: 'InnoDB Cluster'
+mysql_gr_name: 'c7cbdef8-a837-417b-aacb-1822f6aebb72' # <- uuidgen
+mysql_gr_vcu: '46741fed-f016-4fe3-8696-1dbdaf4ff28f' #  <- uuidgen
+mysql_innodb_cluster_name: 'cd-sql-cluster' 
+network_name: "cd-sql-cluster"
+cluster_hosts: [
+  "192.168.2.110 {{network_name}}-110",
+  "192.168.2.111 {{network_name}}-111",
+  "192.168.2.112 {{network_name}}-112",
+]
