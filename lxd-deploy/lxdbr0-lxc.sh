@@ -6,12 +6,13 @@
 # - hostIp eg '10'
 # - networkId eg '192.168.2'
 
+echo "starting lxd-deploy/lxdbr0-lxc.sh"
 # input
 subnetName=$1
 networkId=$2
 hostId=$3
-$projDir=$4
-
+projDir=$4
+echo "projDir=$projDir"
 lxc_container="$subnetName-$hostId"
 # parentBridge="wlp2s0"
 lxc_image="ubuntu:22.04"
