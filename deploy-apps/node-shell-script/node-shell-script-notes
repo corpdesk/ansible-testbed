@@ -1,0 +1,17 @@
+- install node.js to client machine
+- run shell script using node
+- run sudo command using node.js
+
+- view output of cmd:
+  - node.js -- execute command synchronously and get result
+  - https://stackoverflow.com/questions/7183307/node-js-execute-command-synchronously-and-get-result
+  - Run shell command and collect the output in Node.js, Deno, and Bun
+  - https://medium.com/deno-the-complete-reference/run-shell-command-and-collect-the-output-in-node-js-deno-and-bun-f23977bf1d68
+
+- node.js setup glusterfs client:
+  - install 
+
+- Edit Word Documents Online:
+  - Edit Word Documents using REST API in Node.js
+  - https://blog.groupdocs.cloud/editor/edit-word-documents-using-rest-api-in-node.js/
+  - https://gist.github.com/groupdocs-cloud-gists/68b20564599e1c1a70006c664afade61
