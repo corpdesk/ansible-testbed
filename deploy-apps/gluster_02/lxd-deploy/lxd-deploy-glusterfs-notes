@@ -1,0 +1,83 @@
+#hosts setup
+cat > /etc/rc.local <<EOF                                                                        /etc/hosts                                                                                    
+127.0.0.1 localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+192.168.3.20 cd-glusterfs-20
+192.168.3.21 cd-glusterfs-21
+192.168.3.22 cd-glusterfs-22
+
+EOF
+
+# install 
+sudo apt-get install glusterfs-server -y
+sudo systemctl start glusterd
+sudo systemctl enable glusterd
+
+# Configuring GlusterFS
+# Now that your servers are ready and GlusterFS is installed, it’s time to configure gluster. On cd-glusterfs-20, create a trusted pool with the command:
+sudo gluster peer probe cd-glusterfs-21
+# You should see peer probe: success returned.
+
+# Verify the status of the two peers with the command:
+sudo gluster peer status
+# You should see that cd-glusterfs-21 is connected
+
+# Creating a Distributed Volume
+# We’ll next create a distributed volume. I would highly recommend you create this volume on a partition 
+# that isn’t within the system directory (aka, not on the same drive that your OS is hosted on). 
+# If you create this volume on the same drive as the OS, you could run into sync errors.
+# Let’s create a new directory for GlusterFS (on both cd-glusterfs-20 and cd-glusterfs-21) with the command:
+sudo mkdir -p /glusterfs/distributed
+
+# With the directory created, we can now create the volume (named v01) that will replicate on both 
+# cd-glusterfs-20, cd-glusterfs-21 and cd-glusterfs-22. 
+# WARNING:
+# volume create: v01: failed: The brick cd-glusterfs-20:/glusterfs/distributed is being created in the root partition. 
+# It is recommended that you don't use the system's root partition for storage backend. Or use 'force' at the end of the command if you want to override this behavior.
+# The command for this is:
+sudo gluster volume create v01 replica 3 transport tcp cd-glusterfs-20:/glusterfs/distributed cd-glusterfs-21:/glusterfs/distributed cd-glusterfs-22:/glusterfs/distributed force
+
+# ----------------------------------------------------------------------------
+# Installing the GlusterFS Client and Connecting to the Distributed Volume
+# It’s now time to install the GlusterFS client. We’ll do this on cd-glusterfs-30. For this, issue the command:
+sudo apt install glusterfs-client -y
+
+# Create a new mount point for GlusterFS on cd-glusterfs-30 with the command:
+sudo mkdir -p /mnt/glusterfs
+
+# We can now mount the distributed file system with the command:
+sudo mount -t glusterfs cd-glusterfs-20:/v01 /mnt/glusterfs/
+
+# Finally, you’ll want to make sure the distributed file system is mounted at boot. To do this, you’ll need to edit the fstab file with the command:
+sudo nano /etc/fstab
+
+# At the bottom of that file, add the following:
+cd-glusterfs-20:/v01 /mnt/glusterfs glusterfs defaults,_netdev 0 0
+
+# -----------------------------------------------------------
+# Testing the Filesystem
+# With all of this in place, we can now test the GlusterFS distributed file system. On cd-glusterfs-20 issue the command:
+sudo mount -t glusterfs cd-glusterfs-20:/v01 /mnt
+
+# On cd-glusterfs-21 issue the command:
+sudo mount -t glusterfs cd-glusterfs-21:/v01 /mnt
+
+# On cd-glusterfs-22 issue the command:
+sudo mount -t glusterfs cd-glusterfs-22:/v01 /mnt
+
+# Move over to cd-glusterfs-30 and create a test file with the command:
+sudo touch /mnt/glusterfs/thenewstack
+
+# Check to make sure the new file appears on both cd-glusterfs-20, cd-glusterfs-21 and cd-glusterfs-22 with the command (run on all glusterfs servers):
+ls /mnt
+# You should see thenewstack appear in the directories.
+
+
