@@ -1,0 +1,22 @@
+{
+    "url": "https://api.github.com/gists/efb647c997b14ec5468a6bb1d684c8e7",
+    .
+    .
+    .
+    "files": {
+      "test-gist-01.sh": {
+        "filename": "test-gist-01.sh",
+        "type": "application/x-sh",
+        "language": "Shell",
+        "raw_url": "https://gist.githubusercontent.com/georemo/efb647c997b14ec5468a6bb1d684c8e7/raw/34a2d35281707ad7c4e1ae1ebc2b084eee7a16ce/test-gist-01.sh",
+        "size": 485,
+        "truncated": false,
+        "content": "#!/bin/bash\n\n# Text Reset\nRESET='\\e[0m'\nBLINK='\\e[5m'\n\n# Regular Colors\nBLACK='\\e[0;30m'\nRED='\\e[0;31m'\nGREEN='\\e[0;32m'\nYELLOW='\\e[0;33m'\nBLUE='\\e[0;34m'\nPURPLE='\\e[0;35m'\nCYAN='\\e[0;36m'\nWHITE='\\e[0;37m'\n\nclear\necho -e \"${CYAN}=================================================================${RESET}\"\necho -e \"${GREEN}                   VIM Boostrap Installer!!                     ${RESET}\"\necho -e \"${CYAN}=================================================================${RESET}\""
+      }
+    },
+    .
+    .
+    .
+    "truncated": false
+  }
+  

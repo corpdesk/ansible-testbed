@@ -1,0 +1,5 @@
+# Ref: https://thenewstack.io/tutorial-deploy-a-highly-availability-glusterfs-storage-cluster/
+# use lxd-deploy-gfs-server.sh to deploy to servers
+# use lxd-deploy-gfs-client.sh to deploy to client
+
+
