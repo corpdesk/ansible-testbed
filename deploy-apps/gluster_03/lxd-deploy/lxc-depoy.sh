@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# create containers
-for i in 0 1 2
-do
-# launch a container for specific network and static ip address
-sh ../../shared-files/lxdbr0-lxc.sh 'cd-sql-cluster' '192.168.3' "$i"
-done
-
