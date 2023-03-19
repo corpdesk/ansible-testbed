@@ -1,0 +1,9 @@
+# Issue:
+# https://discuss.linuxcontainers.org/t/setting-up-container-with-multiple-network-interfaces-of-differernt-types/16598]
+
+# Cloud-init documentation:
+# https://linuxcontainers.org/lxd/docs/master/cloud-init/
+
+# dual nic tutorial:
+# https://blog.simos.info/how-to-add-both-a-private-and-public-network-to-lxd-using-cloud-init/
+
