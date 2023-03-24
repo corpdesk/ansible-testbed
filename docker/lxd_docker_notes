@@ -1,0 +1,49 @@
+Ref: https://discuss.linuxcontainers.org/t/error-when-running-docker-images-in-a-lxc-container/12945
+lxc launch $image $lxcName --profile privatepublicnetwork -c security.nesting=true 
+
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install docker-ce
+docker run hello-world
+
+///////////////////////
+- resize disk:
+https://discuss.linuxcontainers.org/t/resize-lxd-btrfs-storage-space/5214/9
+https://serverfault.com/questions/1117306/using-zfs-volume-size-increase-are-not-seen-by-lxd-container
+
+sudo truncate -s +5G <LXD_lib_dir>/disks/<pool_name>.img
+sudo truncate -s +5GB /var/lib/lxd/disks/mybtrfs.img
+sudo truncate -s +15GB /var/snap/lxd/common/lxd/disks/default.img
+
+- storage management: https://linuxcontainers.org/lxd/docs/stable-5.0/howto/storage_pools/index.html#view-storage-pools
+sudo truncate -s +5G <LXD_lib_dir>/disks/<pool_name>.img
+sudo zpool set autoexpand=on <pool_name>
+sudo zpool online -e <pool_name> <device_ID>
+sudo zpool set autoexpand=off <pool_name>
+
+Replace the following variables:
+<LXD_lib_dir>:
+    /var/snap/lxd/common/lxd/ if you are using the snap, or /var/lib/lxd/ otherwise.
+<pool_name>:
+The name of your storage pool (for example, my-pool, or default).
+
+<device_ID>:
+    The ID of the ZFS device. Enter sudo zpool status -vg <pool_name> to find the ID.
+    example: sudo zpool status -vg default
+
+sudo truncate -s +5G /var/snap/lxd/common/lxd/disks/default.img
+sudo zpool set autoexpand=on default
+sudo zpool online -e default 8033787277834368444
+sudo zpool set autoexpand=off default
+
+///////////////////////////
+- node.js/typescript -> docker: https://cloudnweb.dev/2019/09/building-a-production-ready-node-js-app-with-typescript-and-docker/
+  - codes: https://github.com/ganeshmani/express-typescript-docker
+
+
+
+
+
