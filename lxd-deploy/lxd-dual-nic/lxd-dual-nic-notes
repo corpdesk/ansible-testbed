@@ -7,3 +7,7 @@
 # dual nic tutorial:
 # https://blog.simos.info/how-to-add-both-a-private-and-public-network-to-lxd-using-cloud-init/
 
+
+# launch dual-nic container
+sh $projDir/lxd-deploy/lxd-dual-nic/lxd-launch.sh <image-name> <container-name>
+

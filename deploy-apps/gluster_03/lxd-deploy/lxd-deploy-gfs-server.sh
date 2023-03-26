@@ -1,4 +1,12 @@
+#!/bin/bash
+
 # Ref: https://thenewstack.io/tutorial-deploy-a-highly-availability-glusterfs-storage-cluster/
+
+# You need to run <projDir>/deploy-apps/gluster_03/lxd-deploy/lxd-deploy-gluster-containers.sh to create lxc containers to host glusterfs servers
+# This is a script for setting up glusterfs server
+# after this script  is done, go to <projDir>/deploy-apps/gluster_03/lxd-deploy/lxd-deploy-gfs-domain.sh to create 
+# glusterfs clients (cloud-brix storage domains)
+# storage domains are the ones consumed by application clients(eg corpdesk) and treated like webservers.
 
 gfsServer0="cd-glusterfs-20"
 gfsServer1="cd-glusterfs-21"
@@ -41,38 +49,38 @@ sudo gluster peer probe $gfsServer2
 sudo gluster peer status
 # You should see that $gfsServer1 is connected
 
-# -------------------------------------------------------------------------------------------------------------------
-# Creating a $consDistrDir Volume
+# # -------------------------------------------------------------------------------------------------------------------
+# # Creating a $consDistrDir Volume
 
-# dirctory: can be dedicated to given consumer
-consDistrDir="ff6e24d8-f1cb-44e4-ad53-1cc62db0c45b"
-# a volume can be defined by end user within a consumer
-# simulate a client id with uuidgen
-uid="2bafb89d-700d-48d8-a367-24cf42f25293"
+# # dirctory: can be dedicated to given consumer
+# consDistrDir="ff6e24d8-f1cb-44e4-ad53-1cc62db0c45b"
+# # a volume can be defined by end user within a consumer
+# # simulate a client id with uuidgen
+# uid="2bafb89d-700d-48d8-a367-24cf42f25293"
 
-# We’ll next create a distributed volume. I would highly recommend you create this volume on a partition 
-# that isn’t within the system directory (aka, not on the same drive that your OS is hosted on). 
-# If you create this volume on the same drive as the OS, you could run into sync errors.
-# Let’s create a new directory for GlusterFS (on $gfsServer0, $gfsServer1 and $gfsServer2) with the command:
-sudo mkdir -p /glusterfs/$consDistrDir
+# # We’ll next create a distributed volume. I would highly recommend you create this volume on a partition 
+# # that isn’t within the system directory (aka, not on the same drive that your OS is hosted on). 
+# # If you create this volume on the same drive as the OS, you could run into sync errors.
+# # Let’s create a new directory for GlusterFS (on $gfsServer0, $gfsServer1 and $gfsServer2) with the command:
+# sudo mkdir -p /glusterfs/$consDistrDir
 
-# ----------------------------------------------------------------------
+# # ----------------------------------------------------------------------
 
-# With the directory created, we can now create a volume (named vol-$uid) that will replicate on both 
-# $gfsServer0, $gfsServer1 and $gfsServer2. 
-# WARNING:
-# volume create: vol-$uid: failed: The brick $gfsServer0:/glusterfs/$consDistrDir is being created in the root partition. 
-# It is recommended that you don't use the system's root partition for storage backend. Or use 'force' at the end of the command if you want to override this behavior.
-# The command for this is: 
-sudo gluster volume create vol-$uid replica 3 transport tcp $gfsServer0:/glusterfs/$consDistrDir $gfsServer1:/glusterfs/$consDistrDir $gfsServer2:/glusterfs/$consDistrDir force
-sudo gluster volume start vol-$uid
+# # With the directory created, we can now create a volume (named vol-$uid) that will replicate on both 
+# # $gfsServer0, $gfsServer1 and $gfsServer2. 
+# # WARNING:
+# # volume create: vol-$uid: failed: The brick $gfsServer0:/glusterfs/$consDistrDir is being created in the root partition. 
+# # It is recommended that you don't use the system's root partition for storage backend. Or use 'force' at the end of the command if you want to override this behavior.
+# # The command for this is: 
+# sudo gluster volume create vol-$uid replica 3 transport tcp $gfsServer0:/glusterfs/$consDistrDir $gfsServer1:/glusterfs/$consDistrDir $gfsServer2:/glusterfs/$consDistrDir force
+# sudo gluster volume start vol-$uid
 
-# mount the volume on each of the servers
-# On $gfsServer0 issue the command:
-sudo mount -t glusterfs $gfsServer0:/vol-$uid /mnt
+# # mount the volume on each of the servers
+# # On $gfsServer0 issue the command:
+# sudo mount -t glusterfs $gfsServer0:/vol-$uid /mnt
 
-# On $gfsServer1 issue the command:
-sudo mount -t glusterfs $gfsServer1:/vol-$uid /mnt
+# # On $gfsServer1 issue the command:
+# sudo mount -t glusterfs $gfsServer1:/vol-$uid /mnt
 
-# On $gfsServer2 issue the command:
-sudo mount -t glusterfs $gfsServer2:/vol-$uid /mnt
+# # On $gfsServer2 issue the command:
+# sudo mount -t glusterfs $gfsServer2:/vol-$uid /mnt

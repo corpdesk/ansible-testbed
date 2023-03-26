@@ -2,4 +2,100 @@
 # use lxd-deploy-gfs-server.sh to deploy to servers
 # use lxd-deploy-gfs-client.sh to deploy to client
 
+Tutorial: Deploy a Highly Availability GlusterFS Storage Cluster
+https://thenewstack.io/tutorial-deploy-a-highly-availability-glusterfs-storage-cluster/
+
+
+https://serverfault.com/questions/171166/can-i-run-mysqld-on-top-of-glusterfs
+https://www.cyberciti.biz/faq/how-to-mount-glusterfs-volumes-inside-lxclxd-linux-containers/
+
+Kubernetes Storage — Part 2 — GlusterFS complete tutorial
+https://itnext.io/kubernetes-storage-part-2-glusterfs-complete-tutorial-77542c12a602
+
+
+------------------------
+- install node.js to client machine
+- run shell script using node
+- run sudo command using node.js
+
+- view output of cmd:
+  - node.js -- execute command synchronously and get result
+  - https://stackoverflow.com/questions/7183307/node-js-execute-command-synchronously-and-get-result
+  - Run shell command and collect the output in Node.js, Deno, and Bun
+  - https://medium.com/deno-the-complete-reference/run-shell-command-and-collect-the-output-in-node-js-deno-and-bun-f23977bf1d68
+
+- node.js setup glusterfs client:
+  - install 
+
+- Edit Word Documents Online:
+  - Edit Word Documents using REST API in Node.js
+  - https://blog.groupdocs.cloud/editor/edit-word-documents-using-rest-api-in-node.js/
+  - https://gist.github.com/groupdocs-cloud-gists/68b20564599e1c1a70006c664afade61
+  
+- security:
+	- setup PKI between glusterfs clients and gluster server
+	
+--------------------------------------------------------------------------
+Example of setting up HA-Storage for corpdesk:
+--------------------------------------------------------------------------
+STAGE1:
+- set name for server
+	- cd-storage
+	- geo-zone
+	- hostId
+- launch lxd with dual nic
+- set up as cd-glusterfs client
+- install apache
+- test gfs storage
+- set apache to use glusterfs
+- do this for 2 containers
+TESTS1:
+- confirm that the data in container 1 & 2 are in sync
+--------------------------------------------------------------------------
+STAGE2:
+- set up HAPROXY for access to this service
+- set name for storage-domain
+	- ep (entry-point)
+	- cd-storage
+	- geo-zone
+	- hostId
+
+
+--------------------------------------------------------------------------
+STAGE3:
+Use cd-user front end project then access src/environments/environment.ts
+USER_RESOURCES: 'http://localhost/user-resources',
+- change the address to http://<storage-domain>/user-resources/<consumer-guid>
+
+TEST2:
+- confirm that user can load personal avatar
+- confirm that user can save personal avatar
+- confirm that user data contains HA-Storage information
+- design user storage dashboard
+	- view metrics
+	- view all files
+- design admin storage setting options
+	- set consumer limits
+	- set consumer quoter
+	- manage backups
+	- manage migration without downtime on client
+	- bring down storage server for maintenance
+	- test storage server before putting on-line
+	- view user metrics
+- design inter user file collaboration options
+	- file sharing
+- design management of chargable resources
+	- bandwidth usage
+	- storage usage
+	- time spent online
+	- per component usage
+	- 
+- design security policy
+	
+
+
+
+
+
+
 
