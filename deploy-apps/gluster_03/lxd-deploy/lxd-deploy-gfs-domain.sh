@@ -13,15 +13,15 @@ gfsServer2="cd-glusterfs-22"
 serverFrom=20
 serverTo=22
 
-clientFrom=32
-clientTo=33
+clientFrom=1
+clientTo=2
 
 # the name assigned to the client container (storage domain, in cloud-brix) and voluname at the server
 storageDomain="stor-dom-000-1"
 
 # gfsClient0="cd-glusterfs-30"
 # gfsClient1="cd-glusterfs-31"
-# gfsClient2="cd-storage-dom-01-32"
+# gfsClient2="$storageDomain-1"
 # $storageDomain
 
 # ---------------------------
@@ -70,11 +70,11 @@ for i in $(seq $serverFrom $serverTo); do
     lxc exec "cd-glusterfs-$i" -- mount -t glusterfs "cd-glusterfs-$i:/vol-$storageDomain" /mnt
 done 
 
-# END OF SERVER ACTIONS
+# END OF SERVER ACTIONS (CREATE CLIENT VOLUME)
 # -----------------------------
 
 # ----------------------------------------------------------------------------
-# START CLIENT ACTION:
+# START CLIENT ACTION (MOUNT SERVER VOLUME):
 # ----------------------------------------------------------------------------
 
 
@@ -87,32 +87,38 @@ done
 
 # gfs-server
 # this should be a name registered at dns or hosts linked to a floating ip address for the gfs servers
-# hosts setup
-cat > /etc/hosts <<EOF                                                                                   
-127.0.0.1 localhost
+# # hosts setup
+# cat > /etc/hosts <<EOF                                                                                   
+# 127.0.0.1 localhost
 
-# The following lines are desirable for IPv6 capable hosts
-::1 ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-ff02::3 ip6-allhosts
+# # The following lines are desirable for IPv6 capable hosts
+# ::1 ip6-localhost ip6-loopback
+# fe00::0 ip6-localnet
+# ff00::0 ip6-mcastprefix
+# ff02::1 ip6-allnodes
+# ff02::2 ip6-allrouters
+# ff02::3 ip6-allhosts
 
-192.168.3.20 $gfsServer0
-192.168.3.21 $gfsServer1
-192.168.3.22 $gfsServer2
+# 192.168.3.20 $gfsServer0
+# 192.168.3.21 $gfsServer1
+# 192.168.3.22 $gfsServer2
 
-192.168.3.30 $storageDomain
+# 192.168.0.101 $storageDomain
+# 192.168.3.82  $storageDomain
 
-EOF
+# EOF
+# set hosts in the lxd host machine. Should be done to all potential clients. Eg front end servers
+sudo sh "$projDir/deploy-apps/apache/shellInstall/setStorageHosts.sh"
+
+# set hosts in the lxd container (storage domain)
+lxc file push "$projDir/deploy-apps/apache/shellInstall/setStorageHosts.sh" $storageDomain/tmp/
+lxc exec $storageDomain -- sh /tmp/setStorageHosts.sh
 
 # for i in $(seq $clientFrom $clientTo); do
 lxc exec $storageDomain -- apt update
 # Installing the GlusterFS Client and Connecting to the Distributed Volume
 # It’s now time to install the GlusterFS client. We’ll do this on cd-glusterfs-30. For this, issue the command:
 lxc exec $storageDomain -- apt install glusterfs-client -y
-
 
 # Create a new mount point for GlusterFS on cd-glusterfs-30 with the command:
 lxc exec $storageDomain -- mkdir -p /mnt/glusterfs
@@ -132,12 +138,15 @@ lxc exec $storageDomain -- sh /tmp/apacheInstall.sh
 
 lxc exec $storageDomain -- cat /etc/apache2/sites-available/000-default.conf
 lxc exec $storageDomain -- sed -i 's/\/var\/www\/html/\/mnt\/glusterfs/g' /etc/apache2/sites-available/000-default.conf
+lxc exec $storageDomain -- cat /etc/apache2/sites-available/000-default.conf
+lxc exec $storageDomain -- cat /etc/apache2/apache2.conf
 lxc exec $storageDomain -- sed -i 's/\/var\/www/\/mnt\/glusterfs/g' /etc/apache2/apache2.conf
+lxc exec $storageDomain -- cat /etc/apache2/apache2.conf
 lxc exec $storageDomain -- adduser ubuntu www-data
 lxc exec $storageDomain -- chown -R www-data:www-data /mnt/glusterfs
 lxc exec $storageDomain -- chmod -R g+rw /mnt/glusterfs
-lxc exec $storageDomain -- echo -e "-- Restarting Apache web server\n"
 lxc exec $storageDomain -- chmod -R 755 /mnt/glusterfs
+lxc exec $storageDomain -- echo -e "-- Restarting Apache web server\n"
 lxc exec $storageDomain -- service apache2 restart
 
 # -----------------------------------------------------------
@@ -145,7 +154,13 @@ lxc exec $storageDomain -- service apache2 restart
 
 # Move over to cd-glusterfs-30 and create a test file with the command:
 lxc exec $storageDomain -- touch /mnt/glusterfs/index.html
+lxc exec $storageDomain -- nano /mnt/glusterfs/index.html
+
+curl http://$storageDomain
 
 # Check to make sure the new file appears on both $gfsServer0, $gfsServer1 and $gfsServer2 with the command (run on all glusterfs servers):
 lxc exec $storageDomain -- ls /mnt
 # You should see thenewstack appear in the directories.
+lxc exec $storageDomain -- mkdir /mnt/glusterfs/B0B3DA99-1859-A499-90F6-1E3F69575DCD/user-resources
+lxc exec $storageDomain -- chown -R www-data:www-data /mnt/glusterfs/B0B3DA99-1859-A499-90F6-1E3F69575DCD
+lxc exec $storageDomain -- service apache2 restart

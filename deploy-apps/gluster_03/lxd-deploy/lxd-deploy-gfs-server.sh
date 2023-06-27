@@ -28,7 +28,6 @@ ff02::3 ip6-allhosts
 192.168.3.21 $gfsServer1
 192.168.3.22 $gfsServer2
 
-
 EOF
 
 # install 
