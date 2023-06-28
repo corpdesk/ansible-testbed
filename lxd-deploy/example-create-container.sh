@@ -9,7 +9,7 @@
 # ---------
 
 # the name assigned to the client container (storage domain, in cloud-brix) and voluname at the server
-networkName="stor-dom-000"
+networkName="test-a"
 # note that 192.168.3.x is the lxd network identity where this script is invoked
 networkId="192.168.3"
 dualNic=true
@@ -20,10 +20,10 @@ image="ubuntu:22.04"
 lxcName="$networkName"
 lxcProfile="privatepublicnetwork"
 
-# deploy single nic container with static ip
+# set the script for creating single nic container with static ip
 deloyGfs="$projDir/lxd-deploy/lxc-deploy.sh"
 
-# launch dual-nic container (local dhcp & macvlan dhcp)
+# set the script for creating dual-nic container (local dhcp & macvlan dhcp)
 deloyGfs2nic="$projDir/lxd-deploy/lxd-dual-nic/lxd-launch.sh"
 
 # from=32
@@ -35,4 +35,3 @@ if [ "$dualNic" = true ] ; then
 else
    sh $deloyGfs $networkName $networkId $from $to $projDir
 fi
-
