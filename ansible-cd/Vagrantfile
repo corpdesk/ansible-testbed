@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #     ans.inventory_path = "hosts.ini"
 #   end
   # network setup
-  config.vm.network "public_network", bridge: "wlp2s0: Wi-Fi (AirPort)", auto_config: true
+  config.vm.network "public_network", auto_config: true
   config.vm.provider :virtualbox do |v|
     v.memory = 2048
     v.linked_clone = true
