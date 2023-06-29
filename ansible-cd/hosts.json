@@ -32,19 +32,19 @@
     ],
     "zones": [
         {
-            "name": "107"
+            "name": "9"
         },
         {
-            "name": "186"
+            "name": "10"
         },
         {
-            "name": "116"
+            "name": "11"
         }
     ],
     "hosts": [
         {
-            "host_name": "mac-01",
-            "ip": "192.168.1.107",
+            "host_name": "emp-09",
+            "ip": "192.168.0.9",
             "is_vm_host": true,
             "is_vm": false,
             "is_active": true,
@@ -55,8 +55,8 @@
             "port": null
         },
         {
-            "host_name": "emp-06",
-            "ip": "192.168.1.186",
+            "host_name": "emp-10",
+            "ip": "192.168.0.10",
             "is_vm_host": true,
             "is_vm": false,
             "is_active": true,
@@ -67,8 +67,8 @@
             "port": null
         },
         {
-            "host_name": "emp-07",
-            "ip": "192.168.1.116",
+            "host_name": "emp-11",
+            "ip": "192.168.0.11",
             "is_vm_host": true,
             "is_vm": false,
             "is_active": true,
@@ -79,8 +79,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-107-1",
-            "ip": "192.168.1.201",
+            "host_name": "emp-09-1",
+            "ip": "192.168.0.151",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -92,8 +92,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-107-2",
-            "ip": "192.168.1.202",
+            "host_name": "emp-09-2",
+            "ip": "192.168.0.152",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -105,8 +105,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-107-3",
-            "ip": "192.168.1.203",
+            "host_name": "emp-09-3",
+            "ip": "192.168.0.153",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -118,8 +118,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-107-4",
-            "ip": "192.168.1.204",
+            "host_name": "emp-09-4",
+            "ip": "192.168.0.154",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -131,8 +131,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-107-5",
-            "ip": "192.168.1.205",
+            "host_name": "emp-09-5",
+            "ip": "192.168.0.155",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -144,8 +144,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-186-1",
-            "ip": "192.168.1.206",
+            "host_name": "emp-10-1",
+            "ip": "192.168.0.156",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -158,8 +158,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-186-2",
-            "ip": "192.168.1.207",
+            "host_name": "emp-10-2",
+            "ip": "192.168.0.157",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -172,8 +172,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-186-3",
-            "ip": "192.168.1.208",
+            "host_name": "emp-10-3",
+            "ip": "192.168.0.158",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -186,8 +186,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-186-4",
-            "ip": "192.168.1.209",
+            "host_name": "emp-10-4",
+            "ip": "192.168.0.159",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -200,8 +200,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-186-5",
-            "ip": "192.168.1.210",
+            "host_name": "emp-10-5",
+            "ip": "192.168.0.160",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -214,8 +214,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-116-1",
-            "ip": "192.168.1.211",
+            "host_name": "cd-11-1",
+            "ip": "192.168.0.161",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -228,8 +228,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-116-2",
-            "ip": "192.168.1.212",
+            "host_name": "cd-11-2",
+            "ip": "192.168.0.162",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -242,8 +242,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-116-3",
-            "ip": "192.168.1.213",
+            "host_name": "cd-11-3",
+            "ip": "192.168.0.163",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -256,8 +256,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-116-4",
-            "ip": "192.168.1.214",
+            "host_name": "cd-11-4",
+            "ip": "192.168.0.164",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,
@@ -270,8 +270,8 @@
             "port": null
         },
         {
-            "host_name": "cd-db-116-5",
-            "ip": "192.168.1.215",
+            "host_name": "cd-11-5",
+            "ip": "192.168.0.165",
             "is_vm_host": false,
             "is_vm": true,
             "is_active": true,

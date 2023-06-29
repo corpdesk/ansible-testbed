@@ -9,9 +9,9 @@ targetFile="Vagrantfile";
 subhostDir="../initial-user/sub-hosts";
 vmBox="bento/ubuntu-22.04";
 vmMem=2048;
-vmDisk="50Gb";
+vmDisk="100Gb";
 vmCups=2;
-netBase="192.168.1";
+netBase="192.168.0";
 
 # /////////////////////////////////////////////////
 hostData="hosts.json";
@@ -20,7 +20,7 @@ hosts=$(jq ".hosts" "$hostData");
 hostsLen=$(echo "$hosts" | jq '. | length');
 echo "value of hostsLen is $hostsLen";
 
-initIpNum=201;
+initIpNum=151;
 i=0;
 while [ $i -lt $hostsLen ]
 do

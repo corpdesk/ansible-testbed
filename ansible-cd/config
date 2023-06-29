@@ -1,3 +1,21 @@
+Host 192.168.0.9
+  ForwardAgent yes
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_rsa
+
+Host 192.168.0.10
+  ForwardAgent yes
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_rsa
+
+  Host 192.168.0.11
+  ForwardAgent yes
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_rsa
+
 Host 192.168.1.201
   ForwardAgent yes
   AddKeysToAgent yes
