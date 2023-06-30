@@ -1,4 +1,5 @@
 vagrant destroy --force
+rm -r .vagrant
 
 from the book: ansible for devops (pg 72)
 
