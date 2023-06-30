@@ -4,8 +4,8 @@
 # update execution codes
 # git pull https://georemo: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@github.com/georemo/ansible-testbed.git
 # git pull https://username:password@git_hostname.com/my/repository
-sudo apt update
-sudo apt upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 sudo snap lxd
 sudo sh remove_devops.sh
 
@@ -20,7 +20,7 @@ sudo sh remove_devops.sh
 # The -E switch enables extended regexp support for sed.
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 # sudo apt update -y
-sudo apt-get install git net-tools openssh-server tree fish jq zfsutils-linux traceroute -y
+sudo apt-get install git net-tools telnet openssh-server tree fish jq zfsutils-linux traceroute -y
 # sudo snap install lxd --channel=latest/stable
 # sudo snap refresh lxd --channel=latest/stable
 sudo service ssh restart
