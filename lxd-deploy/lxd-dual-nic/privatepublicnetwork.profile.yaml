@@ -18,11 +18,11 @@ devices:
     name: eth0
     nictype: bridged
     parent: lxdbr0
-    type: nic
+    type: ni
   eth1:
     name: eth1
     nictype: macvlan
-    parent: enp0s31f6
+    parent: eno1
     type: nic
   root:
     path: /
