@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.memory = 2048
     v.linked_clone = true
   end
-  (156..160).each do |i|
+  (151..155).each do |i|
     config.vm.define "cd-#{zone}-#{i}" do |app|
       app.vm.hostname = "cd-#{zone}-#{i}"
       app.vm.network :public_network, ip: "192.168.0.#{i}"
