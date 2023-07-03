@@ -1,7 +1,7 @@
 ---
 # ----------------------------------------------------------
 ## copy installer files to webserver for easy and fast access by ansible
-# lxc file push ~/app-repo/mysql-community-server-core_8.0.32-1ubuntu22.04_amd64.deb  webserver-238/var/www/html/app-repo/
+#  lxc file push ~/app-repo/mysql-community-server-core_8.0.32-1ubuntu22.04_amd64.deb  webserver-238/var/www/html/app-repo/
 
 # SECTION ONE: install mysql
 - hosts: emp-06

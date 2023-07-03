@@ -12,7 +12,7 @@
 networkName="test-a"
 # note that 192.168.3.x is the lxd network identity where this script is invoked
 # remember to change this according to the settings for lxdbr0, the local lxd nic
-networkId="192.168.3"
+networkId="192.168.0"
 dualNic=true
 from=1
 to=2

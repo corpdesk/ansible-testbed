@@ -17,12 +17,20 @@ devices:
   eth0:
     name: eth0
     nictype: bridged
-    parent: lxdbr0
-    type: ni
+    # virtual bridge interface for non cluster lxd environment
+    # parent: lxdbr0
+    # default virtual bridge interface for clustered lxd environment
+    parent: lxdfan0
+    type: nic
   eth1:
     name: eth1
     nictype: macvlan
-    parent: eno1
+    # HP EliteBook 840 G3
+    # parent: enp0s31f6
+    # HP ProDesk 600 G3 SFF
+    # parent: eno1
+    # VirtualBox vm custom nic by vagrant
+    parent: eth2
     type: nic
   root:
     path: /
