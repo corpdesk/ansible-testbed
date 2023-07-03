@@ -10,12 +10,14 @@
 
 # the name assigned to the client container (storage domain, in cloud-brix) and voluname at the server
 networkName="test-a"
-# note that 192.168.3.x is the lxd network identity where this script is invoked
-# remember to change this according to the settings for lxdbr0, the local lxd nic
-networkId="192.168.0"
+# Note that 192.168.3.x is the lxd network (as specified in the eth0 parent in 
+# the file $HOME/ansible-testbed/lxd-deploy/lxd-dual-nic/privatepublicnetwork.profile.yaml)
+# remember to change this according to the environment (eg non cluster setup, lxd cluster environment etc)
+# networkId="192.168.0" // for emp-06 (lxdbr0)
+networkId="240.15.0"
 dualNic=true
-from=1
-to=2
+from=3
+to=5
 projDir="$HOME/ansible-testbed"
 image="ubuntu:22.04"
 lxcName="$networkName"

@@ -29,7 +29,7 @@ devices:
     # parent: enp0s31f6
     # HP ProDesk 600 G3 SFF
     # parent: eno1
-    # VirtualBox vm custom nic by vagrant
+    # VirtualBox vm custom nic on the vm created by vagrant
     parent: eth2
     type: nic
   root:
