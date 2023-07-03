@@ -20,4 +20,4 @@ lxc profile create privatepublicnetwork
 # 2. make sure ethernet wire is connected and the router is switched on
 
 
-cat privatepublicnetwork.profile | lxc profile edit privatepublicnetwork
+cat privatepublicnetwork.profile.yaml | lxc profile edit privatepublicnetwork
