@@ -1,5 +1,5 @@
 # the name assigned to the client container (storage domain, in cloud-brix) and voluname at the server
-networkName="test-a"
+networkName="cd-sql"
 # Note that 192.168.3.x is the lxd network (as specified in the eth0 parent in 
 # the file $HOME/ansible-testbed/lxd-deploy/lxd-dual-nic/privatepublicnetwork.profile.yaml)
 # remember to change this according to the environment (eg non cluster setup, lxd cluster environment etc)
