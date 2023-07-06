@@ -6,7 +6,8 @@
 # git pull https://username:password@git_hostname.com/my/repository
 sudo apt-get update
 sudo apt-get upgrade -y
-sudo snap lxd
+sudo snap install lxd -y
+sudo snap refresh
 sudo sh remove_devops.sh
 
 
