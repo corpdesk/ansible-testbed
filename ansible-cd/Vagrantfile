@@ -6,7 +6,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "bento/ubuntu-22.04"
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  zone="09"
+  zone="10"
   # setup devops user
   config.vm.provision "file", source: "../shared-files/remove_devops.sh", destination: "remove_devops.sh"
   config.vm.provision "file", source: "../shared-files/reset_environment.sh", destination: "reset_environment.sh"
@@ -22,11 +22,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # network setup
   config.vm.network "public_network", auto_config: true
   config.vm.network "forwarded_port", guest: 8443, host: 8443, auto_correct: true
+  config.vm.synced_folder "shared/", "/shared/dir1", create: true
   config.vm.provider :virtualbox do |v|
     v.memory = 2048
     v.linked_clone = true
   end
-  (151..155).each do |i|
+  (156..160).each do |i|
     config.vm.define "cd-#{zone}-#{i}" do |app|
       app.vm.hostname = "cd-#{zone}-#{i}"
       app.vm.network :public_network, ip: "192.168.0.#{i}"

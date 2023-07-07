@@ -26,16 +26,16 @@ distrDir="/glusterfs/distributed"
 # consDistrDir=""
 
 # hosts setup
-cat > /etc/hosts <<EOF                                                                                   
+sudo cat > /etc/hosts <<EOF                                                                             /etc/hosts                                                                                        
 127.0.0.1 localhost
+127.0.1.1 $HOSTNAME
 
 # The following lines are desirable for IPv6 capable hosts
-::1 ip6-localhost ip6-loopback
+::1     ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
-ff02::3 ip6-allhosts
 
 # primary names
 192.168.0.9 $gfsServer0
@@ -91,6 +91,10 @@ sudo gluster peer status
 # # -------------------------------------------------------------------------------------------------------------------
 # # Creating a distributed volume $consDistrDir
 
+# gfsServer0="cd-glusterfs-09"
+# gfsServer1="cd-glusterfs-10"
+# gfsServer2="cd-glusterfs-11"
+
 # # dirctory: can be dedicated to given consumer
 consDistrDir="ff6e24d8-f1cb-44e4-ad53-1cc62db0c45b"
 # # a volume can be defined by end user within a consumer
@@ -102,7 +106,7 @@ uid="2bafb89d-700d-48d8-a367-24cf42f25293"
 # # If you create this volume on the same drive as the OS, you could run into sync errors.
 # # Let’s create a new directory for GlusterFS (on $gfsServer0, $gfsServer1 and $gfsServer2) with the command:
 sudo mkdir -p /glusterfs/$consDistrDir
-sudo mkdir -p $distrDir
+# sudo mkdir -p $distrDir
 
 # # ----------------------------------------------------------------------
 
