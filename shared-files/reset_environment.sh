@@ -4,8 +4,8 @@
 # update execution codes
 # git pull https://georemo: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@github.com/georemo/ansible-testbed.git
 # git pull https://username:password@git_hostname.com/my/repository
-sudo apt-get update
-sudo apt-get upgrade -y
+sudo apt update
+sudo apt upgrade -y
 sudo snap install lxd -y
 sudo snap refresh
 sudo sh remove_devops.sh
