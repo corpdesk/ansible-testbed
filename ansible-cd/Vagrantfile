@@ -96,11 +96,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.synced_folder "/media/emp-06/emp-04-d2/extr-vagrant-disk/", "/glustervolume/"
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
-<<<<<<< HEAD
-  zone="06"
-=======
   zone="12"
->>>>>>> e4b8fd68c84fb759336cd6be1f28493523bfcb8d
   # setup devops user
   config.vm.provision "file", source: "../shared-files/remove_devops.sh", destination: "remove_devops.sh"
   config.vm.provision "file", source: "../shared-files/reset_environment.sh", destination: "reset_environment.sh"
