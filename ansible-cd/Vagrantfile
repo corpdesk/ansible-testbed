@@ -96,7 +96,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.synced_folder "/media/emp-06/emp-04-d2/extr-vagrant-disk/", "/glustervolume/"
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
+<<<<<<< HEAD
   zone="06"
+=======
+  zone="12"
+>>>>>>> e4b8fd68c84fb759336cd6be1f28493523bfcb8d
   # setup devops user
   config.vm.provision "file", source: "../shared-files/remove_devops.sh", destination: "remove_devops.sh"
   config.vm.provision "file", source: "../shared-files/reset_environment.sh", destination: "reset_environment.sh"
@@ -117,12 +121,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.memory = 2048
     v.linked_clone = true
   end
+<<<<<<< HEAD
 
   # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive sed -i '1i192.168.0.131  cd-#{zone}-131' /etc/hosts", :privileged => true
   # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive sed -i '1i192.168.0.132  cd-#{zone}-132' /etc/hosts", :privileged => true
   # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive sed -i '1i192.168.0.133  cd-#{zone}-133' /etc/hosts", :privileged => true
 
+=======
+<<<<<<< HEAD
+>>>>>>> e4b8fd68c84fb759336cd6be1f28493523bfcb8d
   (131..133).each do |i|
+=======
+  (166..170).each do |i|
+>>>>>>> c166590 (update cd-ansible vagrantfile)
     config.vm.define "cd-#{zone}-#{i}" do |app|
       # sync folder to host
       # config.vm.synced_folder "/media/emp-06/emp-04-d2/emp-06-gluster-#{i}/", "/glustervolume/"
