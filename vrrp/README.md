@@ -1,7 +1,10 @@
-Layer 4 load balancing two different web servers with two different HAProxy servers by providing high-availability with Keepalived in vagrant
-Ref: http://www.inanzzz.com/index.php/post/ya4d/layer-4-load-balancing-two-different-web-servers-with-two-different-haproxy-servers-by-providing-high-availability-with-keepalived-in-vagrat
+### VRRP Implementation via keepalived and HAProxy
 
-n this example, we're going to send a request to virtual IP, it will be diverted to one of the available Load balancers (HAProxy) then get the response from load balanced two different web servers. Request will never go to web servers directly. Load balancer will decide which server to be hit with the request. Example uses vagrant machines and is a layer 4 (transport layer) load balancing. Visit here for full configuration manual for you HAProxy version. We also be using Keepalived to make sure that HAProxy servers are up and running and the virtual IP is assigned to running server when one of them is down. It is Keepalived's responsibility.
+This Layer4 load balancing project is based on an article by inanzzz.com. The Virtual Router Redundancy Protocol(VRRP) implementation on this particular project focusses on improvement for flexibility and depoyment methods. Rather than vagrant and virtualbox, we have adopted lxd virtual machine.<br>
+Ref: http://www.inanzzz.com/index.php/post/ya4d/layer-4-load-balancing-two-different-web-servers-with-two-different-haproxy-servers-by-providing-high-availability-with-keepalived-in-vagrat
+<br>
+
+In this example, we are going to send a request to virtual IP, it will be diverted to one of the available Load balancers (HAProxy) then get the response from load balanced two different web servers. Request will never go to web servers directly. Load balancer will decide which server to be hit with the request. Example uses vagrant machines and is a layer 4 (transport layer) load balancing. Visit here for full configuration manual for you HAProxy version. We also be using Keepalived to make sure that HAProxy servers are up and running and the virtual IP is assigned to running server when one of them is down. It is Keepalived's responsibility.
 
 Two web servers will have only apache running and the load balancer will have HAProxy plus Keepalived running. Load balancer GUI will be accessible from the host machine to see the health and stats about the web servers.
 
@@ -9,18 +12,149 @@ Note
 
 This is a vagrant based example so if the Keepalived floating IP doesn't work as expected, it doesn't mean that it won't work as expected if you do everything manually on the servers so I suggest you to try installing packages manually on a fresh servers.
 
-What we do here
+![alt text](./images/vrrp.png)
+
+The project assumes you have set up macvlan profile on 2 machines and instances are able to ping each other accross the hosts.
+Ref: https://blog.simos.info/how-to-make-your-lxd-container-get-ip-addresses-from-your-lan/
+
+Create instances
+
+    $ lxc launch ubuntu:22.04 lb-01 --vm  --profile default --profile macvlan
+    $ lxc launch ubuntu:22.04 lb-02 --vm  --profile default --profile macvlan
+    $ lxc launch ubuntu:22.04 web-01 --vm  --profile default --profile macvlan
+    $ lxc launch ubuntu:22.04 web-02 --vm  --profile default --profile macvlan
 
 
-Configuration
+Note: One of the challenges with macvlan method is that it relies on dhcp. So we are not able to predetermine the ips before the instances are set.
+A method can be crafted to register and auto-feed back the resulting ips. This can allow for smoother automation of the next processes. The results can also be used to set up a dns server.
 
-I'm assuming that you already have installed vagrant and Oracle VM software. I also assume that the ubuntu/trusty64 box is already added to your filesystem with vagrant box add ubuntu/trusty64 command. If you're not sure, you can confirm it with ls -l ~/.vagrant.d/boxes/ command.
+To do:
+1. use cloud-init to set up the instances
+1(a): use cloud-init to script how ip and hostname are fetched and relayed back to cb-controller and db
+2. set up a dns server that can be used accross different physical hosts
+3. develop one script that can implement all the following with appropriate parameters set (eg no of loadbalancers, number of load nodes)
+4. script ansible project that can do this process
+5. script how one can add a loadbalacer node
+6. script how one can add a load node.
 
-Create a new project folder
 
-    mkdir lay4-hap2-web2
-    $ cd lay4-hap2-web2/
+Create lb.sh
 
+    #!/usr/bin/env bash
+     
+    # BEGIN ########################################################################
+    echo -e "-- ---------- --\n"
+    echo -e "-- BEGIN ${HOSTNAME} --\n"
+    echo -e "-- ---------- --\n"
+     
+    # VARIABLES ####################################################################
+    echo -e "-- Setting global variables\n"
+    SYSCTL_CONFIG=/etc/sysctl.conf
+     
+    # BOX ##########################################################################
+    echo -e "-- Updating packages list\n"
+    apt-get update -y -qq
+     
+    # HAPROXY ######################################################################
+    echo -e "-- Installing HAProxy\n"
+    apt-get install -y haproxy > /dev/null 2>&1
+     
+    echo -e "-- Enabling HAProxy as a start-up deamon\n"
+    cat > /etc/default/haproxy <<EOF
+    ENABLED=1
+    EOF
+     
+    echo -e "-- Configuring HAProxy\n"
+    cat > /etc/haproxy/haproxy.cfg <<EOF
+    global
+        log 127.0.0.1 local0
+        log 127.0.0.1 local1 notice
+        daemon
+        maxconn 2000
+     
+    defaults
+        log global
+        mode http
+        option httplog
+        option dontlognull
+        retries 3
+        option redispatch
+        timeout connect 5000ms
+        timeout client 50000ms
+        timeout server 50000ms
+     
+    frontend http-in
+        bind *:80
+        default_backend webservers
+     
+    backend webservers
+        mode http
+        stats enable
+        stats auth admin:admin
+        stats uri /haproxy?stats
+        balance roundrobin
+        option httpchk
+        option forwardfor
+        option http-server-close
+        server web-01 192.168.1.101:80 maxconn 32 check
+        server web-02 192.168.1.105:80 maxconn 32 check
+    EOF
+     
+    echo -e "-- Validating HAProxy configuration\n"
+    haproxy -f /etc/haproxy/haproxy.cfg -c
+     
+    echo -e "-- Starting HAProxy\n"
+    service haproxy start
+     
+    # KEEPALIVED ###################################################################
+    echo -e "-- Installing Keepalived\n"
+    apt-get install -y keepalived > /dev/null 2>&1
+     
+    echo -e "-- Allowing HAProxy to bind to the virtual IP address\n"
+    grep -q "net.ipv4.ip_nonlocal_bind=1" "${SYSCTL_CONFIG}" || echo "net.ipv4.ip_nonlocal_bind=1" >> "${SYSCTL_CONFIG}"
+     
+    echo -e "-- Enabling virtual IP binding\n"
+    sysctl -p
+     
+    echo -e "-- Configuring Keepalived\n"
+    cat > /etc/keepalived/keepalived.conf <<EOF
+    vrrp_script chk_haproxy {
+        script "killall -0 haproxy"
+        interval 2
+        weight 2
+    }
+    vrrp_instance VI_1 {
+        interface eth1            # This may be eth0
+        state MASTER
+        virtual_router_id 51
+        priority ${PRIORITY}
+        virtual_ipaddress {
+            192.168.56.10
+        }
+        track_script {
+            chk_haproxy
+        }
+    }
+    EOF
+     
+    echo -e "-- Starting Keepalived\n"
+    service keepalived start
+     
+    # END ##########################################################################
+    echo -e "-- -------- --"
+    echo -e "-- END ${HOSTNAME} --"
+    echo -e "-- -------- --"
+
+Instal and configure haproxy and keepalived (load balancer) in lb-01 and lb-02 lxd instances
+
+    $ lxc file push webserver.sh web-01/tmp/
+    $ lxc file push lb.sh lb-01/tmp/
+    $ lxc exec web-01 -- sudo sh /tmp/webserver.sh 
+    $ lxc exec lb-01 -- sudo sh /tmp/lb.sh
+    $ lxc file push webserver.sh web-02/tmp/
+    $ lxc file push lb.sh lb-02/tmp/
+    $ lxc exec web-02 -- sudo sh /tmp/webserver.sh 
+    $ lxc exec lb-02 -- sudo sh /tmp/lb.sh 
 
 Create webserver.sh
 
@@ -84,113 +218,14 @@ Create webserver.sh
     echo -e "-- END ${HOSTNAME} --"
     echo -e "-- -------- --"
 
+Instal webserver in web-01 and web-02
 
-Create haproxy.sh
+    $ lxc file push webserver.sh web-01/tmp/
+    $ lxc exec web-01 -- sudo sh /tmp/webserver.sh 
+    $ lxc file push webserver.sh web-02/tmp/
+    $ lxc exec web-02 -- sudo sh /tmp/webserver.sh 
 
-    #!/usr/bin/env bash
-     
-    # BEGIN ########################################################################
-    echo -e "-- ---------- --\n"
-    echo -e "-- BEGIN ${HOSTNAME} --\n"
-    echo -e "-- ---------- --\n"
-     
-    # VARIABLES ####################################################################
-    echo -e "-- Setting global variables\n"
-    SYSCTL_CONFIG=/etc/sysctl.conf
-     
-    # BOX ##########################################################################
-    echo -e "-- Updating packages list\n"
-    apt-get update -y -qq
-     
-    # HAPROXY ######################################################################
-    echo -e "-- Installing HAProxy\n"
-    apt-get install -y haproxy > /dev/null 2>&1
-     
-    echo -e "-- Enabling HAProxy as a start-up deamon\n"
-    cat > /etc/default/haproxy <<EOF
-    ENABLED=1
-    EOF
-     
-    echo -e "-- Configuring HAProxy\n"
-    cat > /etc/haproxy/haproxy.cfg <<EOF
-    global
-        log 127.0.0.1 local0
-        log 127.0.0.1 local1 notice
-        daemon
-        maxconn 2000
-     
-    defaults
-        log global
-        mode http
-        option httplog
-        option dontlognull
-        retries 3
-        option redispatch
-        timeout connect 5000ms
-        timeout client 50000ms
-        timeout server 50000ms
-     
-    frontend http-in
-        bind *:80
-        default_backend webservers
-     
-    backend webservers
-        mode http
-        stats enable
-        stats auth admin:admin
-        stats uri /haproxy?stats
-        balance roundrobin
-        option httpchk
-        option forwardfor
-        option http-server-close
-        server web1 192.168.56.21:80 maxconn 32 check
-        server web2 192.168.56.22:80 maxconn 32 check
-    EOF
-     
-    echo -e "-- Validating HAProxy configuration\n"
-    haproxy -f /etc/haproxy/haproxy.cfg -c
-     
-    echo -e "-- Starting HAProxy\n"
-    service haproxy start
-     
-    # KEEPALIVED ###################################################################
-    echo -e "-- Installing Keepalived\n"
-    apt-get install -y keepalived > /dev/null 2>&1
-     
-    echo -e "-- Allowing HAProxy to bind to the virtual IP address\n"
-    grep -q "net.ipv4.ip_nonlocal_bind=1" "${SYSCTL_CONFIG}" || echo "net.ipv4.ip_nonlocal_bind=1" >> "${SYSCTL_CONFIG}"
-     
-    echo -e "-- Enabling virtual IP binding\n"
-    sysctl -p
-     
-    echo -e "-- Configuring Keepalived\n"
-    cat > /etc/keepalived/keepalived.conf <<EOF
-    vrrp_script chk_haproxy {
-        script "killall -0 haproxy"
-        interval 2
-        weight 2
-    }
-    vrrp_instance VI_1 {
-        interface eth1            # This may be eth0
-        state MASTER
-        virtual_router_id 51
-        priority ${PRIORITY}
-        virtual_ipaddress {
-            192.168.56.10
-        }
-        track_script {
-            chk_haproxy
-        }
-    }
-    EOF
-     
-    echo -e "-- Starting Keepalived\n"
-    service keepalived start
-     
-    # END ##########################################################################
-    echo -e "-- -------- --"
-    echo -e "-- END ${HOSTNAME} --"
-    echo -e "-- -------- --"
+
 
 
 Create Vagrantfile
@@ -202,43 +237,43 @@ Create Vagrantfile
         config.vm.box = "ubuntu/trusty64"
      
         # Configs for haproxy 1 (master)
-        config.vm.define :hap1 do |hap1_config|
-            hap1_config.vm.provider :virtualbox do |vb_config|
-                vb_config.name = "HAProxy 1 - lay4-hap2-web2"
+        config.vm.define :lb-01 do |lb-01_config|
+            lb-01_config.vm.provider :virtualbox do |vb_config|
+                vb_config.name = "HAProxy 1 - lay4-lb-02-web-02"
             end
-            hap1_config.vm.hostname = "hap1"
-            hap1_config.vm.network "private_network", ip: "192.168.56.11"
-            hap1_config.vm.provision :shell, path: "haproxy.sh", env: {"PRIORITY" => "101"}
+            lb-01_config.vm.hostname = "lb-01"
+            lb-01_config.vm.network "private_network", ip: "192.168.1.100"
+            lb-01_config.vm.provision :shell, path: "lb.sh", env: {"PRIORITY" => "101"}
         end
      
         # Configs for haproxy 2 (backup)
-        config.vm.define :hap2 do |hap2_config|
-            hap2_config.vm.provider :virtualbox do |vb_config|
-                vb_config.name = "HAProxy 2 - lay4-hap2-web2"
+        config.vm.define :lb-02 do |lb-02_config|
+            lb-02_config.vm.provider :virtualbox do |vb_config|
+                vb_config.name = "HAProxy 2 - lay4-lb-02-web-02"
             end
-            hap2_config.vm.hostname = "hap2"
-            hap2_config.vm.network "private_network", ip: "192.168.56.12"
-            hap2_config.vm.provision :shell, path: "haproxy.sh", env: {"PRIORITY" => "100"}
+            lb-02_config.vm.hostname = "lb-02"
+            lb-02_config.vm.network "private_network", ip: "192.168.1.104"
+            lb-02_config.vm.provision :shell, path: "lb.sh", env: {"PRIORITY" => "100"}
         end
      
         # Configs for web server 1
-        config.vm.define :web1 do |web1_config|
-            web1_config.vm.provider :virtualbox do |vb_config|
-                vb_config.name = "Web Server 1 - lay4-hap2-web2"
+        config.vm.define :web-01 do |web-01_config|
+            web-01_config.vm.provider :virtualbox do |vb_config|
+                vb_config.name = "Web Server 1 - lay4-lb-02-web-02"
             end
-            web1_config.vm.hostname = "web1"
-            web1_config.vm.network "private_network", ip: "192.168.56.21"
-            web1_config.vm.provision :shell, path: "webserver.sh"
+            web-01_config.vm.hostname = "web-01"
+            web-01_config.vm.network "private_network", ip: "192.168.1.101"
+            web-01_config.vm.provision :shell, path: "webserver.sh"
         end
      
         # Configs for web server 2
-        config.vm.define :web2 do |web2_config|
-            web2_config.vm.provider :virtualbox do |vb_config|
-                vb_config.name = "Web Server 2 - lay4-hap2-web2"
+        config.vm.define :web-02 do |web-02_config|
+            web-02_config.vm.provider :virtualbox do |vb_config|
+                vb_config.name = "Web Server 2 - lay4-lb-02-web-02"
             end
-            web2_config.vm.hostname = "web2"
-            web2_config.vm.network "private_network", ip: "192.168.56.22"
-            web2_config.vm.provision :shell, path: "webserver.sh"
+            web-02_config.vm.hostname = "web-02"
+            web-02_config.vm.network "private_network", ip: "192.168.1.105"
+            web-02_config.vm.provision :shell, path: "webserver.sh"
         end
     end
 
@@ -248,33 +283,33 @@ Create Vagrantfile
 Access the machines
 
     # Server 1
-    $ vagrant ssh web1
-    vagrant@web1:~$
+    $ vagrant ssh web-01
+    vagrant@web-01:~$
      
     # Server 2
-    $ vagrant ssh web2
-    vagrant@web2:~$
+    $ vagrant ssh web-02
+    vagrant@web-02:~$
      
     # HAProxy 1
-    $ vagrant ssh hap1
-    vagrant@hap1:~$
+    $ vagrant ssh lb-01
+    vagrant@lb-01:~$
      
     # HAProxy 2
-    $ vagrant ssh hap2
-    vagrant@hap2:~$
+    $ vagrant ssh lb-02
+    vagrant@lb-02:~$
 
 
 Verifying Keepalived Virtual IP
 
-As you can see below, the virtual IP has been assigned to hap1 which is master. Just pay attention to inet 192.168.56.10/32 scope global eth1. As you can see, it doesn't appear in hap2 because it is backup.
+As you can see below, the virtual IP has been assigned to lb-01 which is master. Just pay attention to inet 192.168.56.10/32 scope global eth1. As you can see, it doesn't appear in lb-02 because it is backup.
 
 HAProxy 1
 
-    vagrant@hap1:~$ sudo ip addr sh eth1
+    vagrant@lb-01:~$ sudo ip addr sh eth1
      
     3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
         link/ether 08:00:27:79:c5:df brd ff:ff:ff:ff:ff:ff
-        inet 192.168.56.11/24 brd 192.168.56.255 scope global eth1
+        inet 192.168.1.100/24 brd 192.168.56.255 scope global eth1
            valid_lft forever preferred_lft forever
         inet 192.168.56.10/32 scope global eth1
            valid_lft forever preferred_lft forever
@@ -284,17 +319,17 @@ HAProxy 1
 
 HAProxy 2
 
-    vagrant@hap2:~$ sudo ip addr sh eth1
+    vagrant@lb-02:~$ sudo ip addr sh eth1
      
     3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
         link/ether 08:00:27:17:29:f3 brd ff:ff:ff:ff:ff:ff
-        inet 192.168.56.12/24 brd 192.168.56.255 scope global eth1
+        inet 192.168.1.104/24 brd 192.168.56.255 scope global eth1
            valid_lft forever preferred_lft forever
         inet6 fe80::a00:27ff:fe17:29f3/64 scope link
            valid_lft forever preferred_lft forever
 
 
-If you stop HAProxy server on hap1, Keepalived will assign virtual IP to hap2 so as a result inet 192.168.56.10/32 scope global eth1 will appear in hap2 because it is master now. If you use sudo cat /var/log/syslog on both servers, you'll see master and backup state changes.
+If you stop HAProxy server on lb-01, Keepalived will assign virtual IP to lb-02 so as a result inet 192.168.56.10/32 scope global eth1 will appear in lb-02 because it is master now. If you use sudo cat /var/log/syslog on both servers, you'll see master and backup state changes.
 
 Tests
 
@@ -305,10 +340,10 @@ Web server 1
 Response to request below will alway be the same.
 
     # Request
-    http://192.168.56.21/
+    http://192.168.1.101/
      
     # Response
-    web1
+    web-01
     Hi sir, I am going to serve you today!
 
 
@@ -317,10 +352,10 @@ Web server 2
 Response to request below will alway be the same.
 
     # Request
-    http://192.168.56.22/
+    http://192.168.1.105/
      
     # Response
-    web2
+    web-02
     Hi sir, I am going to serve you today!
 
 
@@ -332,21 +367,21 @@ Response will always change because request is evenly shared between web servers
     http://192.168.56.10/
      
     # Response
-    web1
+    web-01
     Hi sir, I am going to serve you today!
      
     # Request
     http://192.168.56.10/
      
     # Response
-    web2
+    web-02
     Hi sir, I am going to serve you today!
      
     # Request
     http://192.168.56.10/
      
     # Response
-    web1
+    web-01
     Hi sir, I am going to serve you today!
 
 
@@ -354,11 +389,11 @@ System outage tests
 
 Bring only web server 1 down
 
-HAProxy will divert traffic to web2 so system will still be up and running.
+HAProxy will divert traffic to web-02 so system will still be up and running.
 
 Bring only web server 2 down
 
-HAProxy will divert traffic to web1 so system will still be up and running.
+HAProxy will divert traffic to web-01 so system will still be up and running.
 
 Bring both web server 1 and 2 down
 
@@ -370,11 +405,11 @@ System will go down because we only have two application servers. As a result HA
 
 Bring only haproxy 1 down
 
-Keepalived will assign virtual IP to hap2 and traffic will be handled by it so system will still be up and running.
+Keepalived will assign virtual IP to lb-02 and traffic will be handled by it so system will still be up and running.
 
 Bring only haproxy 2 down
 
-Keepalived will assign virtual IP to hap1 and traffic will be handled by it so system will still be up and running.
+Keepalived will assign virtual IP to lb-01 and traffic will be handled by it so system will still be up and running.
 
 Bring both haproxy 1 and 2 down
 
@@ -401,10 +436,10 @@ Keepalived pings HAProxy every 2 seconds then the request logs get added to Apac
 
 If a client sends a request to load balancer via http://192.168.56.10, request gets directed to one of the available web servers and the request is logged in access.log file as follows.
 
-    192.168.56.11 - - [09/Jul/2016:13:22:52 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
-    192.168.56.12 - - [09/Jul/2016:13:22:53 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
-    192.168.56.11 - - [09/Jul/2016:13:22:54 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
-    192.168.56.12 - - [09/Jul/2016:13:22:55 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
+    192.168.1.100 - - [09/Jul/2016:13:22:52 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
+    192.168.1.104 - - [09/Jul/2016:13:22:53 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
+    192.168.1.100 - - [09/Jul/2016:13:22:54 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
+    192.168.1.104 - - [09/Jul/2016:13:22:55 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
 
 
 As you can see above, only HAProxy IP's are get recorded which can be useless in real life scenario. To get client's data, we added line below to /etc/apache2/apache2.conf.
@@ -424,7 +459,7 @@ HAProxy Iogs
 
 After stopping and starting HAProxy services on both servers, you'll see state logs in /var/log/haproxy.log file like below.
 
-    # hap1
+    # lb-01
      
     Jul 14 20:51:52 vagrant-ubuntu-trusty-64 Keepalived_vrrp[3026]: VRRP_Script(chk_haproxy) succeeded
     Jul 14 20:51:53 vagrant-ubuntu-trusty-64 Keepalived_vrrp[3026]: VRRP_Instance(VI_1) Transition to MASTER STATE
@@ -435,7 +470,7 @@ After stopping and starting HAProxy services on both servers, you'll see state l
     Jul 14 21:01:38 vagrant-ubuntu-trusty-64 Keepalived_vrrp[3026]: VRRP_Instance(VI_1) Entering BACKUP STATE
 
 
-    # hap2
+    # lb-02
      
     Jul 14 20:53:05 vagrant-ubuntu-trusty-64 Keepalived_vrrp[2973]: VRRP_Script(chk_haproxy) succeeded
     Jul 14 20:53:06 vagrant-ubuntu-trusty-64 Keepalived_vrrp[2973]: VRRP_Instance(VI_1) Transition to MASTER STATE
