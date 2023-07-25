@@ -19,10 +19,10 @@ Ref: https://blog.simos.info/how-to-make-your-lxd-container-get-ip-addresses-fro
 
 Create instances
 
-    $ lxc launch ubuntu:22.04 lb-01 --vm  --profile default --profile macvlan
-    $ lxc launch ubuntu:22.04 lb-02 --vm  --profile default --profile macvlan
-    $ lxc launch ubuntu:22.04 web-01 --vm  --profile default --profile macvlan
-    $ lxc launch ubuntu:22.04 web-02 --vm  --profile default --profile macvlan
+    $ lxc launch ubuntu:22.04 lb-01 --vm --profile default --profile macvlan
+    $ lxc launch ubuntu:22.04 lb-02 --vm --profile default --profile macvlan
+    $ lxc launch ubuntu:22.04 web-01 --profile default --profile macvlan
+    $ lxc launch ubuntu:22.04 web-02 --profile default --profile macvlan
 
 
 Note: One of the challenges with macvlan method is that it relies on dhcp. So we are not able to predetermine the ips before the instances are set.
@@ -124,12 +124,12 @@ Create lb.sh
         weight 2
     }
     vrrp_instance VI_1 {
-        interface eth1            # This may be eth0
+        interface enp5s0            # This may be eth0
         state MASTER
         virtual_router_id 51
         priority ${PRIORITY}
         virtual_ipaddress {
-            192.168.56.10
+            192.168.1.10
         }
         track_script {
             chk_haproxy
@@ -146,6 +146,7 @@ Create lb.sh
     echo -e "-- -------- --"
 
 Instal and configure haproxy and keepalived (load balancer) in lb-01 and lb-02 lxd instances
+WARNING: make sure you have the right setting for nic (eg eth1) and replace the {$PRIORITY} appropriately
 
     $ lxc file push webserver.sh web-01/tmp/
     $ lxc file push lb.sh lb-01/tmp/
@@ -301,7 +302,7 @@ Access the machines
 
 Verifying Keepalived Virtual IP
 
-As you can see below, the virtual IP has been assigned to lb-01 which is master. Just pay attention to inet 192.168.56.10/32 scope global eth1. As you can see, it doesn't appear in lb-02 because it is backup.
+As you can see below, the virtual IP has been assigned to lb-01 which is master. Just pay attention to inet 192.168.1.10/32 scope global eth1. As you can see, it doesn't appear in lb-02 because it is backup.
 
 HAProxy 1
 
@@ -311,7 +312,7 @@ HAProxy 1
         link/ether 08:00:27:79:c5:df brd ff:ff:ff:ff:ff:ff
         inet 192.168.1.100/24 brd 192.168.56.255 scope global eth1
            valid_lft forever preferred_lft forever
-        inet 192.168.56.10/32 scope global eth1
+        inet 192.168.1.10/32 scope global eth1
            valid_lft forever preferred_lft forever
         inet6 fe80::a00:27ff:fe79:c5df/64 scope link
            valid_lft forever preferred_lft forever
@@ -329,7 +330,7 @@ HAProxy 2
            valid_lft forever preferred_lft forever
 
 
-If you stop HAProxy server on lb-01, Keepalived will assign virtual IP to lb-02 so as a result inet 192.168.56.10/32 scope global eth1 will appear in lb-02 because it is master now. If you use sudo cat /var/log/syslog on both servers, you'll see master and backup state changes.
+If you stop HAProxy server on lb-01, Keepalived will assign virtual IP to lb-02 so as a result inet 192.168.1.10/32 scope global eth1 will appear in lb-02 because it is master now. If you use sudo cat /var/log/syslog on both servers, you'll see master and backup state changes.
 
 Tests
 
@@ -364,21 +365,21 @@ Load balancer
 Response will always change because request is evenly shared between web servers. Load balancer does it!
 
     # Request
-    http://192.168.56.10/
+    http://192.168.1.10/
      
     # Response
     web-01
     Hi sir, I am going to serve you today!
      
     # Request
-    http://192.168.56.10/
+    http://192.168.1.10/
      
     # Response
     web-02
     Hi sir, I am going to serve you today!
      
     # Request
-    http://192.168.56.10/
+    http://192.168.1.10/
      
     # Response
     web-01
@@ -434,7 +435,7 @@ Keepalived pings HAProxy every 2 seconds then the request logs get added to Apac
     CustomLog /var/log/apache2/access.log combined env=!do-not-log-haproxy-ping
 
 
-If a client sends a request to load balancer via http://192.168.56.10, request gets directed to one of the available web servers and the request is logged in access.log file as follows.
+If a client sends a request to load balancer via http://192.168.1.10, request gets directed to one of the available web servers and the request is logged in access.log file as follows.
 
     192.168.1.100 - - [09/Jul/2016:13:22:52 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
     192.168.1.104 - - [09/Jul/2016:13:22:53 +0000] "OPTIONS / HTTP/1.0" 200 180 "-" "-"
