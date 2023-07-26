@@ -1,23 +1,51 @@
 #!/bin/bash
 
-# This script is for setting static ip for lxd
-# It has then been integrated for installing differet types of servers
-#   - keepalived/haproxy nodes for vrrp system
-#   - webservers for testing the above
-#   - microk8s nodes to be served by the vrrp system
-#
-# Each type of setting requres carefull review of the params to do multiple deployment of required nodes
-#
+# This script is for creating and LXD container
+# that has a routed network interface.
+# The resulting nic is then accessible from host LAN
+
+# USAGE:
+# routed-lxc-container.sh \
+#   $name : key name of the container. Note that the eventual name is a concatenantion of this string and netork id.
+#   $networkId : the first 3 digits of ip
+#   $hostId : last digit of the ip
+#   $parentBridge : interface for the host
+#   $nic : interface for the container
+#   $lxc_image: container image
+
+# # EXAMPLE:
+# name="routed"
+# networkId="192.168.0"
+# hostId="96"
+# parentBridge="eno1"
+# nic="eth0" 
+# lxc_image="ubuntu:22.04"
+
+# routed-lxc-container.sh \
+#   $name \
+#   $networkId \
+#   $hostId \
+#   $parentBridge \
+#   $nic \
+#   $lxc_image 
+# #
+
+name=$1 # eg "routed"
+
+
 # host variables
 projDir="$HOME/ansible-testbed"
-hostId="95" # last ip digit for the server
-lxc_container="routed-$hostId"
-networkId="192.168.0"
+networkId=$2 # eg: "192.168.0"
+hostId=$3 # last ip digit for the server eg 95
+lxc_container="$name-$hostId"
+
 
 # wifi bridge - to allow connection to local network
-parentBridge="eno1"
+parentBridge=$4 # "eno1"
+# target network interface
+nic=$5 # "eth0"
 # lxd image
-lxc_image="ubuntu:22.04"
+lxc_image=$6 # "ubuntu:22.04"
 # lxd profile name
 routedProfile="routed_$hostId"
 # network setup template
@@ -37,7 +65,7 @@ initSetup="reset_environment.sh"
 # # keepalived priority setting for specific host
 # priority="100"
 # keepalived nic
-nic="eth0"
+# nic="eth0"
 # # keepalived hostId for floating ip 
 # fId="240"
 # # haproxy backend bind port
