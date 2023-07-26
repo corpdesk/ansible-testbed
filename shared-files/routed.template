@@ -39,6 +39,5 @@ devices:
     parent: $GEN_LXC_PARENT
     type: nic
 name: routed_$GEN_LXC_IP
-used_by:
-- /1.0/instances/a2
+used_by: []
 

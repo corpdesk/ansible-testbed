@@ -11,9 +11,11 @@
 # host variables
 bm_host="emp-07"
 networkId="192.168.1"
-hostId="117" # last ip digit for the server
+hostId="60" # last ip digit for the server
 # wifi bridge - to allow connection to local network
-parentBridge="wlp2s0"
+# parentBridge="wlp2s0"
+# hp laptop ethernet adapter
+parentBridge="enp0s31f6"
 # lxd image
 lxc_image="ubuntu:22.04"
 # lxd profile name
@@ -35,9 +37,9 @@ applicationSetupFile="vrrp.sh"
 # keepalived priority setting for specific host
 priority="100"
 # keepalived nic
-nic="eth0"
+nic="enp0s31f6"
 # keepalived hostId for floating ip 
-fId="240"
+fId="10"
 # haproxy backend bind port
 targetPort="80"
 # keepalivd mode

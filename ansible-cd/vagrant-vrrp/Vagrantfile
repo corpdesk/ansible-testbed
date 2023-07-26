@@ -96,14 +96,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.synced_folder "/media/emp-06/emp-04-d2/extr-vagrant-disk/", "/glustervolume/"
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  zone="12"
+  zone="06"
+  network="192.168.1"
   # setup devops user
-  config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "remove_devops.sh"
-  config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "reset_environment.sh"
-  config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "setup_initial_user.sh"
-  config.vm.provision "file", source: "../../shared-files/init_cluster.js", destination: "init_cluster.js"
-  config.vm.provision "file", source: "../../shared-files/build_cluster.js", destination: "build_cluster.js"
-  config.vm.provision :shell, :inline => "sudo sh setup_initial_user.sh"
+  # config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "remove_devops.sh"
+  # config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "reset_environment.sh"
+  # config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "setup_initial_user.sh"
+  # config.vm.provision "file", source: "../../shared-files/init_cluster.js", destination: "init_cluster.js"
+  # config.vm.provision "file", source: "../../shared-files/build_cluster.js", destination: "build_cluster.js"
+  # config.vm.provision :shell, :inline => "sudo sh setup_initial_user.sh"
 #   config.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"
 #   config.vm.provision "ansible" do |ans| 
 #     ans.playbook = "setup_initial_user.yaml"
@@ -111,7 +112,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #   end
   # network setup
   config.vm.network "public_network", auto_config: true
-  config.vm.network "forwarded_port", guest: 8443, host: 8443, auto_correct: true
+  # config.vm.network "forwarded_port", guest: 8443, host: 8443, auto_correct: true
   config.vm.synced_folder "../shared/", "/shared/dir1", create: true
   config.vm.provider :virtualbox do |v|
     v.memory = 2048
@@ -123,44 +124,52 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive sed -i '1i192.168.0.133  cd-#{zone}-133' /etc/hosts", :privileged => true
 
 
-  (166..170).each do |i|
-    config.vm.define "cd-#{zone}-#{i}" do |app|
-      # sync folder to host
-      # config.vm.synced_folder "/media/emp-06/emp-04-d2/emp-06-gluster-#{i}/", "/glustervolume/"
-      app.vm.hostname = "cd-#{zone}-#{i}"
-      app.vm.network :public_network, ip: "192.168.0.#{i}"
-
-      # config.vm.provision :shell, :inline => "apt update && sudo apt upgrade -y", :privileged => true
-      # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive apt install fish net-tools glusterfs-server -y", :privileged => true
-      # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive systemctl start glusterd", :privileged => true
-      # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive systemctl enable glusterd", :privileged => true
-
-      # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive mkdir -p /glusterfs/distributed", :privileged => true
-      
-    end
-  end
-
-  # post installation on server1
-  # (131..133).each do |i|
+  # (161..163).each do |i|
   #   config.vm.define "cd-#{zone}-#{i}" do |app|
-  #     if (i == 131) then
-  #       # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive gluster peer probe cd-#{zone}-132", :privileged => true
-  #       # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive gluster peer probe cd-#{zone}-133", :privileged => true
-  #     end
+  #     app.vm.hostname = "cd-#{zone}-#{i}"
+  #     app.vm.network :public_network, ip: "#{network}.#{i}"
+  #     app.vm.provision :shell, path: "lb.sh", env: {"PRIORITY" => "101"}
   #   end
   # end
 
-  (134..135).each do |i|
-    config.vm.define "cd-#{zone}-#{i}" do |app|
-      app.vm.hostname = "cd-#{zone}-#{i}"
-      app.vm.network :public_network, ip: "192.168.0.#{i}"
-      
-
-      # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive sudo apt update && sudo apt upgrade -y", :privileged => true
-      # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive sudo apt install glusterfs-client -y", :privileged => true
-      # config.vm.provision :shell, :inline => "DEBIAN_FRONTEND=noninteractive sudo mkdir -p /mnt/glusterfs", :privileged => true
-    end
+  # Configs for haproxy 1 (master)
+  config.vm.define :lb01 do |lb01_config|
+      lb01_config.vm.provider :virtualbox do |vb_config|
+          vb_config.name = "HAProxy 1 - lay4-lb-02-web-02"
+      end
+      lb01_config.vm.hostname = "lb-01"
+      lb01_config.vm.network "public_network", ip: "192.168.1.100"
+      lb01_config.vm.provision :shell, path: "../../vrrp/lb.sh", env: {"PRIORITY" => "101"}
   end
-  
+
+  # Configs for haproxy 2 (backup)
+  config.vm.define :lb02 do |lb02_config|
+      lb02_config.vm.provider :virtualbox do |vb_config|
+          vb_config.name = "HAProxy 2 - lay4-lb-02-web-02"
+      end
+      lb02_config.vm.hostname = "lb-02"
+      lb02_config.vm.network "public_network", ip: "192.168.1.104"
+      lb02_config.vm.provision :shell, path: "../../vrrp/lb.sh", env: {"PRIORITY" => "100"}
+  end
+
+  # Configs for web server 1
+  config.vm.define :web01 do |web01_config|
+      web01_config.vm.provider :virtualbox do |vb_config|
+          vb_config.name = "Web Server 1 - lay4-lb-02-web-02"
+      end
+      web01_config.vm.hostname = "web-01"
+      web01_config.vm.network "public_network", ip: "192.168.1.101"
+      web01_config.vm.provision :shell, path: "../../vrrp/webserver.sh"
+  end
+
+  # Configs for web server 2
+  config.vm.define :web02 do |web02_config|
+      web02_config.vm.provider :virtualbox do |vb_config|
+          vb_config.name = "Web Server 2 - lay4-lb-02-web-02"
+      end
+      web02_config.vm.hostname = "web-02"
+      web02_config.vm.network "public_network", ip: "192.168.1.105"
+      web02_config.vm.provision :shell, path: "../../vrrp/webserver.sh"
+  end
   
 end
