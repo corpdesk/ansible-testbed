@@ -2,7 +2,7 @@
  
 # BEGIN ########################################################################
 echo -e "-- ---------- --\n"
-echo -e "-- BEGIN ${HOSTNAME} --\n"
+echo -e "-- BEGIN $(hostname) --\n"
 echo -e "-- ---------- --\n"
  
 # VARIABLES ####################################################################
@@ -44,10 +44,10 @@ echo -e "-- Creating a dummy index.html file\n"
 cat > /var/www/html/index.html <<EOD
 <html>
 <head>
-<title>${HOSTNAME}</title>
+<title>$(hostname)</title>
 </head>
 <body>
-<h1>${HOSTNAME}</h1>
+<h1>$(hostname)</h1>
 <p>Hi sir, I am going to serve you today!</p>
 </body>
 </html>
@@ -55,5 +55,5 @@ EOD
  
 # END ##########################################################################
 echo -e "-- -------- --"
-echo -e "-- END ${HOSTNAME} --"
+echo -e "-- END $(hostname) --"
 echo -e "-- -------- --"
