@@ -20,7 +20,7 @@ config:
   user.network-config: |
     version: 2
     ethernets:
-        eth0:
+        $GEN_LXC_ETH:
             addresses:
             - $GEN_LXC_IP/32
             nameservers:
@@ -33,7 +33,7 @@ config:
                 on-link: true
 description: Default LXD profile
 devices:
-  eth0:
+  $GEN_LXC_ETH:
     ipv4.address: $GEN_LXC_IP
     nictype: routed
     parent: $GEN_LXC_PARENT

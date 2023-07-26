@@ -15,7 +15,7 @@ lxc_container="routed-$hostId"
 networkId="192.168.0"
 
 # wifi bridge - to allow connection to local network
-parentBridge="wlp2s0"
+parentBridge="eno1"
 # lxd image
 lxc_image="ubuntu:22.04"
 # lxd profile name
@@ -25,7 +25,7 @@ template="$projDir/shared-files/routed.template"
 # init setup file
 initSetup="reset_environment.sh"
 # setup file for keepalived/haproxy
-applicationSetupFile="vrrp.sh"
+# applicationSetupFile="vrrp.sh"
 
 # webserver setup file for testing vrrp
 # applicationSetupFile="test-webserver.sh"
@@ -34,12 +34,12 @@ applicationSetupFile="vrrp.sh"
 # KEEPALIVE SETTING FOR WEBSERVER
 # below are specific to keepalive/haproxy variable
 # you can change the configs to suit mysql service
-# keepalived priority setting for specific host
-priority="100"
+# # keepalived priority setting for specific host
+# priority="100"
 # keepalived nic
 nic="eth0"
-# keepalived hostId for floating ip 
-fId="240"
+# # keepalived hostId for floating ip 
+# fId="240"
 # # haproxy backend bind port
 # targetPort="80"
 # # keepalivd mode
@@ -56,6 +56,7 @@ export GEN_LXC_IP="$networkId.$hostId"
 export GEN_LXC_GATEWAY="$networkId.1"
 export GEN_LXC_NS="8.8.8.8"
 export GEN_LXC_PARENT=$parentBridge
+export $GEN_LXC_ETH=$nic
 
 # substitute variables in the template
 # envsubst <"../../$template" >$routedProfile.yaml
@@ -91,8 +92,8 @@ echo -e "-- Push $initSetup file\n"
 # lxc file push ../../shared-files/$initSetup $lxc_container/tmp/
 lxc file push $projDir/shared-files/$initSetup $lxc_container/tmp/
 
-echo -e "-- Push nodes.data file\n"
-lxc file push "../nodes.data" $lxc_container/tmp/
+# echo -e "-- Push nodes.data file\n"
+# lxc file push "../nodes.data" $lxc_container/tmp/
 
 # echo -e "-- Push $applicationSetupFile file\n"
 # lxc file push ../$applicationSetupFile $lxc_container/tmp/
