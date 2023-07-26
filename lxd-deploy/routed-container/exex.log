@@ -1,0 +1,328 @@
+emp-10@emp-10 ~/a/l/routed-container (main)> bash
+emp-10@emp-10:~/ansible-testbed/lxd-deploy/routed-container$ name="routed"
+networkId="192.168.0"
+hostId="96"
+parentBridge="eno1"
+nic="eth0" 
+lxc_image="ubuntu:22.04"
+
+sh routed-lxc-container.sh \
+  $name \
+  $networkId \
+  $hostId \
+  $parentBridge \
+  $nic \
+  $lxc_image 
+Profile routed_96 created
+Creating routed-96
+Starting routed-96
+-e -- update container         
+
+Failed to connect to bus: No such file or directory
+Ign:1 http://archive.ubuntu.com/ubuntu jammy InRelease
+Ign:2 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Ign:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease
+Ign:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease
+Ign:2 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Ign:1 http://archive.ubuntu.com/ubuntu jammy InRelease
+Ign:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease
+Ign:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease
+Get:2 http://security.ubuntu.com/ubuntu jammy-security InRelease [110 kB]
+Hit:1 http://archive.ubuntu.com/ubuntu jammy InRelease 
+Get:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [119 kB]
+Get:5 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [631 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [108 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [14.1 MB]                                                                                                                                     
+Get:7 http://security.ubuntu.com/ubuntu jammy-security/main Translation-en [148 kB]                                                                                                                                
+Get:8 http://security.ubuntu.com/ubuntu jammy-security/main amd64 c-n-f Metadata [11.0 kB]                                                                                                                         
+Get:9 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [651 kB]                                                                                                                          
+Get:10 http://security.ubuntu.com/ubuntu jammy-security/restricted Translation-en [104 kB]                                                                                                                         
+Get:11 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [756 kB]                                                                                                                           
+Get:12 http://security.ubuntu.com/ubuntu jammy-security/universe Translation-en [136 kB]                                                                                                                           
+Get:13 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 c-n-f Metadata [15.9 kB]                                                                                                                    
+Get:14 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [36.5 kB]                                                                                                                        
+Get:15 http://security.ubuntu.com/ubuntu jammy-security/multiverse Translation-en [7060 B]                                                                                                                         
+Get:16 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 c-n-f Metadata [260 B]                                                                                                                    
+Get:17 http://archive.ubuntu.com/ubuntu jammy/universe Translation-en [5652 kB]                                                                                                                                    
+Get:18 http://archive.ubuntu.com/ubuntu jammy/universe amd64 c-n-f Metadata [286 kB]                                                                                                                               
+Get:19 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [217 kB]                                                                                                                                   
+Get:20 http://archive.ubuntu.com/ubuntu jammy/multiverse Translation-en [112 kB]                                                                                                                                   
+Get:21 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 c-n-f Metadata [8372 B]                                                                                                                             
+Get:22 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [853 kB]                                                                                                                                 
+Get:23 http://archive.ubuntu.com/ubuntu jammy-updates/main Translation-en [208 kB]                                                                                                                                 
+Get:24 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 c-n-f Metadata [15.4 kB]                                                                                                                          
+Get:25 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [668 kB]                                                                                                                           
+Get:26 http://archive.ubuntu.com/ubuntu jammy-updates/restricted Translation-en [106 kB]                                                                                                                           
+Get:27 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [954 kB]                                                                                                                             
+Get:28 http://archive.ubuntu.com/ubuntu jammy-updates/universe Translation-en [206 kB]                                                                                                                             
+Get:29 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 c-n-f Metadata [20.9 kB]                                                                                                                      
+Get:30 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [41.6 kB]                                                                                                                          
+Get:31 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse Translation-en [9768 B]                                                                                                                           
+Get:32 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 c-n-f Metadata [476 B]                                                                                                                      
+Get:33 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [40.9 kB]                                                                                                                              
+Get:34 http://archive.ubuntu.com/ubuntu jammy-backports/main Translation-en [10.2 kB]                                                                                                                              
+Get:35 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 c-n-f Metadata [388 B]                                                                                                                          
+Get:36 http://archive.ubuntu.com/ubuntu jammy-backports/restricted amd64 c-n-f Metadata [116 B]                                                                                                                    
+Get:37 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [22.2 kB]                                                                                                                          
+Get:38 http://archive.ubuntu.com/ubuntu jammy-backports/universe Translation-en [15.4 kB]                                                                                                                          
+Get:39 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 c-n-f Metadata [580 B]                                                                                                                      
+Get:40 http://archive.ubuntu.com/ubuntu jammy-backports/multiverse amd64 c-n-f Metadata [116 B]                                                                                                                    
+Fetched 26.4 MB in 16s (1654 kB/s)                                                                                                                                                                                 
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+-------------------------------------------------------------------------------------------------------------------------------------------
+E: Could not open lock file /var/lib/dpkg/lock-frontend - open (13: Permission denied)
+E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), are you root?
+-------------------------------------------------------------------------------------------------------------------------------------------
+-e -- Push reset_environment.sh file
+
+-e -- Check /tmp/ directory:                                                                                                              
+
+reset_environment.sh  snap-private-tmp  systemd-private-9384435242354f23af5831b58ca0e025-systemd-logind.service-1lihLr  systemd-private-9384435242354f23af5831b58ca0e025-systemd-resolved.service-zLG1FF
+-e -- Do initial setup
+
+Hit:1 http://archive.ubuntu.com/ubuntu jammy InRelease
+Hit:2 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu jammy-backports InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+8 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Calculating upgrade... Done
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+The following packages will be upgraded:
+  curl libcurl3-gnutls libcurl4 libldap-2.5-0 libldap-common openssh-client openssh-server openssh-sftp-server
+8 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+6 standard LTS security updates
+Need to get 2351 kB of archives.
+After this operation, 13.3 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssh-sftp-server amd64 1:8.9p1-3ubuntu0.3 [38.8 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssh-server amd64 1:8.9p1-3ubuntu0.3 [434 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 openssh-client amd64 1:8.9p1-3ubuntu0.3 [910 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libldap-2.5-0 amd64 2.5.15+dfsg-0ubuntu0.22.04.1 [183 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 curl amd64 7.81.0-1ubuntu1.13 [194 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcurl4 amd64 7.81.0-1ubuntu1.13 [290 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libcurl3-gnutls amd64 7.81.0-1ubuntu1.13 [284 kB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libldap-common all 2.5.15+dfsg-0ubuntu0.22.04.1 [15.8 kB]
+Fetched 2351 kB in 3s (861 kB/s)         
+debconf: DbDriver "config": /var/cache/debconf/config.dat is locked by another process: Resource temporarily unavailable
+(Reading database ... 33813 files and directories currently installed.)
+Preparing to unpack .../0-openssh-sftp-server_1%3a8.9p1-3ubuntu0.3_amd64.deb ...
+Unpacking openssh-sftp-server (1:8.9p1-3ubuntu0.3) over (1:8.9p1-3ubuntu0.1) ...
+Preparing to unpack .../1-openssh-server_1%3a8.9p1-3ubuntu0.3_amd64.deb ...
+Unpacking openssh-server (1:8.9p1-3ubuntu0.3) over (1:8.9p1-3ubuntu0.1) ...
+Preparing to unpack .../2-openssh-client_1%3a8.9p1-3ubuntu0.3_amd64.deb ...
+Unpacking openssh-client (1:8.9p1-3ubuntu0.3) over (1:8.9p1-3ubuntu0.1) ...
+Preparing to unpack .../3-libldap-2.5-0_2.5.15+dfsg-0ubuntu0.22.04.1_amd64.deb ...
+Unpacking libldap-2.5-0:amd64 (2.5.15+dfsg-0ubuntu0.22.04.1) over (2.5.14+dfsg-0ubuntu0.22.04.2) ...
+Preparing to unpack .../4-curl_7.81.0-1ubuntu1.13_amd64.deb ...
+Unpacking curl (7.81.0-1ubuntu1.13) over (7.81.0-1ubuntu1.10) ...
+Preparing to unpack .../5-libcurl4_7.81.0-1ubuntu1.13_amd64.deb ...
+Unpacking libcurl4:amd64 (7.81.0-1ubuntu1.13) over (7.81.0-1ubuntu1.10) ...
+Preparing to unpack .../6-libcurl3-gnutls_7.81.0-1ubuntu1.13_amd64.deb ...
+Unpacking libcurl3-gnutls:amd64 (7.81.0-1ubuntu1.13) over (7.81.0-1ubuntu1.10) ...
+Preparing to unpack .../7-libldap-common_2.5.15+dfsg-0ubuntu0.22.04.1_all.deb ...
+Unpacking libldap-common (2.5.15+dfsg-0ubuntu0.22.04.1) over (2.5.14+dfsg-0ubuntu0.22.04.2) ...
+Setting up openssh-client (1:8.9p1-3ubuntu0.3) ...
+Setting up libldap-common (2.5.15+dfsg-0ubuntu0.22.04.1) ...
+Setting up libldap-2.5-0:amd64 (2.5.15+dfsg-0ubuntu0.22.04.1) ...
+Setting up libcurl4:amd64 (7.81.0-1ubuntu1.13) ...
+Setting up curl (7.81.0-1ubuntu1.13) ...
+Setting up openssh-sftp-server (1:8.9p1-3ubuntu0.3) ...
+Setting up openssh-server (1:8.9p1-3ubuntu0.3) ...
+rescue-ssh.target is a disabled or a static unit not running, not starting it.
+ssh.socket is a disabled or a static unit not running, not starting it.
+Setting up libcurl3-gnutls:amd64 (7.81.0-1ubuntu1.13) ...
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.1) ...
+Processing triggers for ufw (0.36.1-4build1) ...
+Scanning processes...                                                                                                                                                                                               
+Scanning candidates...                                                                                                                                                                                              
+
+Restarting services...
+ systemctl restart packagekit.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+All snaps up to date.
+sh: 0: cannot open remove_devops.sh: No such file
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+telnet is already the newest version (0.17-44build1).
+telnet set to manually installed.
+git is already the newest version (1:2.34.1-1ubuntu1.9).
+git set to manually installed.
+openssh-server is already the newest version (1:8.9p1-3ubuntu0.3).
+The following package was automatically installed and is no longer required:
+  libfreetype6
+Use 'sudo apt autoremove' to remove it.
+The following additional packages will be installed:
+  bzip2 fish-common libjq1 libnvpair3linux libonig5 libpcre2-32-0 libuutil3linux libzfs4linux libzpool5linux lynx lynx-common mailcap mime-support xsel zfs-zed
+Suggested packages:
+  bzip2-doc doc-base nfs-kernel-server samba-common-bin zfs-initramfs | zfs-dracut
+The following NEW packages will be installed:
+  bzip2 fish fish-common jq libjq1 libnvpair3linux libonig5 libpcre2-32-0 libuutil3linux libzfs4linux libzpool5linux lynx lynx-common mailcap mime-support net-tools traceroute tree xsel zfs-zed zfsutils-linux
+0 upgraded, 21 newly installed, 0 to remove and 0 not upgraded.
+Need to get 7750 kB of archives.
+After this operation, 33.3 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libnvpair3linux amd64 2.1.5-1ubuntu6~22.04.1 [54.6 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libuutil3linux amd64 2.1.5-1ubuntu6~22.04.1 [48.3 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libzfs4linux amd64 2.1.5-1ubuntu6~22.04.1 [232 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libzpool5linux amd64 2.1.5-1ubuntu6~22.04.1 [1355 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 zfsutils-linux amd64 2.1.5-1ubuntu6~22.04.1 [499 kB]
+Get:6 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 zfs-zed amd64 2.1.5-1ubuntu6~22.04.1 [66.7 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy/main amd64 bzip2 amd64 1.0.8-5build1 [34.8 kB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy/universe amd64 fish-common all 3.3.1+ds-3 [1788 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy/universe amd64 lynx-common all 2.9.0dev.10-1 [1024 kB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy/universe amd64 lynx amd64 2.9.0dev.10-1 [719 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 libpcre2-32-0 amd64 10.39-3ubuntu0.1 [194 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy/universe amd64 fish amd64 3.3.1+ds-3 [1032 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy/main amd64 libonig5 amd64 6.9.7.1-2build1 [172 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy/main amd64 libjq1 amd64 1.6-2.1ubuntu3 [133 kB]
+Get:15 http://archive.ubuntu.com/ubuntu jammy/main amd64 jq amd64 1.6-2.1ubuntu3 [52.5 kB]
+Get:16 http://archive.ubuntu.com/ubuntu jammy/main amd64 mailcap all 3.70+nmu1ubuntu1 [23.8 kB]
+Get:17 http://archive.ubuntu.com/ubuntu jammy/main amd64 mime-support all 3.66 [3696 B]
+Get:18 http://archive.ubuntu.com/ubuntu jammy/main amd64 net-tools amd64 1.60+git20181103.0eebece-1ubuntu5 [204 kB]
+Get:19 http://archive.ubuntu.com/ubuntu jammy/universe amd64 traceroute amd64 1:2.1.0-2 [45.4 kB]
+Get:20 http://archive.ubuntu.com/ubuntu jammy/universe amd64 tree amd64 2.0.2-1 [47.9 kB]
+Get:21 http://archive.ubuntu.com/ubuntu jammy/universe amd64 xsel amd64 1.2.0+git9bfc13d.20180109-3 [20.5 kB]
+Fetched 7750 kB in 6s (1357 kB/s)
+Selecting previously unselected package libnvpair3linux.
+(Reading database ... 33813 files and directories currently installed.)
+Preparing to unpack .../00-libnvpair3linux_2.1.5-1ubuntu6~22.04.1_amd64.deb ...
+Unpacking libnvpair3linux (2.1.5-1ubuntu6~22.04.1) ...
+Selecting previously unselected package libuutil3linux.
+Preparing to unpack .../01-libuutil3linux_2.1.5-1ubuntu6~22.04.1_amd64.deb ...
+Unpacking libuutil3linux (2.1.5-1ubuntu6~22.04.1) ...
+Selecting previously unselected package libzfs4linux.
+Preparing to unpack .../02-libzfs4linux_2.1.5-1ubuntu6~22.04.1_amd64.deb ...
+Unpacking libzfs4linux (2.1.5-1ubuntu6~22.04.1) ...
+Selecting previously unselected package libzpool5linux.
+Preparing to unpack .../03-libzpool5linux_2.1.5-1ubuntu6~22.04.1_amd64.deb ...
+Unpacking libzpool5linux (2.1.5-1ubuntu6~22.04.1) ...
+Selecting previously unselected package zfsutils-linux.
+Preparing to unpack .../04-zfsutils-linux_2.1.5-1ubuntu6~22.04.1_amd64.deb ...
+Unpacking zfsutils-linux (2.1.5-1ubuntu6~22.04.1) ...
+Selecting previously unselected package zfs-zed.
+Preparing to unpack .../05-zfs-zed_2.1.5-1ubuntu6~22.04.1_amd64.deb ...
+Unpacking zfs-zed (2.1.5-1ubuntu6~22.04.1) ...
+Selecting previously unselected package bzip2.
+Preparing to unpack .../06-bzip2_1.0.8-5build1_amd64.deb ...
+Unpacking bzip2 (1.0.8-5build1) ...
+Selecting previously unselected package fish-common.
+Preparing to unpack .../07-fish-common_3.3.1+ds-3_all.deb ...
+Unpacking fish-common (3.3.1+ds-3) ...
+Selecting previously unselected package lynx-common.
+Preparing to unpack .../08-lynx-common_2.9.0dev.10-1_all.deb ...
+Unpacking lynx-common (2.9.0dev.10-1) ...
+Selecting previously unselected package lynx.
+Preparing to unpack .../09-lynx_2.9.0dev.10-1_amd64.deb ...
+Unpacking lynx (2.9.0dev.10-1) ...
+Selecting previously unselected package libpcre2-32-0:amd64.
+Preparing to unpack .../10-libpcre2-32-0_10.39-3ubuntu0.1_amd64.deb ...
+Unpacking libpcre2-32-0:amd64 (10.39-3ubuntu0.1) ...
+Selecting previously unselected package fish.
+Preparing to unpack .../11-fish_3.3.1+ds-3_amd64.deb ...
+Unpacking fish (3.3.1+ds-3) ...
+Selecting previously unselected package libonig5:amd64.
+Preparing to unpack .../12-libonig5_6.9.7.1-2build1_amd64.deb ...
+Unpacking libonig5:amd64 (6.9.7.1-2build1) ...
+Selecting previously unselected package libjq1:amd64.
+Preparing to unpack .../13-libjq1_1.6-2.1ubuntu3_amd64.deb ...
+Unpacking libjq1:amd64 (1.6-2.1ubuntu3) ...
+Selecting previously unselected package jq.
+Preparing to unpack .../14-jq_1.6-2.1ubuntu3_amd64.deb ...
+Unpacking jq (1.6-2.1ubuntu3) ...
+Selecting previously unselected package mailcap.
+Preparing to unpack .../15-mailcap_3.70+nmu1ubuntu1_all.deb ...
+Unpacking mailcap (3.70+nmu1ubuntu1) ...
+Selecting previously unselected package mime-support.
+Preparing to unpack .../16-mime-support_3.66_all.deb ...
+Unpacking mime-support (3.66) ...
+Selecting previously unselected package net-tools.
+Preparing to unpack .../17-net-tools_1.60+git20181103.0eebece-1ubuntu5_amd64.deb ...
+Unpacking net-tools (1.60+git20181103.0eebece-1ubuntu5) ...
+Selecting previously unselected package traceroute.
+Preparing to unpack .../18-traceroute_1%3a2.1.0-2_amd64.deb ...
+Unpacking traceroute (1:2.1.0-2) ...
+Selecting previously unselected package tree.
+Preparing to unpack .../19-tree_2.0.2-1_amd64.deb ...
+Unpacking tree (2.0.2-1) ...
+Selecting previously unselected package xsel.
+Preparing to unpack .../20-xsel_1.2.0+git9bfc13d.20180109-3_amd64.deb ...
+Unpacking xsel (1.2.0+git9bfc13d.20180109-3) ...
+Setting up xsel (1.2.0+git9bfc13d.20180109-3) ...
+Setting up libnvpair3linux (2.1.5-1ubuntu6~22.04.1) ...
+Setting up net-tools (1.60+git20181103.0eebece-1ubuntu5) ...
+Setting up traceroute (1:2.1.0-2) ...
+update-alternatives: using /usr/bin/traceroute.db to provide /usr/bin/traceroute (traceroute) in auto mode
+update-alternatives: using /usr/bin/traceroute6.db to provide /usr/bin/traceroute6 (traceroute6) in auto mode
+update-alternatives: using /usr/bin/lft.db to provide /usr/bin/lft (lft) in auto mode
+update-alternatives: using /usr/bin/traceproto.db to provide /usr/bin/traceproto (traceproto) in auto mode
+update-alternatives: using /usr/sbin/tcptraceroute.db to provide /usr/sbin/tcptraceroute (tcptraceroute) in auto mode
+Setting up bzip2 (1.0.8-5build1) ...
+Setting up libpcre2-32-0:amd64 (10.39-3ubuntu0.1) ...
+Setting up tree (2.0.2-1) ...
+Setting up lynx-common (2.9.0dev.10-1) ...
+Setting up lynx (2.9.0dev.10-1) ...
+update-alternatives: using /usr/bin/lynx to provide /usr/bin/www-browser (www-browser) in auto mode
+Setting up libuutil3linux (2.1.5-1ubuntu6~22.04.1) ...
+Setting up fish-common (3.3.1+ds-3) ...
+Setting up mailcap (3.70+nmu1ubuntu1) ...
+Setting up libonig5:amd64 (6.9.7.1-2build1) ...
+Setting up mime-support (3.66) ...
+Setting up libjq1:amd64 (1.6-2.1ubuntu3) ...
+Setting up libzfs4linux (2.1.5-1ubuntu6~22.04.1) ...
+Setting up jq (1.6-2.1ubuntu3) ...
+Setting up fish (3.3.1+ds-3) ...
+Setting up libzpool5linux (2.1.5-1ubuntu6~22.04.1) ...
+Setting up zfsutils-linux (2.1.5-1ubuntu6~22.04.1) ...
+-------------------------------------------------------------------------------------------------------------------------------------------
+modprobe: FATAL: Module zfs not found in directory /lib/modules/5.15.0-78-generic
+-------------------------------------------------------------------------------------------------------------------------------------------
+Created symlink /etc/systemd/system/zfs-import.target.wants/zfs-import-cache.service → /lib/systemd/system/zfs-import-cache.service.
+Created symlink /etc/systemd/system/zfs.target.wants/zfs-import.target → /lib/systemd/system/zfs-import.target.
+Created symlink /etc/systemd/system/zfs-mount.service.wants/zfs-load-module.service → /lib/systemd/system/zfs-load-module.service.
+Created symlink /etc/systemd/system/zfs.target.wants/zfs-load-module.service → /lib/systemd/system/zfs-load-module.service.
+Created symlink /etc/systemd/system/zfs.target.wants/zfs-mount.service → /lib/systemd/system/zfs-mount.service.
+Created symlink /etc/systemd/system/zfs.target.wants/zfs-share.service → /lib/systemd/system/zfs-share.service.
+Created symlink /etc/systemd/system/zfs-volumes.target.wants/zfs-volume-wait.service → /lib/systemd/system/zfs-volume-wait.service.
+Created symlink /etc/systemd/system/zfs.target.wants/zfs-volumes.target → /lib/systemd/system/zfs-volumes.target.
+Created symlink /etc/systemd/system/multi-user.target.wants/zfs.target → /lib/systemd/system/zfs.target.
+zfs-import-scan.service is a disabled or a static unit, not starting it.
+-------------------------------------------------------------------------------------------------------------------------------------------
+Could not execute systemctl:  at /usr/bin/deb-systemd-invoke line 142.
+-------------------------------------------------------------------------------------------------------------------------------------------
+Setting up zfs-zed (2.1.5-1ubuntu6~22.04.1) ...
+Created symlink /etc/systemd/system/zed.service → /lib/systemd/system/zfs-zed.service.
+Created symlink /etc/systemd/system/zfs.target.wants/zfs-zed.service → /lib/systemd/system/zfs-zed.service.
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for libc-bin (2.35-0ubuntu3.1) ...
+Scanning processes...                                                                                                                                                                                               
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Rules updated
+Rules updated
+Rules updated
+emp-10@emp-10:~/ansible-testbed/lxd-deploy/routed-container$ fish
+Welcome to fish, the friendly interactive shell
+Type help for instructions on how to use fish
+emp-10@emp-10 ~/a/l/routed-container (main)> 

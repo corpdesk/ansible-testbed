@@ -21,7 +21,7 @@
 # nic="eth0" 
 # lxc_image="ubuntu:22.04"
 
-# routed-lxc-container.sh \
+# sh routed-lxc-container.sh \
 #   $name \
 #   $networkId \
 #   $hostId \
