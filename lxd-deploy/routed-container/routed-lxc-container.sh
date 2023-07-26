@@ -56,7 +56,7 @@ export GEN_LXC_IP="$networkId.$hostId"
 export GEN_LXC_GATEWAY="$networkId.1"
 export GEN_LXC_NS="8.8.8.8"
 export GEN_LXC_PARENT=$parentBridge
-export $GEN_LXC_ETH=$nic
+export GEN_LXC_ETH=$nic
 
 # substitute variables in the template
 # envsubst <"../../$template" >$routedProfile.yaml
