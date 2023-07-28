@@ -1,3 +1,30 @@
+---------------------------------------------------------------------------------------
+Date: 28/07/2023
+
+1.  SET LOCAL REPOSITORY:
+    This will reduce latency and bandwidth usage due to frequent usage on ephemeral server instances
+    (a) set up VRRP for local repository access
+    (b) download from public repository
+          # url: https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-server_8.0.31-1ubuntu22.04_amd64.deb-bundle.tar 
+          # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb
+          url: "{{ local_repository }}/mysql-shell/mysql-shell_8.0.31-1ubuntu22.04_amd64.deb"
+        - create mysql-shell directory
+        - download the required files
+            - mysql-shell
+
+2.  INSTAL ANSIBLE:
+    sudo apt-add-repository ppa:ansible/ansible
+    sudo apt update && sudo apt upgrade -y
+    sudo apt install ansible -y
+
+3.  CONFIGURE AND RUN ANSIBLE:
+    project-folder: deploy-apps/mysql-02
+    playbook: deploy-apps/mysql-02/install-mysql.yaml
+    ansible-playbook -i hosts.ini install-mysql.yaml -kK -vvv
+
+
+
+----------------------------------
 https://garutilorenzo.github.io/ansible-role-linux-mysql/
 https://github.com/garutilorenzo/ansible-role-linux-mysql
 // ----------------------

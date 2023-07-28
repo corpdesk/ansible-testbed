@@ -54,8 +54,9 @@ backend webservers
     option httpchk
     option forwardfor
     option http-server-close
-    server web-01 192.168.1.103:80 maxconn 32 check
-    server web-02 192.168.1.104:80 maxconn 32 check
+    server routed-92  192.168.1.92:80 maxconn 32 check
+    server routed-102 192.168.1.102:80 maxconn 32 check
+    server routed-112 192.168.1.112:80 maxconn 32 check
 EOF
  
 echo -e "-- Validating HAProxy configuration\n"
@@ -85,9 +86,9 @@ vrrp_instance VI_1 {
     interface eth0            # This may be eth0
     state MASTER
     virtual_router_id 51
-    priority ${PRIORITY}
+    priority 100
     virtual_ipaddress {
-        192.168.1.100
+        192.168.1.90
     }
     track_script {
         chk_haproxy

@@ -1,0 +1,22 @@
+Server: emp-09
+Date: 27th July 2023:
+-----------------------
+Would you like to use LXD clustering? (yes/no) [default=no]: yes
+What IP address or DNS name should be used to reach this server? [default=192.168.0.95]: 
+Are you joining an existing cluster? (yes/no) [default=no]: 
+What member name should be used to identify this server in the cluster? [default=routed-95]: 
+Setup password authentication on the cluster? (yes/no) [default=no]: 
+Do you want to configure a new local storage pool? (yes/no) [default=yes]: 
+Do you want to configure a new remote storage pool? (yes/no) [default=no]: 
+Would you like to connect to a MAAS server? (yes/no) [default=no]: 
+Would you like to configure LXD to use an existing bridge or host interface? (yes/no) [default=no]: 
+Would you like to create a new Fan overlay network? (yes/no) [default=yes]: 
+What subnet should be used as the Fan underlay? [default=auto]: 
+Invalid input: The auto-detected underlay (192.168.0.95/32) isn't a /16 or /24, please specify manually
+
+What subnet should be used as the Fan underlay? [default=auto]: 192.168.0.95/32
+Invalid input: The underlay subnet must be a /16 or a /24
+
+What subnet should be used as the Fan underlay? [default=auto]: 192.168.0.0/24
+Would you like stale cached images to be updated automatically? (yes/no) [default=yes]: 
+Would you like a YAML "lxd init" preseed to be printed? (yes/no) [default=no]:

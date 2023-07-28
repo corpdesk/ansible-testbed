@@ -1,3 +1,27 @@
+---------------------------------------------
+# VIRTUALBOX
+# https://tecadmin.net/how-to-install-virtualbox-on-ubuntu-22-04/
+sudo apt update
+sudo apt upgrade -y
+wget https://www.virtualbox.org/download/oracle_vbox_2016.asc
+cat oracle_vbox_2016.asc | gpg --dearmor | sudo tee /usr/share/keyrings/virtualbox.gpg > /dev/null 2>&1
+sudo echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/virtualbox.gpg] https://download.virtualbox.org/virtualbox/debian jammy contrib' | sudo tee -a /etc/apt/sources.list
+sudo apt update  
+sudo apt install virtualbox-7.0 -y
+
+# ---------------------------------------------------------------
+# VAGRANT
+# https://developer.hashicorp.com/vagrant/downloads
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install vagrant
+
+# make sure the vagrant file has port fowarding for lxd services:
+# https://developer.hashicorp.com/vagrant/docs/networking/forwarded_ports
+# issue: https://discuss.linuxcontainers.org/t/cluster-refusing-connection-from-attempted-new-joining-members/17556
+
+# ------------------------------------------------------------
+--------------------------------
 sudo apt update && sudo apt upgrade && sudo apt install virtualbox vagrant -yva
 vagrant --version
 
