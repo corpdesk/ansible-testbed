@@ -1,4 +1,5 @@
 # mysql versioning system: https://dev.mysql.com/doc/refman/{{v_major}}.{{v_minor}}/en/which-version.html
+# https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-community-server-core_8.0.34-1ubuntu22.04_amd64.deb
 # http://192.168.2.238/app-repo/mysql-community-server-core_8.0.32-1ubuntu22.04_amd64.deb
 # http://192.168.2.238/app-repo/mysql-shell_8.0.32-1ubuntu22.04_amd64
 v_major: "8"

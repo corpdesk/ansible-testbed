@@ -1,8 +1,22 @@
 ---------------------------------------------------------------------------------------
 Date: 28/07/2023
 
+
 1.  SET LOCAL REPOSITORY:
-    This will reduce latency and bandwidth usage due to frequent usage on ephemeral server instances
+    Download mysql server and mysql-shell
+    rational:
+    local repository reduce latency and bandwidth usage due to frequent usage on ephemeral server instances
+
+    mysql server:
+    wget https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-community-server-core_8.0.32-1ubuntu22.04_amd64.deb
+    wget https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-community-server-core_8.0.33-1ubuntu22.04_amd64.deb
+    wget https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-community-server-core_8.0.34-1ubuntu22.04_amd64.deb
+
+    mysql-shell:
+    wget https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_8.0.33-1ubuntu22.04_amd64.deb
+    wget https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_8.0.34-1ubuntu22.04_amd64.deb
+
+    accessing repository:
     (a) set up VRRP for local repository access
     (b) download from public repository
           # url: https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-server_8.0.31-1ubuntu22.04_amd64.deb-bundle.tar 

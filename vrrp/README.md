@@ -14,15 +14,50 @@ This is a vagrant based example so if the Keepalived floating IP doesn't work as
 
 ![alt text](./images/vrrp.png)
 
-The project assumes you have set up macvlan profile on 2 machines and instances are able to ping each other accross the hosts.
-Ref: https://blog.simos.info/how-to-make-your-lxd-container-get-ip-addresses-from-your-lan/
+The project assumes you have set up macvlan profile on 2 machines and instances are able to ping each other accross the hosts.<br>
+Ref: https://blog.simos.info/how-to-make-your-lxd-container-get-ip-addresses-from-your-lan/<br>
 
-Create instances
+CREATE LXD INSTANCES IN ALL SERVERS <br>
+    Reference file:<br>
+    $HOME/ansible-testbed/lxd-deploy/routed-container/routed-lxc-container.sh<br>
 
-    $ lxc launch ubuntu:22.04 lb-01 --vm --profile default --profile macvlan
-    $ lxc launch ubuntu:22.04 lb-02 --vm --profile default --profile macvlan
-    $ lxc launch ubuntu:22.04 web-01 --profile default --profile macvlan
-    $ lxc launch ubuntu:22.04 web-02 --profile default --profile macvlan
+    '''
+    ################################
+    # # EXAMPLE 2 (serial ips):
+    # name="routed"
+    # networkId="192.168.0"
+    # from=95
+    # to=97
+    # parentBridge="eno1"
+    # nic="eth0" 
+    # lxc_image="ubuntu:22.04"
+
+    # for i in $(seq $from $to); do
+    # sh routed-lxc-container.sh \
+    #   $name \
+    #   $networkId \
+    #   $i \
+    #   $parentBridge \
+    #   $nic \
+    #   $lxc_image 
+    # done 
+    #
+    ################################
+    '''
+
+    
+    # INSTALL LOAD BALANCER ON ALL SERVERS
+    Reference file:
+    <proj-file>/ansible-testbed/vrrp/lb.sh
+    $ lxc file push lb.sh routed-91/tmp/ 
+    $ lxc exec routed-91 -- sudo sh /tmp/lb.sh
+
+    # INSTALL WEBSERVER ON SERVER1
+    Reference file:
+    <proj-file>/ansible-testbed/vrrp/webserver.sh
+    $ lxc file push lb.sh routed-92/tmp/
+    $ lxc exec routed-92 -- sudo sh /tmp/webserver.sh
+
 
 
 Note: One of the challenges with macvlan method is that it relies on dhcp. So we are not able to predetermine the ips before the instances are set.
