@@ -87,6 +87,10 @@ lxc profile create $routedProfile
 # set profile
 lxc profile edit $routedProfile < $routedProfile.yaml
 # launch container
+# option of nestable: https://ubuntu.com/blog/nested-containers-in-lxd
+# lxc launch ubuntu nestc1 -c security.nesting=true -c security.privileged=true
+# or to change an existing container:
+# lxc config set nestc1 security.nesting true
 lxc launch $lxc_image $lxc_container --profile default --profile $routedProfile
 
 echo -e "-- update container\n"
