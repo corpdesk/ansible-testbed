@@ -2,7 +2,7 @@
 # To run: sudo sh setup_initial_user.sh
 
 # reset environment
-sudo sh reset_environment.sh
+sudo sh /tmp/reset_environment.sh
 
 # INSTALL ANSIBLE SERVER REQUIREMENTS
 

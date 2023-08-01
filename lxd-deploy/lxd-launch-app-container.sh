@@ -21,10 +21,13 @@ to=2
 
 initAppContainer( $appContainer, $initialUser, $pswd){
     echo "starting initAppContainer($appContainer, $initialUser, $pswd)"
-    # push initial user file
-    lxc file push $initUserFile $appContainer/tmp/
+    
+    # /home/emp-06/ansible-testbed/shared-files/reset_environment.sh
+    resetEnvFile=/home/$clusterMember/ansible-testbed/shared-files/reset_environment.sh
+
     # push reset_env file
     lxc file push $resetEnvFile $appContainer/tmp/
+    lxc exec $appContainer -- sh /tmp/$resetEnvFile
     #
     # ------------------------------------------------
     # setup ssh user to allow ansible operations
@@ -39,6 +42,7 @@ initAppContainer( $appContainer, $initialUser, $pswd){
     # python -c 'import crypt; print crypt.crypt("yU0B14NC1PdE", "$1$SomeSalt$")'
     # as used earlier in shell script: sudo useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
     # recommended: openssl passwd -salt SomeSalt -1 yU0B14NC1PdE
+    
 }
 
 initAppMaintainer(){
