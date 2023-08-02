@@ -22,7 +22,7 @@ sudo sh /tmp/remove_devops.sh
 # sudo apt update -y
 echo "---install initial packages--------------------------------------------------------------------------------------------"
 sudo apt-get install git net-tools telnet openssh-server tree fish jq traceroute -y
-echo "---install sshpass--------------------------------------------------------------------------------------------""
+echo "---install sshpass-----------------------------------------------------------------------------------------------------"
 sudo apt-get install sshpass -y
 # sudo snap install lxd --channel=latest/stable
 # sudo snap refresh lxd --channel=latest/stable
