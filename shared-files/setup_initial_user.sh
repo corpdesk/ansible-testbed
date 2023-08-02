@@ -18,8 +18,8 @@ then
 else
     # sudo useradd -m -s /bin/bash $initialUser
     echo "creating $initialUser user (non-inteructive, with preset hushed password):"
-    # sudo useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash $initialUser
-    sudo useradd -m -p $(openssl passwd -1 $pswd) $initialUser
+    sudo useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash $initialUser
+    # sudo useradd -m -p $(openssl passwd -1 $pswd) $initialUser
     echo "escalate the $initialUser to sudoer:"
     usermod -aG sudo $initialUser
     sudo id $initialUser
