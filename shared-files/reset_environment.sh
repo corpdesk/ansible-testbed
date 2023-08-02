@@ -20,7 +20,7 @@ sudo sh /tmp/remove_devops.sh
 # The -E switch enables extended regexp support for sed.
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 # sudo apt update -y
-sudo apt-get install git net-tools telnet openssh-server tree fish jq traceroute -y
+sudo apt-get install git net-tools telnet openssh-server sshpass tree fish jq traceroute -y
 # sudo snap install lxd --channel=latest/stable
 # sudo snap refresh lxd --channel=latest/stable
 sudo service ssh restart
@@ -36,6 +36,7 @@ sudo sed -i -E 's/#?ChallengeResponseAuthentication no/ChallengeResponseAuthenti
 sudo sed -i -E 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 sudo sed -i -E 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
 sudo systemctl restart ssh
+
 
 
 
