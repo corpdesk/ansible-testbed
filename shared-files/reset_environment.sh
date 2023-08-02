@@ -20,10 +20,24 @@ sudo sh /tmp/remove_devops.sh
 # The -E switch enables extended regexp support for sed.
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 # sudo apt update -y
-echo "---install initial packages--------------------------------------------------------------------------------------------"
-sudo apt-get install git net-tools telnet openssh-server tree fish jq traceroute -y
-echo "---install sshpass-----------------------------------------------------------------------------------------------------"
+echo "---install git -------------------------------------------------------------------------------------------------------"
+sudo apt-get install git  -y
+echo "---install net-tools--------------------------------------------------------------------------------------------------"
+sudo apt-get install net-tools -y
+echo "---install telnet-----------------------------------------------------------------------------------------------------"
+sudo apt-get install telnet -y
+echo "---install openssh-server---------------------------------------------------------------------------------------------"
+sudo apt-get install openssh-server -y
+echo "---install sshpass----------------------------------------------------------------------------------------------------"
 sudo apt-get install sshpass -y
+echo "---install tree-------------------------------------------------------------------------------------------------------"
+sudo apt-get install tree -y
+echo "---install fish-------------------------------------------------------------------------------------------------------"
+sudo apt-get install fish -y
+echo "---install jq---------------------------------------------------------------------------------------------------------"
+sudo apt-get install jq -y
+echo "---install traceroute-------------------------------------------------------------------------------------------------"
+sudo apt-get install traceroute -y
 # sudo snap install lxd --channel=latest/stable
 # sudo snap refresh lxd --channel=latest/stable
 sudo service ssh restart
