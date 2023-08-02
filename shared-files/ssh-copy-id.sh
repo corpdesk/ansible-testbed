@@ -6,6 +6,6 @@ echo "ip for $cname is $cip"
 # ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip
 echo "this host $(hostname)"
 echo "current directory $(pwd)"
-sshpass -f "/tmp/p" ssh-copy-id devops@$cip
+sshpass -f "/tmp/p" ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip
 
 
