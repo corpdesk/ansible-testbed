@@ -19,18 +19,25 @@ else
     # sudo useradd -m -s /bin/bash $initialUser
     echo "creating $initialUser user (non-inteructive, with preset hushed password):"
     # sudo useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash $initialUser
-    useradd -m -p $(openssl passwd -1 $pswd) $initialUser
+    sudo useradd -m -p $(openssl passwd -1 $pswd) $initialUser
     echo "escalate the $initialUser to sudoer:"
     usermod -aG sudo $initialUser
     sudo id $initialUser
     # no password for $initialUser as a sudoer
     sudo echo "$initialUser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    # hash created by:
+    # python -c 'import crypt; print crypt.crypt("yU0B14NC1PdE", "$1$SomeSalt$")'
+    # as used earlier in shell script: sudo useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash devops
+    # recommended: openssl passwd -salt SomeSalt -1 yU0B14NC1PdE
     # useradd -m -s /bin/bash -p
     # useradd -m -p \$6\$QGFip3kXOicYeuKf\$pq3AMKWm9G6/iWtu10G6ciExPjRNcGZRL5Gni6zEHg46juPx4ZSSPkBMZLAF/WBfclfDbuSi4KXGW7b4hg1pH/ -s /bin/bash $initialUser
     sudo mkdir -p /home/$initialUser/.ssh
+    # sudo touch /home/$initialUser/.ssh/authorized_keys
+    
     sudo ssh-keygen -t rsa -b 2048 -f /home/$initialUser/.ssh/id_rsa -q -N ""
     sudo chown $initialUser /home/$initialUser/.ssh
-    sudo chmod -R 700 /home/$initialUser/.ssh
+    sudo chmod -R 700 /home/$initialUser/.ssh  #this is important.
+    # sudo chmod 600 /home/$initialUser/.ssh/authorized_keys  #this is important.
     sudo mkdir /home/$initialUser/vagrant-deploy
     sudo chmod -R 755 /home/$initialUser/vagrant-deploy
     chown -R $initialUser /home/$initialUser/vagrant-deploy
