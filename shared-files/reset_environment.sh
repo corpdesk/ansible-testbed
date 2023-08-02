@@ -20,9 +20,9 @@ sudo sh /tmp/remove_devops.sh
 # The -E switch enables extended regexp support for sed.
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 # sudo apt update -y
-echo "install initial packages"
+echo "---install initial packages--------------------------------------------------------------------------------------------"
 sudo apt-get install git net-tools telnet openssh-server tree fish jq traceroute -y
-echo "install sshpass"
+echo "---install sshpass--------------------------------------------------------------------------------------------""
 sudo apt-get install sshpass -y
 # sudo snap install lxd --channel=latest/stable
 # sudo snap refresh lxd --channel=latest/stable
