@@ -35,7 +35,10 @@ EOF
  
 echo -e "-- Adding a custom LogFormat to Apache config catch client's request IP\n"
 grep -q 'LogFormat "%{X-Forwarded-For}i %l %u %t \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\"" combined' ${APACHE_CONFIG} || echo 'LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined' >> ${APACHE_CONFIG}
- 
+
+echo -e "-- Setup ufw \n"
+sudo ufw allow 'Apache Full'
+
 echo -e "-- Restarting Apache web server\n"
 service apache2 restart
  

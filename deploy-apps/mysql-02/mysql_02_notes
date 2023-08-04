@@ -2,8 +2,47 @@
 Date: 28/07/2023
 
 
-1.  SET LOCAL REPOSITORY:
-    Download mysql server and mysql-shell
+
+1.  SETUP LOCAL REPOSITORY:
+    - It is assumed lxd cluster is already set up and running
+    - ssh is also setup accross the physical machines emp-09, emp-10. emp-11
+    - lxd cluster is also setup accross the 3 machines
+    - the cluster members are named routed-x where x is the serial number. 
+      routed-9x are hosted in emp-09
+      routed-10x are hosted in emp-10
+      and routed-11x are hosted in emp-11
+ 
+
+2.  Launch worker nodes for web services:
+    - from one of the cluster members: launch the worker nodes for sql (web-x)
+    - lxc exec routed-93 -- lxc launch ubuntu:22.04 web-01
+    - spawn 3 containers for web-01 up to web-03
+    - install webserver in each of them
+    - confirm that all are working
+
+3.  Launch worker nodes for VRRP load balancing services:
+    - from one of the cluster members: launch the worker nodes for sql (lb-x)
+    - lxc exec routed-93 -- lxc launch ubuntu:22.04 lb-01
+    - spawn 3 containers for web-01 up to web-03
+    - install webserver in each of them
+    - confirm that all are working
+
+4.  Launch worker nodes for cd-sql services:
+    - from one of the cluster members: launch the worker nodes for sql (cd-db-x)
+    - lxc exec routed-93 -- lxc launch ubuntu:22.04 cd-sql-01
+    - spawn 3 containers for web-01 up to web-03
+    - install webserver in each of them
+    - confirm that all are working
+
+5. ssh setup for worker nodes:
+   Ref: /home/emp-06/ansible-testbed/shared-files/workernode.sh 
+
+2. mount glusterfs folder in webroot:
+
+3.  Download mysql server and mysql-shell:
+    Conventionally we would have had all the webservers hold a copy of the install file.
+    But here is where we start getting the benefits of glusterfs service.
+    On the webservicers we have the files downloaded
     rational:
     local repository reduce latency and bandwidth usage due to frequent usage on ephemeral server instances
 
@@ -25,7 +64,7 @@ Date: 28/07/2023
         - create mysql-shell directory
         - download the required files
             - mysql-shell
-
+3.  Set up VRRP for the webservice
 2.  INSTAL ANSIBLE:
     sudo apt-add-repository ppa:ansible/ansible
     sudo apt update && sudo apt upgrade -y

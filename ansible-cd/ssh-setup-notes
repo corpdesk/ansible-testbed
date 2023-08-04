@@ -1,0 +1,69 @@
+# ****************************************************************************************************************************
+# SHELL SCRIPTS
+# ****************************************************************************************************************************
+# WORKER NODES:
+apt update && apt upgrade -y
+rm -fr ansible-testbed
+deluser devops
+rm -r -f /home/devops
+# add devops user
+useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+# escalate devops to sudoer
+usermod -aG sudo devops
+cp /etc/sudoers /etc/sudoers.backup
+# suppress password prompt on switch to user
+bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
+# enable password authentication for ssh connection
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+systemctl restart ssh
+
+-----
+su devops
+sudo apt-get install git net-tools telnet sshpass tree fish jq traceroute traceroute -y
+git clone https://github.com/corpdesk/ansible-testbed.git
+
+
+# -----------------------------------------
+# CLUSTER MEMBER
+# -----------------------------------------
+
+sudo deluser devops
+sudo rm -r -f /home/devops
+# add devops user
+sudo useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+# escalate devops to sudoer
+sudo usermod -aG sudo devops
+sudo cp /etc/sudoers /etc/sudoers.backup
+# suppress password prompt on switch to user
+sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
+# enable password authentication for ssh connection
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo systemctl restart ssh
+
+------
+su devops
+cd ~
+ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
+git clone https://github.com/corpdesk/ansible-testbed.git
+sh ansible-testbed/shared-files/ssh-copy-id.sh cd-db-01
+
+
+# -----------------------------------------------------------------------------------------------------------------------------
+# HOST MACHINE
+# -----------------------------------------------------------------------------------------------------------------------------
+sudo useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+sudo usermod -aG sudo devops
+sudo cp /etc/sudoers /etc/sudoers.backup
+sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo systemctl restart ssh
+
+
+
+
+cip=$(sudo lxc list -c4 --format csv a1 | cut -d' ' -f1)
+sudo lxc list "a1" -c 4 | awk '!/IPV4/{ if ( $2 != "" ) print $2}'
+-----------------------------------------------------------------------------------------------------------------------------

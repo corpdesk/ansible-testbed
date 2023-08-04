@@ -1,2 +1,221 @@
 https://bitlaunch.io/blog/how-to-use-nginx-as-a-reverse-proxy-on-ubuntu-20-04/
 https://linuxhint.com/create_reverse_proxy_nginx/
+
+
+**************************************************************************************************************************************************
+nginx
+https://vegastack.com/tutorials/how-to-set-up-nginx-server-blocks-on-ubuntu-22-04/
+
+sudo chmod -R 777 /mnt/gluster-client
+sudo mount -t glusterfs emp-09:/vol1 /mnt/gluster-client
+
+------------------------------------------------------
+REMEDY: MOUNTING GLUSTER CLIENT ON TO LXD INSTANCE:
+----------------------------------------------------
+# after creating a client directory on the host, it is now possible to mount the client directory on a lxd vm
+# stop the container
+lxc stop routed-103
+# add directory as an extra volume device
+lxc config device add routed-103 gclientdisk1 disk source=/mnt/gluster-client path=/gluster-vol/
+# then start the lxd instance
+lxc start routed-103
+
+lxc exec routed-93 -- sudo apt install nginx -y
+lxc exec routed-93 -- sudo ufw allow 'Nginx FULL'
+lxc exec routed-93 -- curl http://localhost
+
+lxc exec routed-93 -- sudo mkdir -p /gluster-vol/cloud-brix.lab/html
+lxc exec routed-93 -- sudo chown -R root:root /gluster-vol/cloud-brix.lab/html
+lxc exec routed-93 -- sudo chmod -R 755 /gluster-vol/cloud-brix.lab
+lxc exec routed-93 -- touch /gluster-vol/cloud-brix.lab/html/index.html
+
+lxc exec routed-93 -- cat > /gluster-vol/cloud-brix.lab/html/index.html <<EOF
+<p>Welcome to routed-93:enginx@cloud-brix.lab</p>
+EOF
+
+lxc exec routed-93 -- touch /etc/nginx/sites-available/cloud-brix.lab
+
+lxc exec routed-93 -- cat > /gluster-vol/cloud-brix.lab/html/index.html <<EOF
+server {
+        listen 80;
+        listen [::]:80;
+        root /gluster-vol/cloud-brix.lab/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name cloud-brix.lab www.cloud-brix.lab;
+
+        location / {
+               try_files $uri $uri/ =404;
+        }
+}
+EOF
+
+lxc exec routed-93 -- sudo ln -s /etc/nginx/sites-available/cloud-brix.lab /etc/nginx/sites-enabled/
+lxc exec routed-93 -- sudo unlink /etc/nginx/sites-enabled/default
+lxc exec routed-93 -- sudo nginx -t
+lxc exec routed-93 -- sudo systemctl restart nginx
+lxc exec routed-93 -- curl http://localhost
+
+
+
+*************************************************************
+SERVER 2
+***************************************************************
+sudo chmod -R 777 /mnt/gluster-client
+sudo mount -t glusterfs emp-10:/vol1 /mnt/gluster-client
+
+------------------------------------------------------
+REMEDY: MOUNTING GLUSTER CLIENT ON TO LXD INSTANCE:
+----------------------------------------------------
+# after creating a client directory on the host, it is now possible to mount the client directory on a lxd vm
+# stop the container
+lxc stop routed-103
+# add directory as an extra volume device
+lxc config device add routed-103 gclientdisk1 disk source=/mnt/gluster-client path=/gluster-vol/
+# then start the lxd instance
+lxc start routed-103
+
+
+
+lxc exec routed-103 -- sudo apt install nginx -y
+lxc exec routed-103 -- sudo ufw allow 'Nginx FULL'
+lxc exec routed-103 -- curl http://localhost
+**SOME SCRIPTS LEFT OUT HERE FOR SUBSEQUENT PHYSICAL SERVERS *****
+lxc exec routed-103 -- touch /etc/nginx/sites-available/cloud-brix.lab
+
+lxc exec routed-103 -- cat > /gluster-vol/cloud-brix.lab/html/index.html <<EOF
+server {
+        listen 80;
+        listen [::]:80;
+        root /gluster-vol/cloud-brix.lab/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name cloud-brix.lab www.cloud-brix.lab;
+
+        location / {
+               try_files $uri $uri/ =404;
+        }
+}
+EOF
+
+lxc exec routed-103 -- sudo ln -s /etc/nginx/sites-available/cloud-brix.lab /etc/nginx/sites-enabled/
+lxc exec routed-103 -- sudo unlink /etc/nginx/sites-enabled/default
+lxc exec routed-103 -- sudo nginx -t
+lxc exec routed-103 -- sudo systemctl restart nginx
+lxc exec routed-103 -- curl http://localhost
+
+-------------------------------------------------
+SERVER 3
+------------------------------------------------
+sudo chmod -R 777 /mnt/gluster-client
+sudo mount -t glusterfs emp-11:/vol1 /mnt/gluster-client
+
+------------------------------------------------------
+REMEDY: MOUNTING GLUSTER CLIENT ON TO LXD INSTANCE:
+----------------------------------------------------
+# after creating a client directory on the host, it is now possible to mount the client directory on a lxd vm
+# stop the container
+lxc stop routed-113
+# add directory as an extra volume device
+lxc config device add routed-113 gclientdisk1 disk source=/mnt/gluster-client path=/gluster-vol/
+# then start the lxd instance
+lxc start routed-113
+
+lxc exec routed-113 -- sudo apt install nginx -y
+lxc exec routed-113 -- sudo ufw allow 'Nginx FULL'
+lxc exec routed-113 -- curl http://localhost
+**SOME SCRIPTS LEFT OUT HERE FOR SUBSEQUENT PHYSICAL SERVERS *****
+lxc exec routed-113 -- touch /etc/nginx/sites-available/cloud-brix.lab
+lxc exec routed-113 -- cat > /etc/nginx/sites-available/cloud-brix.lab <<EOF
+server {
+        listen 80;
+        listen [::]:80;
+        root /gluster-vol/cloud-brix.lab/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name cloud-brix.lab www.cloud-brix.lab;
+
+        location / {
+               try_files $uri $uri/ =404;
+        }
+}
+EOF
+
+lxc exec routed-113 -- sudo ln -s /etc/nginx/sites-available/cloud-brix.lab /etc/nginx/sites-enabled/
+lxc exec routed-113 -- sudo unlink /etc/nginx/sites-enabled/default
+lxc exec routed-113 -- sudo nginx -t
+lxc exec routed-113 -- sudo systemctl restart nginx
+lxc exec routed-113 -- curl http://localhost
+
+
+**************************************************************************************************************************
+
+NGINX CONFIGURATION OUTPUT:
+emp-09@emp-09 ~> lxc exec routed-93 -- sudo apt install nginx -y
+                 lxc exec routed-93 -- sudo ufw allow 'Nginx FULL'
+                 lxc exec routed-93 -- curl http://localhost
+                 
+
+
+...script is running
+Reading package lists... Done
+.
+.
+.
+.
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Rules updated
+Rules updated (v6)
+<html>
+<head>
+<title>routed-93</title>
+</head>
+<body>
+<h1>routed-93</h1>
+<p>Hi sir, I am going to serve you today!</p>
+</body>
+</html>
+,,,script finninshed running
+
+
+emp-09@emp-09 ~> lxc exec routed-93 -- sudo systemctl status enginx
+Unit enginx.service could not be found.
+emp-09@emp-09 ~ [4]> lxc exec routed-93 -- sudo systemctl status apache
+Unit apache.service could not be found.
+emp-09@emp-09 ~ [4]> lxc exec routed-93 -- sudo systemctl status apache2
+○ apache2.service - The Apache HTTP Server
+     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+     Active: inactive (dead) since Fri 2023-08-04 08:57:34 UTC; 21min ago
+       Docs: https://httpd.apache.org/docs/2.4/
+   Main PID: 159809 (code=exited, status=0/SUCCESS)
+        CPU: 942ms
+
+Aug 04 07:03:31 routed-93 systemd[1]: Reloading The Apache HTTP Server...
+Aug 04 07:03:31 routed-93 apachectl[164772]: AH00112: Warning: DocumentRoot [/gluster-vol/cloud-brix.lab/public_html] does not exist
+Aug 04 07:03:31 routed-93 systemd[1]: Reloaded The Apache HTTP Server.
+Aug 04 08:20:59 routed-93 systemd[1]: Reloading The Apache HTTP Server...
+Aug 04 08:20:59 routed-93 systemd[1]: Reloaded The Apache HTTP Server.
+Aug 04 08:51:44 routed-93 systemd[1]: Reloading The Apache HTTP Server...
+Aug 04 08:51:44 routed-93 systemd[1]: Reloaded The Apache HTTP Server.
+Aug 04 08:57:34 routed-93 systemd[1]: Stopping The Apache HTTP Server...
+Aug 04 08:57:34 routed-93 systemd[1]: apache2.service: Deactivated successfully.
+Aug 04 08:57:34 routed-93 systemd[1]: Stopped The Apache HTTP Server.
+emp-09@emp-09 ~ [3]> lxc exec routed-93 -- tee /etc/nginx/sites-available/
+tee: /etc/nginx/sites-available/: Is a directory
+^C⏎                                                                                                                                                                                                                 emp-09@emp-09 ~ [SIGINT]> lxc exec routed-93 -- ls /etc/nginx/sites-available/
+default
+emp-09@emp-09 ~> lxc exec routed-93 -- nano /etc/nginx/sites-available/default
+emp-09@emp-09 ~> lxc exec routed-93 -- sudo mkdir -p /gluster-vol/cloud-brix.lab/html
+                 lxc exec routed-93 -- sudo chown -R root:root /gluster-vol/cloud-brix.lab/html
+                 lxc exec routed-93 -- sudo chmod -R 755 /gluster-vol/cloud-brix.lab
+                 lxc exec routed-93 -- nano /gluster-vol/cloud-brix.lab/html/index.html
+emp-09@emp-09 ~> lxc exec routed-93 -- sudo nano /etc/nginx/sites-available/cloud-brix.lab
+emp-09@emp-09 ~> lxc exec routed-93 -- sudo ln -s /etc/nginx/sites-available/cloud-brix.lab /etc/nginx/sites-enabled/
+                 lxc exec routed-93 -- sudo unlink /etc/nginx/sites-enabled/default
+emp-09@emp-09 ~> lxc exec routed-93 -- sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+emp-09@emp-09 ~> lxc exec routed-93 -- sudo systemctl restart nginx
+                 lxc exec routed-93 -- http://localhost
+Error: Command not found
+emp-09@emp-09 ~ [127]> lxc exec routed-93 -- curl http://localhost
+<p>Welcome to routed-93:enginx@cloud-brix.lab</p>
+
+************************************************************************************************************************************

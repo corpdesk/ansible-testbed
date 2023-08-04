@@ -1,0 +1,112 @@
+*****************************************************************************
+# Repeat the following on all the servers (emp-09, emp-10, emp-11)
+sudo mkfs.xfs /dev/sda4 -f
+sudo mkdir /glustervolume
+sudo mount -t xfs /dev/sda4 /glustervolume
+
+# sudo echo "/dev/sda4 /glustervolume xfs defaults 0 0" >> /etc/fstab
+sudo nano /etc/fstab
+
+
+sudo mount -a
+sudo df -h
+
+sudo gluster peer probe emp-10
+sudo gluster peer probe emp-11
+sudo gluster pool list
+
+# exectute on all the servers (emp-09, emp-10, emp-11)
+sudo mkdir -p /glustervolume/vol1
+
+# execute on emp-09
+sudo gluster volume create vol1 replica 3 emp-09:/glustervolume/vol1 emp-10:/glustervolume/vol1 emp-11:/glustervolume/vol1
+sudo gluster volume start vol1
+sudo gluster volume status
+sudo gluster volume info vol1
+
+# Next, mount the created volume on /opt directory on both nodes by editing /etc/fstab file so your volume is available after the server boots.
+sudo nano /etc/fstab
+# Add the following line:
+# "localhost:/vol1 /opt glusterfs defaults,_netdev 0 0"
+# Save and close the file when you are finished. Then, run the following command to apply the changes:
+sudo mount -a
+*****************************************************************************
+
+/////////////////////////////////
+//SETUP GLUSTER CLIENT
+Several groups of disks can be used as gluster server replicas but not all servers have 
+to reserve disks for storage service. some can just run gluster clients.  This way,
+disks and storage servers can be added on demand but can be independent from other services.
+---------------
+# perform the following:
+sudo apt install glusterfs-client -y
+sudo mkdir -p /mnt/gluster-client
+sudo mount -t glusterfs emp-09:/vol1 /mnt/gluster-client
+sudo chmod -R 777 /mnt/gluster-client
+
+sudo apt install glusterfs-client -y
+sudo mkdir -p /mnt/gluster-client
+sudo mount -t glusterfs emp-10:/vol1 /mnt/gluster-client
+sudo chmod -R 777 /mnt/gluster-client
+
+sudo apt install glusterfs-client -y
+sudo mkdir -p /mnt/gluster-client
+sudo mount -t glusterfs emp-11:/vol1 /mnt/gluster-client
+sudo chmod -R 777 /mnt/gluster-client
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+NOTE: USING LXD AS GLUSTER CLIENT HAS NOT WORKED
+
+# create a gluster client directory on the host
+emp-09@192.168.0.9 ~/a/ansible-cd (main)> sudo mkdir -p /mnt/gluster-client
+[sudo] password for emp-06: 
+emp-09@192.168.0.9 ~/a/ansible-cd (main)> sudo mount -t glusterfs emp-06:/gv0 /mnt/gluster-client
+
+# Note that mounting gluster replicated file is not possible on a lxd vm
+emp-09@192.168.0.9 ~/a/ansible-cd (main)> lxc exec routed-93 -- sudo mkdir -p /mnt/gluster-client
+emp-09@192.168.0.9 ~/a/ansible-cd (main)> lxc exec routed-93 -- sudo mount -t glusterfs emp-06:/gv0 /mnt/gluster-client
+Mounting glusterfs on /mnt/gluster-client failed.
+
+
+
+***************************************************
+REMEDY: MOUNTING GLUSTER CLIENT ON TO LXD INSTANCE:
+***************************************************
+# after creating a client directory on the host, it is now possible to mount the client directory on a lxd vm
+# stop the vm/container
+emp-09@192.168.0.9 ~/a/ansible-cd (main) [1]> lxc stop routed-93
+# add directory as an extra volume device
+emp-09@192.168.0.9 ~/a/ansible-cd (main)> lxc config device add routed-93 gclientdisk1 disk source=/mnt/gluster-client path=/gluster-vol/
+Device gclientdisk1 added to routed-93
+# then start the lxd instance
+emp-09@192.168.0.9 ~/a/ansible-cd (main)> lxc start routed-93
+
+----------------------
+PERMISSION CONFIGURATIONS ON GLUSTER CLIENT MOUNT:
+# exectute on all the servers (emp-09, emp-10, emp-11)
+sudo ls -l /mnt/gluster-client
+sudo chown -R emp-09:emp-09 /mnt/gluster-client
+sudo chmod -R 777 /mnt/gluster-client
+
+# create a working directory on the instance
+lxc exec routed-93 -- mkdir -p /gluster-vol/test-gluster-dir
+# create a test file
+lxc exec routed-93 -- touch /glusterclientvol1/test-gluster-dir/test_distributed_file.txt
+
+# while trying to write to the file, there could be some likely permission issues,
+# this can be sorted by 'disks' application using 'Take Ownership' in the menu.
+# Below is the behaviour before permission issues are sorted
+emp-09@192.168.0.9 ~/a/ansible-cd (main)> bash
+emp-09@192.168.0.9:~/ansible-testbed/ansible-cd$ lxc exec routed-93 -- echo "lxc is welcome to gluster" >> /glusterclientvol1/test-gluster-dir/test_distributed_file.txt
+bash: /glusterclientvol1/test-gluster-dir/test_distributed_file.txt: No such file or directory
+emp-09@192.168.0.9:~/ansible-testbed/ansible-cd$ lxc exec routed-93 -- ls /glusterclientvol1/test-gluster-dir/
+test_distributed_file.txt
+
+
+# after permission issues are sorted, it is possible to write to file. You can check the file on the other gluster server or another gluster client
+root@routed-93:~# cat /glusterclientvol1/test-gluster-dir/test_distributed_file.txt
+root@routed-93:~# nano /glusterclientvol1/test-gluster-dir/test_distributed_file.txt
+root@routed-93:~# cat /glusterclientvol1/test-gluster-dir/test_distributed_file.txt
+xx
+root@routed-93:~# 
+**********************************************

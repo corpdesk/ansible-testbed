@@ -1,5 +1,59 @@
 Enhance the process using shell script progressbar: https://stackoverflow.com/questions/238073/how-to-add-a-progress-bar-to-a-shell-script
-1. setup machine farm:
+
+1. set up physical servers:
+    - set up low cost machines with good processors, and ample RAM. 32gb and above is recommended
+    - the machines should be able to ping each other
+    - set up hostfile
+    - set working partitions away from the OS parttion
+    - FYI: you can always use htop for server monitoring via terminal on the hosts or any container
+
+2. Setup socketxp: 
+    - Rationale: Most online service providers will offer 512MB or RAM for $5 a month and by the time you have 4gb, it would be around $50 per month
+        with this connection, you can start with free 2 connection for 30 days then pay $10 per month and 10 connections limit... but you route the 
+        connection to your lab with as much as RAM as you can afford and a large a cloud as you can afford. 
+        You can then access your machines from anywhere to allow development and demos.
+        FUTURE CONSIDERATONS:
+        - learn how this is possible and develop a service for sale and also other custom uses.
+        - What if it is possile to connect two services in different locations with a VRRP? via a digital ocean account as a central point.
+        - What if from the above a development community can start hosting services with the benefit of VRRPs to contain downtimes
+        - in all the above proposals, cloud-brix can play a part new ways of disruptinig hosting business...which is a big market
+    - Ref: https://docs.socketxp.com/
+    - create account
+    - set up ssh access to physical machines
+
+3. Setup VRRP for physical servers:
+    - Ref: /home/emp-06/ansible-testbed/vrrp/README.md
+
+4. Setup glusterfs:
+    - Ref: MyDrive/emp/coud-brix/glusterfs-webservice for details on glusterfs setup 
+
+3. set up lxd cluster via routed methods:
+    - This setup launch lxd containers that can network accross physical machines within a given subnet
+    - Ref: <proj-dir>/ansible-testbed/lxd-deploy/routed-container/routed-notes.md
+    - If the containers are nesting other containers, then enable nesting:
+        - lxc config set routed-95 security.nesting true
+    - set up expiry limit for quick spawning of containers
+        lxc config set images.remote_cache_expiry 20
+        lxd sql global 'UPDATE images SET cached=1 WHERE fingerprint="346f313cdd56c3d3b925bc13ce1622a36afa0e0557278c0dc85dabbba28bcb74"'
+
+4. Set up SSH from controller(cluster members) to target machines(worker nodes):
+    - shell script notes: <proj-dir>/ansible-testbed/ansible-cd/ssh-setup-notes
+    - Ref: MyDrive/emp/coud-brix/lxd-ansible for notes, scripts and methods for automation
+    - Ref: <proj-dir>/ansible-testbed/shared-files/setup_initial_user.sh
+
+5. Intstall Ansible:
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-22-04
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible y
+
+6. Deploy mysql:
+    - Ref: /home/emp-06/ansible-testbed/deploy-apps/mysql-02/mysql_02_notes
+    - setup mysql router
+    - setup VRRP behind mysql-routers
+
+
+6. setup machine farm:
     - use shell to create inventory related files from json file
         - hosts.json
         - using jq to read json file: https://www.baeldung.com/linux/jq-command-json
@@ -17,7 +71,7 @@ Enhance the process using shell script progressbar: https://stackoverflow.com/qu
         - all server are reachable in network
     
 
-2. setup storage services:
+7. setup storage services:
     - install mysql-cluster
     - security:
         - firewall
@@ -28,15 +82,17 @@ Enhance the process using shell script progressbar: https://stackoverflow.com/qu
     - security:
         - firewall
 
-3. set-up cd-api cluster
+8. set-up cd-api cluster
     - install mysql-router
     - install npm
     - clone private repository
     - setup connection to storage services
     - security:
         - firewall
+    - setup VRRP for cd-api
 
 
-4. set-up module federation cluster
+9. set-up module federation cluster
     - clone private repository
     - deploy dist directory
+    - setup VRRP for 
