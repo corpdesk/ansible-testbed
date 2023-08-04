@@ -1,8 +1,8 @@
 ---
 # ----------------------------------------------------------
 # SECTION ONE: install mysql
-- hosts: emp-06
-  remote_user: emp-06
+- hosts: cb-servers
+  remote_user: devops
   become: yes
 
   vars_files:
@@ -32,8 +32,8 @@
 # ----------------------------------------------------------
 # SECTION TWO: harden mysql
 
-- hosts: emp-06
-  remote_user: emp-06
+- hosts: cb-servers
+  remote_user: devops
   become: yes
 
   roles:
@@ -47,8 +47,8 @@
 
 # ----------------------------------------------------------
 # SECTION TWO: create db users, install mysql-shell, setup cluster
-- hosts: emp-06
-  remote_user: emp-06
+- hosts: cb-servers
+  remote_user: devops
   become: yes
 
   vars_files:

@@ -4,7 +4,7 @@
 # http://192.168.2.238/app-repo/mysql-shell_8.0.32-1ubuntu22.04_amd64
 v_major: "8"
 v_minor: "0"
-v_release: "32"
+v_release: "34"
 v_platform: "1ubuntu22.04_amd64"
 
 # array of vm hosts
@@ -12,7 +12,7 @@ zone_ids: ["107", "173", "137"]
 # selected hosts: should be derived from zone_ids
 zone_id: "107"
 inventory_zone: "cd-db-{{ zone_id }}"
-local_repository: "http://192.168.2.238/app-repo"
+local_repository: "http://192.168.0.93/mysql-downloads"
 cluster_hosts:
   # [
   #   "192.168.1.171 {{inventory_zone}}-171",
