@@ -28,6 +28,7 @@ git clone https://github.com/corpdesk/ansible-testbed.git
 # CLUSTER MEMBER
 # -----------------------------------------
 
+
 sudo deluser devops
 sudo rm -r -f /home/devops
 # add devops user
