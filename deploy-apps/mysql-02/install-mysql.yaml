@@ -5,14 +5,14 @@
   remote_user: devops
   become: yes
 
-  vars_files:
-    - ../shared_vars/mysql_cluster_vars.yaml
-  # vars:
-  #   # mysql versioning system: https://dev.mysql.com/doc/refman/{{v_major}}.{{v_minor}}/en/which-version.html
-  #   v_major: "8"
-  #   v_minor: "0"
-  #   v_release: "31"
-  #   v_platform: "1ubuntu22.04_amd64"
+  # vars_files:
+  #   - ../shared_vars/mysql_cluster_vars.yaml
+  vars:
+    # mysql versioning system: https://dev.mysql.com/doc/refman/{{v_major}}.{{v_minor}}/en/which-version.html
+    v_major: "8"
+    v_minor: "0"
+    v_release: "31"
+    v_platform: "1ubuntu22.04_amd64"
 
   tasks:
     # --------------------
