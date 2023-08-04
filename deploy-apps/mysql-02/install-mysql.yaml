@@ -120,7 +120,7 @@
     - name: download mysql-shell deb pkg
       get_url:
         # url: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-.{{v_platform}}.deb
-        url: "{{ local_repository }}/mysql-shell/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb"
+        url: "{{ local_repository }}/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb"
         dest: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb
         force: yes
 
