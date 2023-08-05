@@ -186,18 +186,18 @@
     # sudo chmod -R 755 /home/devops/vagrant-deploy
     # chown -R devops /home/devops/vagrant-deploy
     # sudo cp init_cluster.js /home/devops/init_cluster.js
-    - name: Move init file
-      shell: cp -f /home/vagrant/init_cluster.js /home/devops/init_cluster.js && chown -R devops /home/devops/init_cluster.js
-      become: yes
+    # - name: Move init file
+    #   shell: cp -f /home/devops/.cp/mysql-shell-scripts/init_cluster.js /home/devops/init_cluster.js && chown -R devops /home/devops/init_cluster.js
+    #   become: yes
 
-    - name: Move cluster build file
-      shell: cp -f /home/vagrant/build_cluster.js /home/devops/build_cluster.js && chown -R devops /home/devops/build_cluster.js
-      become: yes
+    # - name: Move cluster build file
+    #   shell: cp -f /home/devops/.cp/mysql-shell-scripts/build_cluster.js /home/devops/build_cluster.js && chown -R devops /home/devops/build_cluster.js
+    #   become: yes
 
     # ---------------------------------------------------
     # INIT CLUSTER
     - name: Init cluster
-      shell: mysqlsh --file ~/init_cluster.js
+      shell: mysqlsh --file ~/.cp/mysql-shell-scripts/init_cluster.js
       become_user: devops
 
     # # // On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to my.cnf.
@@ -222,7 +222,7 @@
 
     # ToDo: execute with arguments or import file eg: inventory, primary-ip
     - name: Re-run init cluster after restart to confirm compliance
-      shell: mysqlsh --file ~/init_cluster.js
+      shell: mysqlsh --file ~/.cp/mysql-shell-scripts/init_cluster.js
       become_user: devops
 
     - name: Restart service mysql after initializing replication
@@ -234,7 +234,7 @@
   # ## ---------------------------------------------------
   # ## BUILD CLUSTER
   # - name: Run build cluster after cluster initialization
-  #   shell: mysqlsh --file ~/build_cluster.js
+  #   shell: mysqlsh --file ~/.cp/mysql-shell-scripts/build_cluster.js
   #   become_user: devops
 
 - hosts: mysql-primary
@@ -245,5 +245,5 @@
     ## BUILD CLUSTER
     # ToDo: execute with arguments or import file eg: inventory, primary-ip
     - name: Run build cluster after cluster initialization
-      shell: mysqlsh --file ~/build_cluster.js
+      shell: mysqlsh --file ~/.cp/mysql-shell-scripts/build_cluster.js
       become_user: devops

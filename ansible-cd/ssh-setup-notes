@@ -48,9 +48,13 @@ su devops
 cd ~
 ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
 git clone https://github.com/corpdesk/ansible-testbed.git
-cp  ansible-testbed/shared-files/p .ssh/p
+mkdir .cb
+mkdir -p .cp/mysql-shell-scripts/
+cp ansible-testbed/shared-files/build_cluster.js .cp/mysql-shell-scripts/build_cluster.js
+cp ansible-testbed/shared-files/init_cluster.js .cp/mysql-shell-scripts/init_cluster.js
+cp  ansible-testbed/shared-files/p .cb/p
 sh ansible-testbed/shared-files/ssh-copy-id.sh cd-db-01
-rm -f .ssh/p
+rm -f .cb/p
 
 
 # -----------------------------------------------------------------------------------------------------------------------------
