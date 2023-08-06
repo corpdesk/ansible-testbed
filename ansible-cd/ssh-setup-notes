@@ -74,7 +74,7 @@ else
     echo "--------seting up initial user cb work space"
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
-echo "\n3\n"
+
 if [ -d "/home/devops/.cb" ] 
 then
     echo "--------.cb dir exists"
@@ -83,7 +83,6 @@ else
     mkdir .cb
 fi
 
-echo "\n4\n"
 
 if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
 then
@@ -93,10 +92,9 @@ else
     mkdir -p /home/devops/.cb/mysql-shell-scripts/
 fi
 
-echo "\n5\n"
-cp /home/devops/ansible-testbed/shared-files/build_cluster.js /home/devops/.cb/mysql-shell-scripts/build_cluster.js
-cp /home/devops/ansible-testbed/shared-files/init_cluster.js /home/devops/.cb/mysql-shell-scripts/init_cluster.js
-cp /home/devops/ansible-testbed/shared-files/p /home/devops/.cb/p
+cp -f /home/devops/ansible-testbed/shared-files/build_cluster.js /home/devops/.cb/mysql-shell-scripts/build_cluster.js
+cp -f /home/devops/ansible-testbed/shared-files/init_cluster.js /home/devops/.cb/mysql-shell-scripts/init_cluster.js
+cp -f /home/devops/ansible-testbed/shared-files/p /home/devops/.cb/p
 for i in {1..3}
 do
    sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
