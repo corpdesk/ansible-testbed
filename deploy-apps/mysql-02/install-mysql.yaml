@@ -197,7 +197,7 @@
     # ---------------------------------------------------
     # INIT CLUSTER
     - name: Init cluster
-      shell: mysqlsh --file ~/.cb/mysql-shell-scripts/init_cluster.js
+      shell: mysqlsh --file /home/devops/.cb/mysql-shell-scripts/init_cluster.js
       become_user: devops
 
     # # // On each innodb server, add gtid_mode=ON and enforce_gtid_consistency=ON to my.cnf.
@@ -222,7 +222,7 @@
 
     # ToDo: execute with arguments or import file eg: inventory, primary-ip
     - name: Re-run init cluster after restart to confirm compliance
-      shell: mysqlsh --file ~/.cb/mysql-shell-scripts/init_cluster.js
+      shell: mysqlsh --file /home/devops/.cb/mysql-shell-scripts/init_cluster.js
       become_user: devops
 
     - name: Restart service mysql after initializing replication
@@ -234,7 +234,7 @@
   # ## ---------------------------------------------------
   # ## BUILD CLUSTER
   # - name: Run build cluster after cluster initialization
-  #   shell: mysqlsh --file ~/.cb/mysql-shell-scripts/build_cluster.js
+  #   shell: mysqlsh --file /home/devops/.cb/mysql-shell-scripts/build_cluster.js
   #   become_user: devops
 
 - hosts: mysql-primary
@@ -245,5 +245,5 @@
     ## BUILD CLUSTER
     # ToDo: execute with arguments or import file eg: inventory, primary-ip
     - name: Run build cluster after cluster initialization
-      shell: mysqlsh --file ~/.cb/mysql-shell-scripts/build_cluster.js
+      shell: mysqlsh --file /home/devops/.cb/mysql-shell-scripts/build_cluster.js
       become_user: devops
