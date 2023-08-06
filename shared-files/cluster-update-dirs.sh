@@ -2,32 +2,32 @@
 
 # script executed at a cluster member (ansible controller) assuming initial user(devops) has alreaydy been setup
 sudo -H -u devops bash -c '
-
+host=$(echo $hostname)
 if [ -d "/home/devops/ansible-testbed" ] 
 then
-    echo "--------cloud-brix files will be updated at $hostname"
+    echo "--------cloud-brix files will be updated at $host"
     cd /home/devops/ansible-testbed
     git pull
     cd /home/devops/
 else
-    echo "--------updating source files at $hostname"
+    echo "--------updating source files at $host"
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
 
 if [ -d "/home/devops/.cb" ] 
 then
-    echo "--------$hostname: .cb dir exists"
+    echo "--------$host: .cb dir exists"
 else
-    echo "--------$hostname: creating new .cb dir"
+    echo "--------$host: creating new .cb dir"
     mkdir .cb
 fi
 
 
 if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
 then
-    echo "--------$hostname: /home/devops/.cb/mysql-shell-scripts/ dir exists"
+    echo "--------$host: /home/devops/.cb/mysql-shell-scripts/ dir exists"
 else
-    echo "--------$hostname: creating new .cb/mysql-shell-scriptsdir"
+    echo "--------$host: creating new .cb/mysql-shell-scriptsdir"
     mkdir -p /home/devops/.cb/mysql-shell-scripts/
 fi
 
