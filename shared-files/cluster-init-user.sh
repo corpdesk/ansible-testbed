@@ -21,3 +21,7 @@ sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo systemctl restart ssh
+for i in {1..3}
+do
+    sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
+done
