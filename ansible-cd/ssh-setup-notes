@@ -47,6 +47,7 @@ sudo systemctl restart ssh
 su devops
 cd ~
 
+echo "\n1\n"
 if [ -f "/home/devops/.ssh/id_rsa" ] 
 then
     echo "--------ssh keys already exists"
@@ -54,18 +55,19 @@ else
     echo "--------creating ssh keys"
     ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
 fi
-
-if [ -d "~/ansible-testbed" ] 
+echo "\n2\n"
+if [ -d "/home/devops/ansible-testbed" ] 
 then
     echo "--------cloud-brix files will be updated"
-    cd ~/ansible-testbed
+    cd /home/devops/ansible-testbed
     git pull
+    cd ~
 else
     echo "--------seting up initial user cb work space"
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
-
-if [ -d "~/.cb" ] 
+echo "\n3\n"
+if [ -d "/home/devops/.cb" ] 
 then
     echo "--------.cb dir exists"
 else
@@ -73,18 +75,21 @@ else
     mkdir .cb
 fi
 
-if [ -d "~/.cp/mysql-shell-scripts/" ] 
+echo "\n4\n"
+
+if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
 then
-    echo "--------~/.cp/mysql-shell-scripts/ dir exists"
+    echo "--------/home/devops/.cb/mysql-shell-scripts/ dir exists"
 else
     echo "--------creating new .cb dir"
-    mkdir -p ~/.cp/mysql-shell-scripts/
-file
+    mkdir -p /home/devops/.cb/mysql-shell-scripts/
+fi
 
-cp ansible-testbed/shared-files/build_cluster.js .cp/mysql-shell-scripts/build_cluster.js
-cp ansible-testbed/shared-files/init_cluster.js .cp/mysql-shell-scripts/init_cluster.js
-cp ansible-testbed/shared-files/p .cb/p
-sh ansible-testbed/shared-files/ssh-copy-id.sh cd-db-01
+echo "\n5\n"
+cp /home/devops/ansible-testbed/shared-files/build_cluster.js /home/devops/.cb/mysql-shell-scripts/build_cluster.js
+cp /home/devops/ansible-testbed/shared-files/init_cluster.js /home/devops/.cb/mysql-shell-scripts/init_cluster.js
+cp /home/devops/ansible-testbed/shared-files/p /home/devops/.cb/p
+sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-01
 rm -f .cb/p
 
 

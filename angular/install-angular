@@ -1,0 +1,9 @@
+
+Compatibility: https://angular.io/guide/versions
+Install nvm:
+sudo apt update
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+su $USER
+nvm install --lts
+nvm install v16.20.1
+npm install -g @angular/cli
