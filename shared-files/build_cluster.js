@@ -10,7 +10,7 @@ print('Setting up a Percona Server for MySQL - InnoDB cluster.\n\n');
 
 
 
-const dbUser = 'goremo';
+const dbUser = 'devops';
 const dbPass = 'yU0B14NC1PdE';
 const clusterName = 'cdCluster';
 const port = 3306;
