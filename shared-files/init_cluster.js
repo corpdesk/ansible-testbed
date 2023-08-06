@@ -5,8 +5,8 @@ print('==================================\n');
 //     type: "password"
 // });
 
-const user = 'goremo';
-const server = "goremo@localhost:3306";
+const user = 'devops';
+const server = "devops@localhost:3306";
 const dbPass = "yU0B14NC1PdE";
 const key = { password: dbPass };
 
