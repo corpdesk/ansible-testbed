@@ -99,8 +99,7 @@ for i in {1..3}
 do
    sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
 done
-rm -f /home/devops/.cb/p
-'
+rm -f /home/devops/.cb/p'
 
 
 # -----------------------------------------------------------------------------------------------------------------------------

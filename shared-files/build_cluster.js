@@ -113,5 +113,5 @@ try {
     print('\nInnoDB cluster deployed successfully.\n');
 } catch (e) {
     print('\nThe InnoDB cluster could not be created.\n');
-    print(e + '\n');
+    print(JSON.stringify(e) + '\n');
 }
