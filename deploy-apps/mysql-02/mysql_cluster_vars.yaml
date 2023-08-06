@@ -20,9 +20,9 @@ cluster_hosts:
   #   "192.168.1.173 {{inventory_zone}}-173",
   # ]
   [
-    "192.168.1.176 {{inventory_zone}}-176",
-    "192.168.1.177 {{inventory_zone}}-177",
-    "192.168.1.178 {{inventory_zone}}-178",
+    "240.93.0.172 cd-db-01",
+    "240.103.0.170 cd-db-02",
+    "240.104.0.196 cd-db-03",
   ]
 # ToDo: apply ansible-vault for credentials
 mysql_admin: devops
