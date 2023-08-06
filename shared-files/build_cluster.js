@@ -24,10 +24,11 @@ const key = { password: dbPass };
 //     "192.168.1.174",
 //     "192.168.1.175"
 // ];
+
 const dbHosts = [
     "240.93.0.172",
-    "240.103.0.170",
-    "240.104.0.196"
+    "240.94.0.155",
+    "240.95.0.221"
 ];
 
 // for (let i = 1; i <= numNodes; i++) {
@@ -53,13 +54,15 @@ function setupCluster() {
     print('\nConfiguring the instances.');
     for (let n = 0; n < dbHosts.length; n++) {
         print('\n=> ');
-        dba.configureInstance(`${dbUser}@${dbHosts[n]}:${port}`, {
-            // clusterAdmin: `devops@${dbHosts[n]}`,
-            // clusterAdminPassword: dbPass,
-            // password: dbPass,
-            interactive: false,
-            restart: true
-        });
+        dba.configureInstance(`${dbUser}:${dbPass}@${dbHosts[n]}:${port}`
+        // , {
+        //     clusterAdmin: `devops@${dbHosts[n]}`,
+        //     clusterAdminPassword: dbPass,
+        //     password: dbPass,
+        //     interactive: false,
+        //     restart: true
+        // }
+        );
     }
     print('\nConfiguring Instances completed.\n\n');
 

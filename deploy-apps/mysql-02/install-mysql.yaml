@@ -173,15 +173,16 @@
         backup: yes
       become: yes
 
+
     - name: apply appropriate hostnames based on expected cluster nodes
       lineinfile:
         dest: /etc/hosts
         line: "{{ item }}"
       with_items:
         "{{ cluster_hosts }}"
-        # - "192.168.1.171 {{inventory_zone}}-171"
-        # - "192.168.1.172 {{inventory_zone}}-172"
-        # - "192.168.1.173 {{inventory_zone}}-173"
+        - "240.93.0.172 cd-db-01"
+        - "240.94.0.155 cd-db-02"
+        - "240.95.0.221 cd-db-03"
 
     # sudo chmod -R 755 /home/devops/vagrant-deploy
     # chown -R devops /home/devops/vagrant-deploy

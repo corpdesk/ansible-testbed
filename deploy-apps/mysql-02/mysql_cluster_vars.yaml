@@ -21,8 +21,8 @@ cluster_hosts:
   # ]
   [
     "240.93.0.172 cd-db-01",
-    "240.103.0.170 cd-db-02",
-    "240.104.0.196 cd-db-03",
+    "240.94.0.155 cd-db-02",
+    "240.95.0.221 cd-db-03",
   ]
 # ToDo: apply ansible-vault for credentials
 mysql_admin: devops

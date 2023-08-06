@@ -1,22 +1,27 @@
+
+
+
 # ****************************************************************************************************************************
 # SHELL SCRIPTS
 # ****************************************************************************************************************************
 # WORKER NODES:
-apt update && apt upgrade -y
-rm -fr ansible-testbed
-deluser devops
-rm -r -f /home/devops
-# add devops user
-useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
-# escalate devops to sudoer
-usermod -aG sudo devops
-cp /etc/sudoers /etc/sudoers.backup
-# suppress password prompt on switch to user
-bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
-# enable password authentication for ssh connection
-cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-systemctl restart ssh
+Ref: <proj-dir>/ansible-testbed/shared-files/worker-init-user.sh
+# bash -c '
+# apt update && apt upgrade -y
+# rm -fr ansible-testbed
+# deluser devops
+# rm -r -f /home/devops
+# # add devops user
+# useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+# # escalate devops to sudoer
+# usermod -aG sudo devops
+# cp /etc/sudoers /etc/sudoers.backup
+# # suppress password prompt on switch to user
+# bash -c "echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers"
+# # enable password authentication for ssh connection
+# cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+# sed -i -E "s/#?PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
+# systemctl restart ssh'
 
 -----
 su devops
@@ -28,78 +33,96 @@ git clone https://github.com/corpdesk/ansible-testbed.git
 # CLUSTER MEMBER
 # -----------------------------------------
 
-
-sudo deluser devops
-sudo rm -r -f /home/devops
-# add devops user
-sudo useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
-if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
-then
-    echo "--------/home/devops/.cb/mysql-shell-scripts/ dir exists"
-else
-    echo "--------creating new .cb/mysql-shell-scriptsdir"
-    mkdir -p /home/devops/.cb/mysql-shell-scripts/
-fi
-sudo chmod -R 755 /home/devops/
-# escalate devops to sudoer
-sudo usermod -aG sudo devops
-sudo cp /etc/sudoers /etc/sudoers.backup
-# suppress password prompt on switch to user
-sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
-# enable password authentication for ssh connection
-sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-sudo systemctl restart ssh
+Ref: <proj_dir>/ansible-testbed/shared-files/cluster-init-user.sh
+# sudo deluser devops
+# sudo rm -r -f /home/devops
+# # add devops user
+# sudo useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+# if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
+# then
+#     echo "--------/home/devops/.cb/mysql-shell-scripts/ dir exists"
+# else
+#     echo "--------creating new .cb/mysql-shell-scriptsdir"
+#     mkdir -p /home/devops/.cb/mysql-shell-scripts/
+# fi
+# sudo chmod -R 755 /home/devops/
+# # escalate devops to sudoer
+# sudo usermod -aG sudo devops
+# sudo cp /etc/sudoers /etc/sudoers.backup
+# # suppress password prompt on switch to user
+# sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
+# # enable password authentication for ssh connection
+# sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+# sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+# sudo systemctl restart ssh
 
 ------
-su devops
 
-bash -c '
-cd ~
-if [ -f "/home/devops/.ssh/id_rsa" ] 
-then
-    echo "--------ssh keys already exists"
-else
-    echo "--------creating ssh keys"
-    ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
-fi
+# post initial user script
+# executed as devops user
+Ref: <proj-dir>/ansible-testbed/shared-files/cluster-post-init-user.sh
 
-if [ -d "/home/devops/ansible-testbed" ] 
-then
-    echo "--------cloud-brix files will be updated"
-    cd /home/devops/ansible-testbed
-    git pull
-    cd /home/devops/
-else
-    echo "--------seting up initial user cb work space"
-    git clone https://github.com/corpdesk/ansible-testbed.git
-fi
+# sudo -H -u devops bash -c '
+# echo " ...starting post initial user creation"
+# echo " initial user: $USER, uid=$UID"
 
-if [ -d "/home/devops/.cb" ] 
-then
-    echo "--------.cb dir exists"
-else
-    echo "--------creating new .cb dir"
-    mkdir .cb
-fi
+# cd ~
+# if [ -f "/home/devops/.ssh/id_rsa" ] 
+# then
+#     echo "--------ssh keys already exists"
+# else
+#     echo "--------creating ssh keys"
+#     ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
+# fi
+
+# if [ -d "/home/devops/ansible-testbed" ] 
+# then
+#     echo "--------cloud-brix files will be updated"
+#     cd /home/devops/ansible-testbed
+#     git pull
+#     cd /home/devops/
+# else
+#     echo "--------seting up initial user cb work space"
+#     git clone https://github.com/corpdesk/ansible-testbed.git
+# fi
+
+# if [ -d "/home/devops/.cb" ] 
+# then
+#     echo "--------.cb dir exists"
+# else
+#     echo "--------creating new .cb dir"
+#     mkdir .cb
+# fi
 
 
-if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
-then
-    echo "--------/home/devops/.cb/mysql-shell-scripts/ dir exists"
-else
-    echo "--------creating new .cb/mysql-shell-scriptsdir"
-    mkdir -p /home/devops/.cb/mysql-shell-scripts/
-fi
+# if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
+# then
+#     echo "--------/home/devops/.cb/mysql-shell-scripts/ dir exists"
+# else
+#     echo "--------creating new .cb/mysql-shell-scriptsdir"
+#     mkdir -p /home/devops/.cb/mysql-shell-scripts/
+# fi
 
-cp -f /home/devops/ansible-testbed/shared-files/build_cluster.js /home/devops/.cb/mysql-shell-scripts/build_cluster.js
-cp -f /home/devops/ansible-testbed/shared-files/init_cluster.js /home/devops/.cb/mysql-shell-scripts/init_cluster.js
-cp -f /home/devops/ansible-testbed/shared-files/p /home/devops/.cb/p
-for i in {1..3}
-do
-   sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
-done
-rm -f /home/devops/.cb/p'
+# cp -f /home/devops/ansible-testbed/shared-files/worker-init-user.sh /home/devops/.cb/worker-init-user.sh
+# cp -f /home/devops/ansible-testbed/shared-files/build_cluster.js /home/devops/.cb/mysql-shell-scripts/build_cluster.js
+# cp -f /home/devops/ansible-testbed/shared-files/init_cluster.js /home/devops/.cb/mysql-shell-scripts/init_cluster.js
+# cp -f /home/devops/ansible-testbed/shared-files/p /home/devops/.cb/p
+
+# for i in {1..3}
+# do
+#     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/worker-init-user.sh
+#     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/init_cluster.js
+#     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/build_cluster.js
+#     sudo lxc exec cd-db-0$i -- sh /tmp/.cb/worker-init-user.sh
+#     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/init_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
+#     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
+#     sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
+# done
+# rm -f /home/devops/.cb/p'
+
+########################################
+# lxd executing as a differnt user
+# lxc exec container --user 1000 – ls
 
 
 # -----------------------------------------------------------------------------------------------------------------------------
@@ -119,14 +142,14 @@ sudo systemctl restart ssh
 cip=$(sudo lxc list -c4 --format csv a1 | cut -d' ' -f1)
 sudo lxc list "a1" -c 4 | awk '!/IPV4/{ if ( $2 != "" ) print $2}'
 -----------------------------------------------------------------------------------------------------------------------------
-# ansible will be expecting init_cluster.js and build_cluster 
-# so we move the latest version
-bash -c '
-for i in {1..3}
-do
-    sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/init_cluster.js
-    sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/build_cluster.js
-    sudo lxc file push /home/devops/.cb/mysql-shell-scripts/init_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
-    sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
-done'
+# # ansible will be expecting init_cluster.js and build_cluster 
+# # so we move the latest version
+# bash -c '
+# for i in {1..3}
+# do
+#     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/init_cluster.js
+#     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/build_cluster.js
+#     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/init_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
+#     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
+# done'
 ansible-playbook -i hosts.ini install-mysql.yaml -kK -vvv
