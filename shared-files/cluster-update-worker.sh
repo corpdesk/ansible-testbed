@@ -1,8 +1,10 @@
 #!/bin/bash
 # executed at the physical machine
-echo "--------executing at the cluster member"
+
 operator="devops"
 clusterMember="routed-93"
+echo "--------STARTING cluster-update-worker.sh"
+echo "--------executing at the cluster member $clusterMember"
 if [ -d "/home/$operator/ansible-testbed" ] 
 then
     echo "--------cloud-brix files for $clusterMember will be updated"

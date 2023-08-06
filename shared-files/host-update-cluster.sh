@@ -30,5 +30,5 @@ echo "--------pushing cluster-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-init-user.sh     $clusterMember/home/$operator/.cb/cluster-init-user.sh
 echo "--------pushing worker-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh      $clusterMember/home/$operator/.cb/worker-init-user.sh
-
+lxc exec $clusterMember -- sh /home/$operator/.cb/cluster-update-worker.sh
 '
