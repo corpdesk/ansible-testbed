@@ -46,6 +46,7 @@ sudo systemctl restart ssh
 ------
 su devops
 
+bash -c '
 cd ~
 if [ -f "/home/devops/.ssh/id_rsa" ] 
 then
@@ -93,6 +94,7 @@ do
    sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
 done
 rm -f /home/devops/.cb/p
+'
 
 
 # -----------------------------------------------------------------------------------------------------------------------------
