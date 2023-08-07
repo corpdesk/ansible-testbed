@@ -8,32 +8,32 @@ echo "."
 echo "."
 echo "."
 echo "--------STARTING cluster-update-dirs.sh"
-echo "--------executing at the cluster member $clusterMember"
+echo "--------cluster-update-dirs.sh: executing at the cluster member $clusterMember"
 if [ -d "/home/devops/ansible-testbed" ] 
 then
-    echo "--------cloud-brix files will be updated at $(hostname)"
+    echo "--------cluster-update-dirs.sh: cloud-brix files will be updated at $(hostname)"
     cd /home/devops/ansible-testbed
     git pull
     cd /home/devops/
 else
-    echo "--------updating source files at $(hostname)"
+    echo "--------cluster-update-dirs.sh: updating source files at $(hostname)"
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
 
 if [ -d "/home/devops/.cb" ] 
 then
-    echo "--------$(hostname): .cb dir exists"
+    echo "--------cluster-update-dirs.sh: $(hostname): .cb dir exists"
 else
-    echo "--------$(hostname): creating new .cb dir"
+    echo "--------cluster-update-dirs.sh: $(hostname): creating new .cb dir"
     mkdir .cb
 fi
 
 
 if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
 then
-    echo "--------$(hostname): /home/devops/.cb/mysql-shell-scripts/ dir exists"
+    echo "--------cluster-update-dirs.sh: $(hostname): /home/devops/.cb/mysql-shell-scripts/ dir exists"
 else
-    echo "--------$(hostname): creating new .cb/mysql-shell-scriptsdir"
+    echo "--------cluster-update-dirs.sh: $(hostname): creating new .cb/mysql-shell-scriptsdir"
     mkdir -p /home/devops/.cb/mysql-shell-scripts/
 fi
 
