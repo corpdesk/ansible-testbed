@@ -38,9 +38,9 @@ echo "--------host-update-cluster.sh: updating $clusterMember directories"
 sh /home/$adminUser/ansible-testbed/shared-files/cluster-update-dirs.sh
 
 echo "--------host-update-cluster.sh: pushing init_cluster.js from $adminUser to $clusterMember"
-sudo lxc file push /home/$adminUser/ansible-testbed/shared-files/init_cluster.js     cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
+lxc file push /home/$adminUser/ansible-testbed/shared-files/init_cluster.js     cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
 echo "--------host-update-cluster.sh: pushing init_build_cluster.js from $adminUser to $clusterMember"
-sudo lxc file push /home/$adminUser/ansible-testbed/shared-files/build_cluster.js    cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
+lxc file push /home/$adminUser/ansible-testbed/shared-files/build_cluster.js    cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
 echo "--------host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh      $clusterMember/home/$operator/.cb/worker-init-user.sh
 lxc exec $clusterMember -- sh /home/$operator/.cb/cluster-update-worker.sh
