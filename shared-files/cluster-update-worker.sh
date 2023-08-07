@@ -6,18 +6,18 @@ clusterMember="routed-93"
 echo "."
 echo "."
 echo "."
-echo "--------STARTING cluster-update-worker.sh"
-echo "--------cluster-update-worker.sh: executing at the cluster member $clusterMember"
-echo "--------cluster-update-worker.sh: setting up initial user for $clusterMember"
+echo "--------$(hostname)/STARTING cluster-update-worker.sh"
+echo "--------$(hostname)/cluster-update-worker.sh: executing at the cluster member $clusterMember"
+echo "--------$(hostname)/cluster-update-worker.sh: setting up initial user for $clusterMember"
 sh /home/devops/.cb/cluster-init-user.sh
 if [ -d "/home/$operator/ansible-testbed" ] 
 then
-    echo "--------cluster-update-worker.sh: cloud-brix files for $clusterMember will be updated"
+    echo "--------$(hostname)/cluster-update-worker.sh: cloud-brix files for $clusterMember will be updated"
     cd /home/$operator/ansible-testbed
     git pull
     cd /home/$operator/
 else
-    echo "--------cluster-update-worker.sh: updating source files for $clusterMember"
+    echo "--------$(hostname)/cluster-update-worker.sh: updating source files for $clusterMember"
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
 
@@ -26,17 +26,17 @@ do
     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/worker-init-user.sh
     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/init_cluster.js
     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/build_cluster.js
-    echo "--------cluster-update-worker.sh: pushing shared-files/worker-pre-init-user.sh from $clusterMember to cd-db-0$i"
+    echo "--------$(hostname)/cluster-update-worker.sh: pushing shared-files/worker-pre-init-user.sh from $clusterMember to cd-db-0$i"
     lxc file push home/$operator/.cb/worker-pre-init-user.sh  cd-db-0$i/home/$operator/.cb/worker-pre-init-user.sh
     sudo lxc exec cd-db-0$i -- sh /tmp/.cb/worker-init-user.sh
-    echo "--------cluster-update-worker.sh: pushing shared-files/p from $clusterMember to cd-db-0$i"
+    echo "--------$(hostname)/cluster-update-worker.sh: pushing shared-files/p from $clusterMember to cd-db-0$i"
     lxc file push /home/$operator/.cb/p                        cd-db-0$i/home/$operator/.cb/p
-    echo "--------cluster-update-worker.sh: pushing worker-init-user.sh from $clusterMember to cd-db-0$i"
+    echo "--------$(hostname)/cluster-update-worker.sh: pushing worker-init-user.sh from $clusterMember to cd-db-0$i"
     lxc file push /home/$operator/.cb/worker-init-user.sh      cd-db-0$i/home/$operator/.cb/worker-init-user.sh
-    echo "--------cluster-update-worker.sh: setting up initial user at cd-db-0$i"
+    echo "--------$(hostname)/cluster-update-worker.sh: setting up initial user at cd-db-0$i"
     sudo lxc exec cd-db-0$i -- sh /tmp/.cb/worker-init-user.sh
-    echo "--------cluster-update-worker.sh: pushing init_cluster.js from $clusterMember to cd-db-0$i"
+    echo "--------$(hostname)/cluster-update-worker.sh: pushing init_cluster.js from $clusterMember to cd-db-0$i"
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/init_cluster.js             cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
-    echo "--------cluster-update-worker.sh: pushing init_build_cluster.js from $clusterMember to cd-db-0$i"
+    echo "--------$(hostname)/cluster-update-worker.sh: pushing init_build_cluster.js from $clusterMember to cd-db-0$i"
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js            cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
 done
