@@ -1,16 +1,28 @@
 #!/bin/bash
 
-sudo deluser devops
-sudo rm -r -f /home/devops
-# add devops user
-sudo useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+
+echo "."
+echo "."
+echo "."
+echo "--------$(hostname)/STARTING worker-init-user.sh"
+if [ -d "/home/devops/" ] 
+then
+    echo "--------$(hostname)/worker-init-user.sh: /home/devops/ dir exists"
+else
+    sudo deluser devops
+    sudo rm -r -f /home/devops
+    # add devops user
+    sudo useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+fi
+
 if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
 then
-    echo "--------/home/devops/.cb/mysql-shell-scripts/ dir exists"
+    echo "--------$(hostname)/worker-init-user.sh: /home/devops/.cb/mysql-shell-scripts/ dir exists"
 else
-    echo "--------creating new .cb/mysql-shell-scriptsdir"
+    echo "--------$(hostname)/worker-init-user.sh: creating new .cb/mysql-shell-scriptsdir"
     mkdir -p /home/devops/.cb/mysql-shell-scripts/
 fi
+
 sudo chmod -R 755 /home/devops/
 # escalate devops to sudoer
 sudo usermod -aG sudo devops
