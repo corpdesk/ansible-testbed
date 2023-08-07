@@ -9,6 +9,8 @@ echo "."
 echo "--------$(hostname)/STARTING cluster-update-worker.sh"
 echo "--------$(hostname)/cluster-update-worker.sh: executing at the cluster member $clusterMember"
 echo "--------$(hostname)/cluster-update-worker.sh: setting up initial user for $clusterMember"
+echo "--------$(hostname)/cluster-update-worker.sh: check if cluster-init-user.sh is avilable"
+ls -la /home/devops/.cb/
 sh /home/devops/.cb/cluster-init-user.sh
 if [ -d "/home/$operator/ansible-testbed" ] 
 then
@@ -18,6 +20,7 @@ then
     cd /home/$operator/
 else
     echo "--------$(hostname)/cluster-update-worker.sh: updating source files for $clusterMember"
+    cd /home/$operator/
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
 
