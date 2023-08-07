@@ -26,7 +26,7 @@ Ref: <proj-dir>/ansible-testbed/shared-files/worker-init-user.sh
 -----
 su devops
 sudo apt-get install git net-tools telnet sshpass tree fish jq traceroute traceroute -y
-git clone https://github.com/corpdesk/ansible-testbed.git
+sudo -H -u devops bash -c 'git clone https://github.com/corpdesk/ansible-testbed.git'
 
 
 # -----------------------------------------

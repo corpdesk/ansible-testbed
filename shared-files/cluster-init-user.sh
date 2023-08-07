@@ -3,7 +3,8 @@
 echo "."
 echo "."
 echo "."
-echo "--------STARTING cluster-init-user.sh"
+echo "--------$(hostname)/STARTING cluster-init-user.sh"
+echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
 echo "--------$(hostname)/cluster-init-user.sh: executing at $(hostname)"
 
 if [ -d "/home/devops/" ] 

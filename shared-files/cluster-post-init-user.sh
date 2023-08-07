@@ -4,7 +4,8 @@
 echo "."
 echo "."
 echo "."
-echo "--------STARTING cluster-init-user.sh"
+echo "--------$(hostname)/STARTING cluster-init-user.sh"
+echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
 echo "--------cluster-init-user.sh: executing at $(hostname)"
 sudo -H -u devops bash -c '
 echo "--------cluster-init-user.sh: executing at $(hostname)"
@@ -29,6 +30,8 @@ do
     sudo lxc exec cd-db-0$i -- sh /tmp/.cb/worker-init-user.sh
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/init_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
+    sudo lxc exec cd-db-0$i -- chown -R devops:devops /home/devops/
+    sudo lxc exec cd-db-0$i -- chmode -R 775 /home/devops/
     sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
 done
 rm -f /home/devops/.cb/p

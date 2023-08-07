@@ -4,12 +4,14 @@
 # USAGE:
 # execute below in at any host (emp-09, emp-10, emp-11) 
 # cd ~/ansible-testbed && git pull && sh ~/ansible-testbed/shared-files/host-update-cluster.sh
-bash -c '
+
+sudo -H -u devops bash -c  '
 # executed at the physical machine
 echo "."
 echo "."
 echo "."
 echo "--------$(hostname)/STARTING host-update-cluster.sh"
+echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
 echo "--------$(hostname)/host-update-cluster.sh: executing at the physical machine"
 adminUser="emp-09"
 operator="devops"
@@ -46,5 +48,7 @@ echo "--------$(hostname)/host-update-cluster.sh: pushing init_build_cluster.js 
 lxc file push /home/$adminUser/ansible-testbed/shared-files/build_cluster.js    $clusterMember/home/devops/.cb/mysql-shell-scripts/build_cluster.js
 echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh      $clusterMember/home/$operator/.cb/worker-init-user.sh
+sudo lxc exec $clusterMember -- chown -R devops:devops /home/devops/
+sudo lxc exec $clusterMember -- chmode -R 775 /home/devops/
 lxc exec $clusterMember -- sh /home/$operator/.cb/cluster-update-worker.sh
 '

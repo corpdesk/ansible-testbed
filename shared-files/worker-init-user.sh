@@ -5,6 +5,7 @@ echo "."
 echo "."
 echo "."
 echo "--------$(hostname)/STARTING worker-init-user.sh"
+echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
 if [ -d "/home/devops/" ] 
 then
     echo "--------$(hostname)/worker-init-user.sh: /home/devops/ dir exists"

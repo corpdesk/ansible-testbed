@@ -7,6 +7,7 @@ echo "."
 echo "."
 echo "."
 echo "--------$(hostname)/STARTING cluster-update-worker.sh"
+echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
 echo "--------$(hostname)/cluster-update-worker.sh: executing at the cluster member $clusterMember"
 echo "--------$(hostname)/cluster-update-worker.sh: setting up initial user for $clusterMember"
 echo "--------$(hostname)/cluster-update-worker.sh: check if cluster-init-user.sh is avilable"
@@ -23,7 +24,8 @@ then
 else
     echo "--------$(hostname)/cluster-update-worker.sh: updating source files for $clusterMember"
     cd /home/$operator/
-    git clone https://github.com/corpdesk/ansible-testbed.git
+    # git clone https://github.com/corpdesk/ansible-testbed.git
+    sudo -H -u devops bash -c 'git clone https://github.com/corpdesk/ansible-testbed.git'
 fi
 
 # for i in {1..3}
@@ -48,5 +50,7 @@ do
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/init_cluster.js             cd-db-0$j/home/devops/.cb/mysql-shell-scripts/init_cluster.js
     echo "--------$(hostname)/cluster-update-worker.sh: pushing init_build_cluster.js from $clusterMember to cd-db-0$j"
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js            cd-db-0$j/home/devops/.cb/mysql-shell-scripts/build_cluster.js
+    sudo lxc exec cd-db-0$j -- chown -R devops:devops /home/devops/
+    sudo lxc exec cd-db-0$j -- chmode -R 775 /home/devops/
     i=$(($i + 1))
 done

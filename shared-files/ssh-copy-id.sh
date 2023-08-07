@@ -4,6 +4,7 @@ echo "."
 echo "."
 echo "."
 echo "--------$(hostname)/STARTING ssh-copy-id.sh"
+echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
 cname=$1
 echo "--------$(hostname)/ssh-copy-id.sh: ssh-copy-id for $cname"
 cip=$(sudo lxc list -c4 --format csv $cname | cut -d' ' -f1)
