@@ -12,6 +12,17 @@ echo "--------$(hostname)/ssh-copy-id.sh: $cname ip address is $cip"
 # echo "ip for $cname is $cip"
 # ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip
 echo "--------$(hostname)/ssh-copy-id.sh: current directory $(pwd)"
-sudo -H -u devops bash -c 'sshpass -f "/home/devops/.cb/p" ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip'
+sudo -H -u devops bash -c '
+
+if [ -f "/home/devops/.ssh/id_rsa" ] 
+then
+    echo "--------cluster-init-user.sh: ssh keys already exists"
+else
+    echo "--------cluster-init-user.sh: creating ssh keys"
+    ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
+fi
+
+sshpass -f "/home/devops/.cb/p" ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip
+'
 
 
