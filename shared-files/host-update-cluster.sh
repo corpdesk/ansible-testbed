@@ -40,8 +40,6 @@ lxc file push /home/$adminUser/ansible-testbed/shared-files/pre-init-user.sh  $c
 lxc exec $clusterMember -- sh /tmp/cluster-init-user.sh
 # ----------------------------------------------
 
-
-
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/cluster-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-init-user.sh   $clusterMember/home/$operator/.cb/cluster-init-user.sh 
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/p from $adminUser to $clusterMember"
