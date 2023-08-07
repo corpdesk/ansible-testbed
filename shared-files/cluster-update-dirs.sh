@@ -1,7 +1,14 @@
 #!/bin/bash
 
 # script executed at a cluster member (ansible controller) assuming initial user(devops) has alreaydy been setup
-sudo -H -u devops bash -c '
+clusterMember="routed-93"
+lxc exec $clusterMember -- sudo -H -u devops bash -c '
+clusterMember="routed-93"
+echo "."
+echo "."
+echo "."
+echo "--------STARTING cluster-update-dirs.sh"
+echo "--------executing at the cluster member $clusterMember"
 if [ -d "/home/devops/ansible-testbed" ] 
 then
     echo "--------cloud-brix files will be updated at $(hostname)"
