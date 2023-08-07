@@ -2,8 +2,8 @@
 
 # script executed at a cluster member (ansible controller) assuming initial user(devops) has alreaydy been setup
 sudo -H -u devops bash -c '
-echo " ...starting post initial user creation"
-echo " initial user: $USER, uid=$UID"
+echo "--------starting post initial user creation"
+echo "--------initial user: $USER, uid=$UID"
 
 cd ~
 if [ -f "/home/devops/.ssh/id_rsa" ] 
