@@ -37,8 +37,8 @@ do
     sudo lxc exec cd-db-0$j -- rm -f /home/devops/.cb/worker-init-user.sh
     sudo lxc exec cd-db-0$j -- rm -f /home/devops/.cb/mysql-shell-scripts/init_cluster.js
     sudo lxc exec cd-db-0$j -- rm -f /home/devops/.cb/mysql-shell-scripts/build_cluster.js
-    echo "--------$(hostname)/cluster-update-worker.sh: pushing shared-files/worker-pre-init-user.sh from $clusterMember to cd-db-0$j"
-    lxc file push home/$operator/.cb/worker-pre-init-user.sh  cd-db-0$j/home/$operator/.cb/worker-pre-init-user.sh
+    echo "--------$(hostname)/cluster-update-worker.sh: pushing shared-files/pre-init-user.sh from $clusterMember to cd-db-0$j"
+    lxc file push home/$operator/.cb/pre-init-user.sh  cd-db-0$j/home/$operator/.cb/pre-init-user.sh
     sudo lxc exec cd-db-0$j -- sh /tmp/.cb/worker-init-user.sh
     echo "--------$(hostname)/cluster-update-worker.sh: pushing shared-files/p from $clusterMember to cd-db-0$j"
     lxc file push /home/$operator/.cb/p                        cd-db-0$j/home/$operator/.cb/p

@@ -27,9 +27,21 @@ else
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
 
+# ----------------------------------------------
+echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
+lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh  $clusterMember/tmp/worker-init-user.sh
 
-echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/worker-pre-init-user.sh from $adminUser to $clusterMember"
-lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-pre-init-user.sh  $clusterMember/home/$operator/.cb/worker-pre-init-user.sh
+echo "--------$(hostname)/host-update-cluster.sh: pushing cluster-init-user.sh from $adminUser to $clusterMember"
+lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-init-user.sh  $clusterMember/tmp/cluster-init-user.sh
+
+echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/pre-init-user.sh from $adminUser to $clusterMember"
+lxc file push /home/$adminUser/ansible-testbed/shared-files/pre-init-user.sh  $clusterMember/tmp/pre-init-user.sh
+
+lxc exec $clusterMember -- sh /tmp/cluster-init-user.sh
+# ----------------------------------------------
+
+
+
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/cluster-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-init-user.sh   $clusterMember/home/$operator/.cb/cluster-init-user.sh 
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/p from $adminUser to $clusterMember"
