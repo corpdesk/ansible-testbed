@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # use this on physical machine to update files
+# USAGE:
+# execute below in at any host (emp-09, emp-10, emp-11) 
+# cd ~/ansible-testbed && git pull && sh ~/ansible-testbed/shared-files/host-update-cluster.sh
 bash -c '
 # executed at the physical machine
 echo "."

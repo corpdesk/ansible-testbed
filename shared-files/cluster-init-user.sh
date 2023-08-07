@@ -1,4 +1,5 @@
 #!/bin/bash
+
 echo "."
 echo "."
 echo "."
@@ -30,8 +31,13 @@ sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo systemctl restart ssh
 
-for i in {1..3}
+# for i in {1..3}
+$count=3
+i=0
+while [ "$i" -lt $count ]
 do
-    echo "--------$(hostname)/cluster-init-user.sh: ssh-copy-id to cd-db-0$i"
-    sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
+    j=$(($i + 1))
+    echo "--------$(hostname)/cluster-init-user.sh: ssh-copy-id to cd-db-0$j"
+    sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$j
+    i=$(($i + 1))
 done
