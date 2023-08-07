@@ -11,6 +11,7 @@ echo "--------$(hostname)/cluster-update-worker.sh: executing at the cluster mem
 echo "--------$(hostname)/cluster-update-worker.sh: setting up initial user for $clusterMember"
 echo "--------$(hostname)/cluster-update-worker.sh: check if cluster-init-user.sh is avilable"
 ls -la /home/devops/.cb/
+git config --global --add safe.directory /home/devops/ansible-testbed
 sh /home/devops/.cb/cluster-init-user.sh
 if [ -d "/home/$operator/ansible-testbed" ] 
 then

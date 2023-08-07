@@ -18,7 +18,7 @@ if [ -d "/home/$adminUser/ansible-testbed" ]
 then
     echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for $adminUser will be updated"
     cd /home/$adminUser/ansible-testbed
-    git pull
+    git fetch -all
     cd /home/$adminUser/
 else
     echo "--------$(hostname)/host-update-cluster.sh: updating source files for $adminUser"
