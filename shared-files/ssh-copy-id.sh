@@ -19,9 +19,10 @@ then
     echo "--------cluster-init-user.sh: ssh keys already exists"
 else
     echo "--------cluster-init-user.sh: creating ssh keys"
-    ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
+    # ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
+    sh /home/devops/.cb/ssh-key.sh devops
 fi
-
+echo "cmd: sshpass -f /home/devops/.cb/p ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip"
 sshpass -f "/home/devops/.cb/p" ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip
 '
 

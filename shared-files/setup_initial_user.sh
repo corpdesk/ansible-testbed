@@ -43,9 +43,9 @@ else
     sudo mkdir -p /home/$initialUser/.ssh
     # sudo touch /home/$initialUser/.ssh/authorized_keys
     
-    sudo ssh-keygen -t rsa -b 2048 -f /home/$initialUser/.ssh/id_rsa -q -N ""
-    sudo chown $initialUser /home/$initialUser/.ssh
-    sudo chmod -R 700 /home/$initialUser/.ssh  #this is important.
+    # sudo ssh-keygen -t rsa -b 2048 -f /home/$initialUser/.ssh/id_rsa -q -N ""
+    # sudo chown $initialUser /home/$initialUser/.ssh
+    # sudo chmod -R 700 /home/$initialUser/.ssh  #this is important.
     sudo chmod -R 755 /home/$initialUser
     # sudo chmod 600 /home/$initialUser/.ssh/authorized_keys  #this is important.
     sudo mkdir /home/$initialUser/vagrant-deploy

@@ -17,7 +17,8 @@ then
     echo "--------cluster-init-user.sh: ssh keys already exists"
 else
     echo "--------cluster-init-user.sh: creating ssh keys"
-    ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
+    # ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
+    sh /home/devops/.cb/ssh-key.sh devops
 fi
 
 for i in {1..3}
