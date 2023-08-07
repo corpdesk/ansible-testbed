@@ -39,7 +39,7 @@ sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/
 sudo systemctl restart ssh
 
 # for i in {1..3}
-$count=3
+count=3
 i=0
 while [ $i -lt $count ]
 do
