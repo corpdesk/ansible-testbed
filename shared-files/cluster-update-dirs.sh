@@ -18,6 +18,7 @@ then
     cd /home/devops/
 else
     echo "--------cluster-update-dirs.sh: updating source files at $(hostname)"
+    cd /home/devops/
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
 
