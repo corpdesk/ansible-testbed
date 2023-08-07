@@ -1,5 +1,9 @@
 #!/bin/bash
-
+echo "."
+echo "."
+echo "."
+echo "--------STARTING cluster-init-user.sh"
+echo "--------executing at $(hostname)"
 sudo deluser devops
 sudo rm -r -f /home/devops
 # add devops user

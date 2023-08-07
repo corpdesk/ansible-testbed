@@ -1,16 +1,22 @@
 #!/bin/bash
 
 # script executed at a cluster member (ansible controller) assuming initial user(devops) has alreaydy been setup
+echo "."
+echo "."
+echo "."
+echo "--------STARTING cluster-init-user.sh"
+echo "--------cluster-init-user.sh: executing at $(hostname)"
 sudo -H -u devops bash -c '
-echo "--------starting post initial user creation"
-echo "--------initial user: $USER, uid=$UID"
+echo "--------cluster-init-user.sh: executing at $(hostname)"
+echo "--------cluster-init-user.sh: starting post initial user creation"
+echo "--------cluster-init-user.sh: initial user: $USER, uid=$UID"
 
 cd ~
 if [ -f "/home/devops/.ssh/id_rsa" ] 
 then
-    echo "--------ssh keys already exists"
+    echo "--------cluster-init-user.sh: ssh keys already exists"
 else
-    echo "--------creating ssh keys"
+    echo "--------cluster-init-user.sh: creating ssh keys"
     ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
 fi
 

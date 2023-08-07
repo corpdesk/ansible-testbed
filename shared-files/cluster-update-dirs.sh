@@ -8,6 +8,7 @@ echo "."
 echo "."
 echo "."
 echo "--------STARTING cluster-update-dirs.sh"
+echo "--------executing at $(hostname)"
 echo "--------cluster-update-dirs.sh: executing at the cluster member $clusterMember"
 if [ -d "/home/devops/ansible-testbed" ] 
 then
