@@ -37,6 +37,19 @@ sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo systemctl restart ssh
 
+if [ -d "/home/$adminUser/ansible-testbed" ] 
+then
+    echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for $adminUser will be updated"
+    cd /home/$adminUser/ansible-testbed
+    sudo -H -u devops bash -c 'git fetch --all'
+    cd /home/$adminUser/
+else
+    echo "--------$(hostname)/host-update-cluster.sh: updating source files for $adminUser"
+    # git clone https://github.com/corpdesk/ansible-testbed.git
+    sudo -H -u devops bash -c 'git clone https://github.com/corpdesk/ansible-testbed.git'
+fi
+
+
 
 # ----------------------------------------------
 # initialize worker node

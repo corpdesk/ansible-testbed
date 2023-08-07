@@ -34,3 +34,4 @@ sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo systemctl restart ssh
+
