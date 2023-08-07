@@ -5,12 +5,19 @@ echo "."
 echo "."
 echo "--------STARTING cluster-init-user.sh"
 echo "--------$(hostname)/cluster-init-user.sh: executing at $(hostname)"
-echo "--------$(hostname)/cluster-init-user.sh: removing user devops"
-sudo deluser devops
-sudo rm -r -f /home/devops
-# add devops user
-echo "--------$(hostname)/cluster-init-user.sh: adding user devops"
-sudo useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+
+if [ -d "/home/devops/" ] 
+then
+    echo "--------$(hostname)/cluster-init-user.sh: /home/devops/ dir exists"
+else
+    echo "--------$(hostname)/cluster-init-user.sh: removing user devops"
+    sudo deluser devops
+    sudo rm -r -f /home/devops
+    # add devops user
+    echo "--------$(hostname)/cluster-init-user.sh: adding user devops"
+    sudo useradd -m -p $(openssl passwd -1 yU0B14NC1PdE) devops
+fi
+
 if [ -d "/home/devops/.cb/mysql-shell-scripts/" ] 
 then
     echo "--------$(hostname)/cluster-init-user.sh: /home/devops/.cb/mysql-shell-scripts/ dir exists"
@@ -34,7 +41,7 @@ sudo systemctl restart ssh
 # for i in {1..3}
 $count=3
 i=0
-while [ "$i" -lt $count ]
+while [ $i -lt $count ]
 do
     j=$(($i + 1))
     echo "--------$(hostname)/cluster-init-user.sh: ssh-copy-id to cd-db-0$j"
