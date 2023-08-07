@@ -12,6 +12,6 @@ echo "--------$(hostname)/ssh-copy-id.sh: $cname ip address is $cip"
 # echo "ip for $cname is $cip"
 # ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip
 echo "--------$(hostname)/ssh-copy-id.sh: current directory $(pwd)"
-sshpass -f "/home/devops/.cb/p" ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip
+sudo -H -u devops bash -c 'sshpass -f "/home/devops/.cb/p" ssh-copy-id -i /home/devops/.ssh/id_rsa.pub devops@$cip'
 
 
