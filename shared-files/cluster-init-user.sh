@@ -71,6 +71,6 @@ do
 
     # ssh copy to app container
     echo "--------$(hostname)/cluster-init-user.sh: ssh-copy-id to cd-db-0$j"
-    sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$j
+    sh /tmp/ssh-copy-id.sh cd-db-0$j
     i=$(($i + 1))
 done
