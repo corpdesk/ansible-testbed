@@ -37,6 +37,7 @@ echo "--------$(hostname)/cluster-init-user.sh: setting up ssh access"
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 sudo systemctl restart ssh
+mkdir -p /home/devops/.ssh
 
 
 if [ -f "/home/devops/.ssh/id_rsa" ] 

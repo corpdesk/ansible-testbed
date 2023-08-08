@@ -27,7 +27,32 @@ else
     git clone https://github.com/corpdesk/ansible-testbed.git
 fi
 
-# ----------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------------
+# DELETE INITIAL FILES FROM $clusterMember/tmp DIRECTORY
+# -------------------------------------------------------------------------------------------------------------------------------
+echo "--------$(hostname)/host-update-cluster.sh: remove worker-init-user.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/worker-init-user.sh
+
+echo "--------$(hostname)/host-update-cluster.sh: remove cluster-init-user.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/cluster-init-user.sh
+
+echo "--------$(hostname)/host-update-cluster.sh: remove shared-files/pre-init-user.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/pre-init-user.sh
+
+echo "--------$(hostname)/host-update-cluster.sh: remove shared-files/ssh-key.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/ssh-key.sh
+
+echo "--------$(hostname)/host-update-cluster.sh: remove shared-files/ssh-copy-id.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/ssh-copy-id.sh
+
+echo "--------$(hostname)/host-update-cluster.sh: remove shared-files/p from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/p
+
+
+
+# -------------------------------------------------------------------------------------------------------------------------------
+# PUSH INITIAL FILES TO $clusterMember/tmp DIRECTORY
+# -------------------------------------------------------------------------------------------------------------------------------
 echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh  $clusterMember/tmp/worker-init-user.sh
 
@@ -48,8 +73,11 @@ lxc file push /home/$adminUser/ansible-testbed/shared-files/p  $clusterMember/tm
 
 lxc exec $clusterMember -- sh /tmp/pre-init-user.sh
 lxc exec $clusterMember -- sh /tmp/cluster-init-user.sh
-# ----------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------------
 
+# -------------------------------------------------------------------------------------------------------------------------------
+# PUSH POST-INITIAL FILES TO $clusterMember/home/$operator/.cb/ DIRECTORY
+# -------------------------------------------------------------------------------------------------------------------------------
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/cluster-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-init-user.sh   $clusterMember/home/$operator/.cb/cluster-init-user.sh 
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/p from $adminUser to $clusterMember"

@@ -24,7 +24,7 @@ else
     # ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -q -N ""
     sh /home/devops/.cb/ssh-key.sh devops
     echo "--------ssh-copy-id: check if key exists after ssh-key.sh"
-    tree /home/devops/.ssh
+    tree /home/devops/.ssh/
 fi
 
 echo "--------$(hostname)/ssh-copy-id: whoami: $(whoami)"
