@@ -24,14 +24,14 @@ else
     mkdir -p /home/devops/.cb/mysql-shell-scripts/
 fi
 
-sudo chmod -R 755 /home/devops/
+chmod -R 755 /home/devops/
 # escalate devops to sudoer
-sudo usermod -aG sudo devops
-sudo cp /etc/sudoers /etc/sudoers.backup
+usermod -aG sudo devops
+cp /etc/sudoers /etc/sudoers.backup
 # suppress password prompt on switch to user
-sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
+bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
 # enable password authentication for ssh connection
-sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-sudo systemctl restart ssh
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+systemctl restart ssh
 
