@@ -180,9 +180,9 @@
         line: "{{ item }}"
       with_items:
         "{{ cluster_hosts }}"
-        - "240.93.0.172 cd-db-01"
-        - "240.94.0.155 cd-db-02"
-        - "240.95.0.221 cd-db-03"
+        # - "240.93.0.172 cd-db-01"
+        # - "240.94.0.155 cd-db-02"
+        # - "240.95.0.221 cd-db-03"
 
     # sudo chmod -R 755 /home/devops/vagrant-deploy
     # chown -R devops /home/devops/vagrant-deploy
