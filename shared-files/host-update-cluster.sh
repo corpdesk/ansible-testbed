@@ -79,7 +79,11 @@ lxc file push /home/$adminUser/ansible-testbed/shared-files/p  $clusterMember/tm
 
 echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
 lxc exec $clusterMember -- rm -f /tmp/worker-init-user.sh
-lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh      $clusterMember/tmp/worker-init-user.sh
+lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh  $clusterMember/tmp/worker-init-user.sh
+
+echo "--------$(hostname)/host-update-cluster.sh: pushing cluster-update-dirs.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/cluster-update-dirs.sh
+lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-update-dirs.sh  $clusterMember/tmp/cluster-update-dirs.sh
 
 lxc exec $clusterMember -- sh /tmp/cluster-init-user.sh
 # -------------------------------------------------------------------------------------------------------------------------------
@@ -95,10 +99,6 @@ echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/cluster-u
 lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-update-worker.sh $clusterMember/home/$operator/.cb/cluster-update-worker.sh
 echo "--------$(hostname)/host-update-cluster.sh: moving cluster-update-dirs.sh to controller machine"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-update-dirs.sh   $clusterMember/home/$operator/.cb/cluster-update-dirs.sh
-echo "--------$(hostname)/host-update-cluster.sh: updating $clusterMember directories"
-
-sh /home/$adminUser/ansible-testbed/shared-files/cluster-update-dirs.sh
-
 echo "--------$(hostname)/host-update-cluster.sh: pushing init_cluster.js from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/init_cluster.js     $clusterMember/home/devops/.cb/mysql-shell-scripts/init_cluster.js
 echo "--------$(hostname)/host-update-cluster.sh: pushing init_build_cluster.js from $adminUser to $clusterMember"

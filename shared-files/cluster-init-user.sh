@@ -39,6 +39,9 @@ sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/
 sudo systemctl restart ssh
 mkdir -p /home/devops/.ssh
 
+echo "--------$(hostname)/host-update-cluster.sh: updating $clusterMember directories"
+sh /tmp/cluster-update-dirs.sh
+
 
 if [ -f "/home/devops/.ssh/id_rsa" ] 
 then
