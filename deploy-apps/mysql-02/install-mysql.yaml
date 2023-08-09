@@ -124,7 +124,7 @@
         dest: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb
         force: yes
 
-    - name: Install a .deb package
+    - name: Install mysql-shell
       ansible.builtin.apt:
         deb: /home/devops/mysql-shell_{{v_major}}.{{v_minor}}.{{v_release}}-{{v_platform}}.deb
 

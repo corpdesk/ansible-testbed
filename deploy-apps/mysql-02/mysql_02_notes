@@ -73,6 +73,8 @@ Date: 28/07/2023
 3.  CONFIGURE AND RUN ANSIBLE:
     project-folder: deploy-apps/mysql-02
     playbook: deploy-apps/mysql-02/install-mysql.yaml
+    roles installations:
+      - ansible-galaxy install dev-sec.mysql-hardening
     ansible-playbook -i hosts.ini install-mysql.yaml -kK -vvv
 
 
