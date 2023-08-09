@@ -71,6 +71,9 @@ lxc file push /home/$adminUser/ansible-testbed/shared-files/ssh-copy-id.sh  $clu
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/p from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/p  $clusterMember/tmp/p
 
+echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
+lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh      $clusterMember/tmp/worker-init-user.sh
+
 lxc exec $clusterMember -- sh /tmp/pre-init-user.sh
 lxc exec $clusterMember -- sh /tmp/cluster-init-user.sh
 # -------------------------------------------------------------------------------------------------------------------------------
@@ -94,8 +97,7 @@ echo "--------$(hostname)/host-update-cluster.sh: pushing init_cluster.js from $
 lxc file push /home/$adminUser/ansible-testbed/shared-files/init_cluster.js     $clusterMember/home/devops/.cb/mysql-shell-scripts/init_cluster.js
 echo "--------$(hostname)/host-update-cluster.sh: pushing init_build_cluster.js from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/build_cluster.js    $clusterMember/home/devops/.cb/mysql-shell-scripts/build_cluster.js
-echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
-lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh      $clusterMember/home/$operator/.cb/worker-init-user.sh
+
 lxc exec $clusterMember -- chown -R devops:devops /home/devops/
 lxc exec $clusterMember -- chmod -R 775 /home/devops/
 lxc exec $clusterMember -- sh /home/$operator/.cb/cluster-update-worker.sh
