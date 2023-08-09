@@ -62,64 +62,50 @@ else
 fi
 
 
-if [ -d "/home/$operator/ansible-testbed" ] 
-then
-    echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for $operator will be updated"
-    cd /home/$operator/ansible-testbed
-    sudo -H -u devops bash -c 'git fetch --all'
-    cd /home/$operator/
-else
-    echo "--------$(hostname)/host-update-cluster.sh: updating source files for $operator"
-    # git clone https://github.com/corpdesk/ansible-testbed.git
-    sudo -H -u devops bash -c 'git clone https://github.com/corpdesk/ansible-testbed.git'
-fi
+# # ----------------------------------------------
+# # initialize worker node
 
+# # for i in {1..3}
+# count=3
+# i=0
+# while [ $i -lt $count ]
+# do
+#     j=$(($i + 1))
 
+#     # -----------------------------------------------------
+#     # REMOVE FILES
+#     # -----------------------------------------------------
+#     echo "--------$(hostname)/cluster-init-user.sh: delete file pre-init-user.sh from cd-db-0$j"
+#     lxc exec cd-db-0$j -- rm -f /tmp/pre-init-user.sh
+#     echo "--------$(hostname)/cluster-init-user.sh: delete file worker-init-user.sh from cd-db-0$j"
+#     lxc exec cd-db-0$j -- rm -f /tmp/worker-init-user.sh
 
-# ----------------------------------------------
-# initialize worker node
+#     # -----------------------------------------------------
+#     # ADD FILES
+#     # -----------------------------------------------------
+#     echo "--------$(hostname)/cluster-init-user.sh: pushing pre-init-user.sh from cluster member to cd-db-0$j"
+#     lxc file push /tmp/pre-init-user.sh  cd-db-0$j/tmp/pre-init-user.sh
+#     echo "--------$(hostname)/cluster-init-user.sh: pushing worker-init-user.sh from clulster member to  cd-db-0$j"
+#     lxc file push /tmp/worker-init-user.sh  cd-db-0$j/tmp/worker-init-user.sh
 
-# for i in {1..3}
-count=3
-i=0
-while [ $i -lt $count ]
-do
-    j=$(($i + 1))
-
-    # -----------------------------------------------------
-    # REMOVE FILES
-    # -----------------------------------------------------
-    echo "--------$(hostname)/cluster-init-user.sh: delete file pre-init-user.sh from cd-db-0$j"
-    lxc exec cd-db-0$j -- rm -f /tmp/pre-init-user.sh
-    echo "--------$(hostname)/cluster-init-user.sh: delete file worker-init-user.sh from cd-db-0$j"
-    lxc exec cd-db-0$j -- rm -f /tmp/worker-init-user.sh
-
-    # -----------------------------------------------------
-    # ADD FILES
-    # -----------------------------------------------------
-    echo "--------$(hostname)/cluster-init-user.sh: pushing pre-init-user.sh from cluster member to cd-db-0$j"
-    lxc file push /tmp/pre-init-user.sh  cd-db-0$j/tmp/pre-init-user.sh
-    echo "--------$(hostname)/cluster-init-user.sh: pushing worker-init-user.sh from clulster member to  cd-db-0$j"
-    lxc file push /tmp/worker-init-user.sh  cd-db-0$j/tmp/worker-init-user.sh
-
-    # -----------------------------------------------------
-    # SET PERMISSIONS
-    # -----------------------------------------------------
-    echo "--------$(hostname)/cluster-init-user.sh: delete file pre-init-user.sh from cd-db-0$j"
-    lxc exec cd-db-0$j -- chmod 775 /tmp/pre-init-user.sh
-    lxc exec cd-db-0$j -- chown root:root /tmp/pre-init-user.sh
-    echo "--------$(hostname)/cluster-init-user.sh: delete file worker-init-user.sh from cd-db-0$j"
-    lxc exec cd-db-0$j -- chmod 775 /tmp/worker-init-user.sh
-    lxc exec cd-db-0$j -- chown root:root /tmp/pre-init-user.sh
+#     # -----------------------------------------------------
+#     # SET PERMISSIONS
+#     # -----------------------------------------------------
+#     echo "--------$(hostname)/cluster-init-user.sh: delete file pre-init-user.sh from cd-db-0$j"
+#     lxc exec cd-db-0$j -- chmod 775 /tmp/pre-init-user.sh
+#     lxc exec cd-db-0$j -- chown root:root /tmp/pre-init-user.sh
+#     echo "--------$(hostname)/cluster-init-user.sh: delete file worker-init-user.sh from cd-db-0$j"
+#     lxc exec cd-db-0$j -- chmod 775 /tmp/worker-init-user.sh
+#     lxc exec cd-db-0$j -- chown root:root /tmp/pre-init-user.sh
 
     
-    echo "--------$(hostname)/cluster-init-user.sh: running pre-init-user.sh on cd-db-0$j"
-    lxc exec cd-db-0$j -- sh /tmp/pre-init-user.sh
-    echo "--------$(hostname)/cluster-init-user.sh: running worker-init-user.sh cd-db-0$j"
-    lxc exec cd-db-0$j -- sh /tmp/worker-init-user.sh
+#     echo "--------$(hostname)/cluster-init-user.sh: running pre-init-user.sh on cd-db-0$j"
+#     lxc exec cd-db-0$j -- sh /tmp/pre-init-user.sh
+#     echo "--------$(hostname)/cluster-init-user.sh: running worker-init-user.sh cd-db-0$j"
+#     lxc exec cd-db-0$j -- sh /tmp/worker-init-user.sh
 
-    # ssh copy to app container
-    echo "--------$(hostname)/cluster-init-user.sh: ssh-copy-id to cd-db-0$j"
-    sh /tmp/ssh-copy-id.sh cd-db-0$j
-    i=$(($i + 1))
-done
+#     # ssh copy to app container
+#     echo "--------$(hostname)/cluster-init-user.sh: ssh-copy-id to cd-db-0$j"
+#     sh /tmp/ssh-copy-id.sh cd-db-0$j
+#     i=$(($i + 1))
+# done
