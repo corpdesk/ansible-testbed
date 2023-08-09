@@ -24,10 +24,10 @@ fi
 
 for i in {1..3}
 do
-    sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/worker-init-user.sh
+    # sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/worker-init-user.sh
     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/init_cluster.js
     sudo lxc exec cd-db-0$i -- rm -f /home/devops/.cb/mysql-shell-scripts/build_cluster.js
-    sudo lxc exec cd-db-0$i -- sh /tmp/.cb/worker-init-user.sh
+    # sudo lxc exec cd-db-0$i -- sh /home/devops/.cb/worker-init-user.sh
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/init_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
     sudo lxc exec cd-db-0$i -- chown -R devops:devops /home/devops/
