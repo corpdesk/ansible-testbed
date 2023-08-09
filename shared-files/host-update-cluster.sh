@@ -54,24 +54,31 @@ lxc exec $clusterMember -- rm -f /tmp/p
 # PUSH INITIAL FILES TO $clusterMember/tmp DIRECTORY
 # -------------------------------------------------------------------------------------------------------------------------------
 echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/worker-init-user.sh
 lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh  $clusterMember/tmp/worker-init-user.sh
 
 echo "--------$(hostname)/host-update-cluster.sh: pushing cluster-init-user.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/cluster-init-user.sh
 lxc file push /home/$adminUser/ansible-testbed/shared-files/cluster-init-user.sh  $clusterMember/tmp/cluster-init-user.sh
 
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/pre-init-user.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/pre-init-user.sh
 lxc file push /home/$adminUser/ansible-testbed/shared-files/pre-init-user.sh  $clusterMember/tmp/pre-init-user.sh
 
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/ssh-key.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/ssh-key.sh
 lxc file push /home/$adminUser/ansible-testbed/shared-files/ssh-key.sh  $clusterMember/tmp/ssh-key.sh
 
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/ssh-copy-id.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/sh-copy-id.sh
 lxc file push /home/$adminUser/ansible-testbed/shared-files/ssh-copy-id.sh  $clusterMember/tmp/ssh-copy-id.sh
 
 echo "--------$(hostname)/host-update-cluster.sh: pushing shared-files/p from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/p
 lxc file push /home/$adminUser/ansible-testbed/shared-files/p  $clusterMember/tmp/p
 
 echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
+lxc exec $clusterMember -- rm -f /tmp/worker-init-user.sh
 lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh      $clusterMember/tmp/worker-init-user.sh
 
 lxc exec $clusterMember -- sh /tmp/cluster-init-user.sh
