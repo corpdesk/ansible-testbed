@@ -85,10 +85,34 @@ i=0
 while [ $i -lt $count ]
 do
     j=$(($i + 1))
+
+    # -----------------------------------------------------
+    # REMOVE FILES
+    # -----------------------------------------------------
+    echo "--------$(hostname)/cluster-init-user.sh: delete file pre-init-user.sh from cd-db-0$j"
+    lxc exec cd-db-0$j -- rm -f /tmp/pre-init-user.sh
+    echo "--------$(hostname)/cluster-init-user.sh: delete file worker-init-user.sh from cd-db-0$j"
+    lxc exec cd-db-0$j -- rm -f /tmp/worker-init-user.sh
+
+    # -----------------------------------------------------
+    # ADD FILES
+    # -----------------------------------------------------
     echo "--------$(hostname)/cluster-init-user.sh: pushing pre-init-user.sh from cluster member to cd-db-0$j"
     lxc file push /tmp/pre-init-user.sh  cd-db-0$j/tmp/pre-init-user.sh
     echo "--------$(hostname)/cluster-init-user.sh: pushing worker-init-user.sh from clulster member to  cd-db-0$j"
     lxc file push /tmp/worker-init-user.sh  cd-db-0$j/tmp/worker-init-user.sh
+
+    # -----------------------------------------------------
+    # SET PERMISSIONS
+    # -----------------------------------------------------
+    echo "--------$(hostname)/cluster-init-user.sh: delete file pre-init-user.sh from cd-db-0$j"
+    lxc exec cd-db-0$j -- chmod 775 /tmp/pre-init-user.sh
+    lxc exec cd-db-0$j -- chown root:root /tmp/pre-init-user.sh
+    echo "--------$(hostname)/cluster-init-user.sh: delete file worker-init-user.sh from cd-db-0$j"
+    lxc exec cd-db-0$j -- chmod 775 /tmp/worker-init-user.sh
+    lxc exec cd-db-0$j -- chown root:root /tmp/pre-init-user.sh
+
+    
     echo "--------$(hostname)/cluster-init-user.sh: running pre-init-user.sh on cd-db-0$j"
     lxc exec cd-db-0$j -- sh /tmp/pre-init-user.sh
     echo "--------$(hostname)/cluster-init-user.sh: running worker-init-user.sh cd-db-0$j"

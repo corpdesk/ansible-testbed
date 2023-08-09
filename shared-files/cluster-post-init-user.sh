@@ -31,7 +31,7 @@ do
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/init_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/init_cluster.js
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js cd-db-0$i/home/devops/.cb/mysql-shell-scripts/build_cluster.js
     sudo lxc exec cd-db-0$i -- chown -R devops:devops /home/devops/
-    sudo lxc exec cd-db-0$i -- chmode -R 775 /home/devops/
+    sudo lxc exec cd-db-0$i -- chmod -R 775 /home/devops/
     sh /home/devops/ansible-testbed/shared-files/ssh-copy-id.sh cd-db-0$i
 done
 rm -f /home/devops/.cb/p

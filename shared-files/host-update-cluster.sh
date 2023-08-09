@@ -97,6 +97,6 @@ lxc file push /home/$adminUser/ansible-testbed/shared-files/build_cluster.js    
 echo "--------$(hostname)/host-update-cluster.sh: pushing worker-init-user.sh from $adminUser to $clusterMember"
 lxc file push /home/$adminUser/ansible-testbed/shared-files/worker-init-user.sh      $clusterMember/home/$operator/.cb/worker-init-user.sh
 sudo lxc exec $clusterMember -- chown -R devops:devops /home/devops/
-sudo lxc exec $clusterMember -- chmode -R 775 /home/devops/
+sudo lxc exec $clusterMember -- chmod -R 775 /home/devops/
 lxc exec $clusterMember -- sh /home/$operator/.cb/cluster-update-worker.sh
 '

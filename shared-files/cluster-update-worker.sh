@@ -34,9 +34,17 @@ i=0;
 while [ "$i" -lt $count ]
 do
     j=$(($i + 1))
+
+    # -------------------------------------------------------------------------------------------------------------------------------
+    # PUSH INITIAL FILES TO worker container /home/$operator/.cb/ DIRECTORY
+    # -------------------------------------------------------------------------------------------------------------------------------
     sudo lxc exec cd-db-0$j -- rm -f /home/devops/.cb/worker-init-user.sh
     sudo lxc exec cd-db-0$j -- rm -f /home/devops/.cb/mysql-shell-scripts/init_cluster.js
     sudo lxc exec cd-db-0$j -- rm -f /home/devops/.cb/mysql-shell-scripts/build_cluster.js
+
+    # -------------------------------------------------------------------------------------------------------------------------------
+    # PUSH INITIAL FILES TO worker container /home/$operator/.cb/ DIRECTORY
+    # -------------------------------------------------------------------------------------------------------------------------------
     echo "--------$(hostname)/cluster-update-worker.sh: pushing shared-files/pre-init-user.sh from $clusterMember to cd-db-0$j"
     lxc file push home/$operator/.cb/pre-init-user.sh  cd-db-0$j/home/$operator/.cb/pre-init-user.sh
     sudo lxc exec cd-db-0$j -- sh /tmp/.cb/worker-init-user.sh
@@ -51,6 +59,6 @@ do
     echo "--------$(hostname)/cluster-update-worker.sh: pushing init_build_cluster.js from $clusterMember to cd-db-0$j"
     sudo lxc file push /home/devops/.cb/mysql-shell-scripts/build_cluster.js            cd-db-0$j/home/devops/.cb/mysql-shell-scripts/build_cluster.js
     sudo lxc exec cd-db-0$j -- chown -R devops:devops /home/devops/
-    sudo lxc exec cd-db-0$j -- chmode -R 775 /home/devops/
+    sudo lxc exec cd-db-0$j -- chmod -R 775 /home/devops/
     i=$(($i + 1))
 done
