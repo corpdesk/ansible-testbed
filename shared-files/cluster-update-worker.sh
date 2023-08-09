@@ -18,8 +18,8 @@ if [ -d "/home/$operator/ansible-testbed" ]
 then
     echo "--------$(hostname)/cluster-update-worker.sh: cloud-brix files for $clusterMember will be updated"
     cd /home/$operator/ansible-testbed
-    # git fetch --all
-    git pull --force "@{u}:HEAD"
+    sudo -H -u devops bash -c 'git fetch --all'
+    # git pull --force "@{u}:HEAD"
     cd /home/$operator/
 else
     echo "--------$(hostname)/cluster-update-worker.sh: updating source files for $clusterMember"
