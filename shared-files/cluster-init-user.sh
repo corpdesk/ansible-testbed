@@ -49,17 +49,17 @@ else
 fi
 
 
-if [ -d "/home/$operator/ansible-testbed" ] 
-then
-    echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for $operator will be updated"
-    cd /home/$operator/ansible-testbed
-    sudo -H -u devops bash -c 'git fetch --all'
-    cd /home/$operator/
-else
-    echo "--------$(hostname)/host-update-cluster.sh: updating source files for $operator"
-    # git clone https://github.com/corpdesk/ansible-testbed.git
-    sudo -H -u devops bash -c 'git clone https://github.com/corpdesk/ansible-testbed.git'
-fi
+# if [ -d "/home/$operator/ansible-testbed" ] 
+# then
+#     echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for $operator will be updated"
+#     cd /home/$operator/ansible-testbed
+#     sudo -H -u devops bash -c 'git fetch --all'
+#     cd /home/$operator/
+# else
+#     echo "--------$(hostname)/host-update-cluster.sh: updating source files for $operator"
+#     # git clone https://github.com/corpdesk/ansible-testbed.git
+#     sudo -H -u devops bash -c 'git clone https://github.com/corpdesk/ansible-testbed.git'
+# fi
 
 
 # # ----------------------------------------------
