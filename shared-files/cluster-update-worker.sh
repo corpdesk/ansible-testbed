@@ -47,9 +47,12 @@ do
     # -------------------------------------------------------------------------------------------------------------------------------
     echo "--------$(hostname)/cluster-update-worker.sh: pushing shared-files/pre-init-user.sh from $clusterMember to cd-db-0$j"
     lxc file push /tmp/pre-init-user.sh  cd-db-0$j/tmp/pre-init-user.sh
-    sudo lxc exec cd-db-0$j -- sh /tmp/.cb/worker-init-user.sh
+    sudo lxc exec cd-db-0$j -- sh /tmp/worker-init-user.sh
     echo "--------$(hostname)/cluster-update-worker.sh: pushing shared-files/p from $clusterMember to cd-db-0$j"
-    lxc file push /tmp/p                        cd-db-0$j/tmp/p
+    # remove destination file
+    lxc exec cd-db-0$j -- rm -f /tmp/p
+    # send file
+    lxc file push /tmp/p cd-db-0$j/tmp/p
     echo "--------$(hostname)/cluster-update-worker.sh: pushing worker-init-user.sh from $clusterMember to cd-db-0$j"
     lxc file push /tmp/worker-init-user.sh      cd-db-0$j/tmp/worker-init-user.sh
     echo "--------$(hostname)/cluster-update-worker.sh: setting up initial user at cd-db-0$j"
