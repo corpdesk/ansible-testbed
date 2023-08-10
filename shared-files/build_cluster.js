@@ -1,3 +1,5 @@
+
+// Ref: https://www.percona.com/blog/setting-up-an-innodb-cluster-with-a-few-lines-of-code/
 print('InnoDB cluster set up\n');
 print('==================================\n');
 print('Setting up a Percona Server for MySQL - InnoDB cluster.\n\n');

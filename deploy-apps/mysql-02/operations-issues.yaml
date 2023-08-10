@@ -1,0 +1,24 @@
+
+emp-09@emp-09 ~> lxc exec routed-93 -- lxc exec cd-db-01 -- mysqlsh
+MySQL Shell 8.0.34
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+Creating a Classic session to 'root@localhost'
+MySQL Error 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)
+
+----------------------------------------------------
+
+root@cd-db-01 ~# mysqlsh
+MySQL Shell 8.0.34
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+Creating a Classic session to 'root@localhost'
+MySQL Error 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)

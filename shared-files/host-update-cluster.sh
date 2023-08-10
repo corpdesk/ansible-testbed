@@ -5,6 +5,12 @@
 # execute below in at any host (emp-09, emp-10, emp-11) 
 # cd ~/ansible-testbed && git pull && sh ~/ansible-testbed/shared-files/host-update-cluster.sh
 
+l1Hostname="emp-09"
+l1Operator="emp-09"
+
+l1Hostname="routed-93"
+l2Operator="devops"
+
 bash -c '
 # executed at the physical machine
 echo "."
@@ -13,9 +19,9 @@ echo "."
 echo "--------$(hostname)/STARTING host-update-cluster.sh"
 echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
 echo "--------$(hostname)/host-update-cluster.sh: executing at the physical machine"
-adminUser="emp-09"
-operator="devops"
-clusterMember="routed-93"
+adminUser=${l1Operator}
+operator=${l2Operator}
+clusterMember=${l1Hostname}
 if [ -d "/home/$adminUser/ansible-testbed" ] 
 then
     echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for $adminUser will be updated"

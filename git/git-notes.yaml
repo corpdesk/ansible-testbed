@@ -1,0 +1,6 @@
+DOWNLOADING SINGLE FILES:
+Ref: https://stackoverflow.com/questions/1125476/retrieve-a-single-file-from-a-repository
+Sample1: wget https://github.com/name/folder/file.zip?raw=true
+Sample2: curl --silent --request GET --header 'PRIVATE-TOKEN: replace_with_your_token' \
+'http://git.example.com/foo/bar.sql' --output /tmp/bar.sql
+Sample3: 

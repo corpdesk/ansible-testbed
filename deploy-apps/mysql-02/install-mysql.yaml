@@ -73,6 +73,7 @@
         host: "%"
         priv: "*.*:ALL,GRANT"
         state: present
+      ignore_errors: yes
 
     # # # ---------------------------------------------------------------------------
     # - name: Try to specify preference for mysql

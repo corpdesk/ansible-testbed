@@ -1,7 +1,4 @@
 ---------------------------------------------------------------------------------------
-Date: 28/07/2023
-
-
 
 1.  SETUP LOCAL REPOSITORY:
     - It is assumed lxd cluster is already set up and running
@@ -74,11 +71,70 @@ Date: 28/07/2023
     project-folder: deploy-apps/mysql-02
     playbook: deploy-apps/mysql-02/install-mysql.yaml
     roles installations:
-      - ansible-galaxy install dev-sec.mysql-hardening
+      - ansible-galaxy install -p ./roles dev-sec.mysql-hardening
+      - ignore_errors: yes # (apply where necessary)
     ansible-playbook -i hosts.ini install-mysql.yaml -kK -vvv
 
+--------------------------------------------------------------
+Testing: mysql -u devops -p
+Response:
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 127
+Server version: 8.0.33-0ubuntu0.22.04.4 (Ubuntu)
 
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
 
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+------------------------------------------------------------------------------------
+root@cd-db-01 ~ [1]# mysqlsh --uri mysql://devops:yU0B14NC1PdE@localhost:3306
+MySQL Shell 8.0.34
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+WARNING: Using a password on the command line interface can be insecure.
+Creating a Classic session to 'devops@localhost:3306'
+Fetching schema names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 133
+Server version: 8.0.33-0ubuntu0.22.04.4 (Ubuntu)
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  JS > 
+---------------------------------------------------------------------------------
+dba.checkInstanceConfiguration("devops@localhost:3306")
+var chk = dba.checkInstanceConfiguration("devops@localhost:3306");
+
+-------------------------------------------------
+dba.configureInstance("devops@localhost:3306")
+shell.connect("cd@cd-db-01:3306")
+-----------------------------------------------------------------
+mysqlsh --mysql -u devops -h localhost -P 3306
+mysqlsh --uri mysql://user@localhost:3306
+
+-----------------
+Automation Script: 
+  - https://www.percona.com/blog/setting-up-an-innodb-cluster-with-a-few-lines-of-code/
+
+-------------------------------------------------------------------------------
+RESTORE FROM SQL DUMP FILE:
+  
+  Get dumpfile:
+  - lxc file push /home/emp-09/Dump20220829.sql routed-93/home/devops/.cb/Dump20220829.sql
+  - lxc exec routed-93 -- lxc file push /home/devops/.cb/Dump20220829.sql cd-db-01/home/devops/.cb/Dump20220829.sql
+
+  Restore data:
+  - Ref: https://blog.devart.com/how-to-restore-mysql-database-from-backup.html
+  - devops@cd-db-01> mysql -u devops -p
+  - mysql> create database cd1213;
+  - mysql> use cd1213;
+  - mysql> source /home/devops/.cb/Dumpfile.sql;
 ---------------------------------------------------------------------------------------
 https://garutilorenzo.github.io/ansible-role-linux-mysql/
 https://github.com/garutilorenzo/ansible-role-linux-mysql
@@ -99,7 +155,7 @@ FLUSH PRIVILEGES;
 https://gist.github.com/rimiti/b1d2410504f8e6cb0b754f3dfd8d999f
 https://dev.mysql.com/doc/refman/8.0/en/checking-gpg-signature.html
 
-ansible-playbook -i hosts.ini install-mysql.yaml -kK -vvv
+Run ansible playbook: ansible-playbook -i hosts.ini install-mysql.yaml -kK -vvv
 
 
 
