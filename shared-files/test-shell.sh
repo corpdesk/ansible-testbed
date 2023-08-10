@@ -1,72 +1,71 @@
 #!/bin/bash
 
-# # executing concatenated commands
-# cmd1="echo xx"
-# cmd2="echo yy"
-# cmd="$cmd1; $cmd2"
-# bash -c "$cmd"
-# -----------------------------------------------------------
+# global variables
+export HOST_USER="emp-09"
+export HOST_NAME="emp-09"
+export CB_OPERATOR="devops"
+export CLUSTER_MEMBER="routee-93"
+export EXEC_FILE="host-update-cluster.sh"
+export SHARED_FILES_HOST="/home/${HOST_USER}/ansible-testbed/shared-files"
+export SHARED_FILES_CLUSTER_MEMBER="/home/${CB_OPERATOR}/ansible-testbed/shared-files"
 
-# # exported string variable & function output
-# **************************************************
-# export ENV_VAR="env-var"
-# fxPringSomething(){
-#     echo "fxSomething";
-# }
-# cmdHead='echo "."
-# echo "."
-# echo "."
-# echo "--------$(hostname)/STARTING host-update-cluster.sh"
-# echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
-# echo "--------$(hostname)/host-update-cluster.sh: executing at the physical machine"'
-# cmd2="echo ${ENV_VAR}"
-# cmd3="echo $(fxPringSomething)"
-# cmd="$cmdHead; $cmd2; $cmd3;"
-# bash -c "$cmd"
-# -----------------------------------------------------------------
 
-adminUser="emp-09"
-operator="devops"
-clusterMember="routed-93"
-export ENV_VAR="env-var"
-export HOST_USER=$adminUser
-export CB_OPERATOR=$operator
-export CLUSTER_MEMBER=$clusterMember
-
-fxPringSomething(){
-    echo "fxSomething";
-}
-
-# gitAnsibleTestbed='
-#     if [ -d "/home/emp-06/test/ansible-testbed" ] 
-#     then
-#         echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for ${HOST_USER}  will be updated"
-#         cd /home/emp-06/test/ansible-testbed
-#         git pull
-#         cd /home/emp-06/
-#     else
-#         mkdir -p /home/emp-06/test/
-#         cd /home/emp-06/test/
-#         echo "--------$(hostname)/host-update-cluster.sh: updating source files for ${HOST_USER}"
-#         git clone https://github.com/corpdesk/ansible-testbed.git
-#     fi'
-
-gitAnsibleTestbed='
+# print header
+cmdHead='
     source ./fx.sh
-    func1 love horror
-    func2 ball mystery
-    fxGitAnsibleTestbed'
+    fxHeader'
 
-cmdHead='echo "."
-echo "."
-echo "."
-echo "--------$(hostname)/STARTING host-update-cluster.sh"
-echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
-echo "--------$(hostname)/host-update-cluster.sh: executing at the physical machine"'
-cmd2="echo ${ENV_VAR}"
-cmdGitAnsibleTestbed="$gitAnsibleTestbed"
+# clone or update files
+cmdGit='
+    source ./fx.sh
+    fxSubHeader "Update files from Git"
+    fxGit "ansible-testbed" "https://github.com/corpdesk/ansible-testbed.git"'
 
-cmd="$cmdHead; $cmd2; $cmdGitAnsibleTestbed;"
+
+# push cb files to /tmp/ dir for cluster member
+cmdPushClusterFilesTmp='
+    source ./fx.sh
+    fxSubHeader "Move cb files to /tmp/ directory at ${CLUSTER_MEMBER}"
+    fxPushClusterTmpFile "fx.sh"                
+    fxPushClusterTmpFile "worker-init-user.sh"  
+    fxPushClusterTmpFile "cluster-init-user.sh" 
+    fxPushClusterTmpFile "pre-init-user.sh"     
+    fxPushClusterTmpFile "ssh-key.sh"           
+    fxPushClusterTmpFile "ssh-copy-id.sh"       
+    fxPushClusterTmpFile "p"'
+
+# execute init-user in cluster member
+cmdInitClusterUser='
+    source ./fx.sh
+    fxSubHeader "Execute ${EXEC_FILE} at ${CLUSTER_MEMBER}"
+    fxExecClusterTmpFile "cluster-init-user.sh"'
+
+# push cb files to ~/.cb/ dir for cluster member
+cmdPushClusterFilesCb='
+    source ./fx.sh
+    fxSubHeader "PUSH POST-INITIAL FILES TO $clusterMember/home/$operator/.cb/ DIRECTORY"
+    fxPushClusterCbFile "cluster-init-user.sh"          "" 
+    fxPushClusterCbFile "p"                             ""
+    fxPushClusterCbFile "cluster-update-worker.sh"      ""
+    fxPushClusterCbFile "cluster-update-dirs.sh"        ""
+    fxPushClusterCbFile "init_cluster.js"               ""
+    fxPushClusterCbFile "init_build_cluster.js"         "mysql-shell-scripts/"
+    fxPushClusterCbFile "build_cluster.js"              "mysql-shell-scripts/"'
+
+# reset permissions for operator in the cluster member   
+cmdClusterMemberResetPerm='
+    source ./fx.sh
+    fxSubHeader "PUSH POST-INITIAL FILES TO $clusterMember/home/$operator/.cb/ DIRECTORY"
+    fxClusterMemberResetPerm'
+
+# do cb bootstrap the worker containers
+# containers would be for specific project eg db containers for given projects
+cmdExecClusterFilesCb='
+    source ./fx.sh
+    fxSubHeader "Execute ${EXEC_FILE} at ${CLUSTER_MEMBER}"
+    fxExecClusterCbFile "cluster-update-worker.sh"'
+    
+# run scripts in this file
+cmd="$cmdHead;$cmdGit;$cmdPushClusterFilesTmp;$cmdInitClusterUser;$cmdPushClusterFilesCb;$cmdClusterMemberResetPerm;$cmdExecClusterFilesCb;"
 bash -c "$cmd"
-
 
