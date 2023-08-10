@@ -34,7 +34,7 @@ fxPringSomething(){
     echo "fxSomething";
 }
 
-gitAnsibleTestbed(){
+gitAnsibleTestbed="
     if [ -d "/home/emp-06/test/ansible-testbed" ] 
     then
         echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for $adminUser  will be updated"
@@ -48,7 +48,7 @@ gitAnsibleTestbed(){
         git clone https://github.com/corpdesk/ansible-testbed.git
     fi
 
-}
+}"
 
 cmdHead='echo "."
 echo "."
@@ -57,7 +57,7 @@ echo "--------$(hostname)/STARTING host-update-cluster.sh"
 echo "--------$(hostname)/cluster-init-user.sh: whoami: $(whoami)"
 echo "--------$(hostname)/host-update-cluster.sh: executing at the physical machine"'
 cmd2="echo ${ENV_VAR}"
-cmdGitAnsibleTestbed="echo $(gitAnsibleTestbed)"
+cmdGitAnsibleTestbed="$gitAnsibleTestbed"
 
 cmd="$cmdHead; $cmd2; $cmdGitAnsibleTestbed;"
 bash -c "$cmd"
