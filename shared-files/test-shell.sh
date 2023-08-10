@@ -29,26 +29,33 @@ adminUser="emp-09"
 operator="devops"
 clusterMember="routed-93"
 export ENV_VAR="env-var"
+export HOST_USER=$adminUser
+export CB_OPERATOR=$operator
+export CLUSTER_MEMBER=$clusterMember
 
 fxPringSomething(){
     echo "fxSomething";
 }
 
-gitAnsibleTestbed="
-    if [ -d "/home/emp-06/test/ansible-testbed" ] 
-    then
-        echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for $adminUser  will be updated"
-        cd /home/emp-06/test/ansible-testbed
-        git pull
-        cd /home/emp-06/
-    else
-        mkdir -p /home/emp-06/test/
-        cd /home/emp-06/test/
-        echo "--------$(hostname)/host-update-cluster.sh: updating source files for $adminUser"
-        git clone https://github.com/corpdesk/ansible-testbed.git
-    fi
+# gitAnsibleTestbed='
+#     if [ -d "/home/emp-06/test/ansible-testbed" ] 
+#     then
+#         echo "--------$(hostname)/host-update-cluster.sh: cloud-brix files for ${HOST_USER}  will be updated"
+#         cd /home/emp-06/test/ansible-testbed
+#         git pull
+#         cd /home/emp-06/
+#     else
+#         mkdir -p /home/emp-06/test/
+#         cd /home/emp-06/test/
+#         echo "--------$(hostname)/host-update-cluster.sh: updating source files for ${HOST_USER}"
+#         git clone https://github.com/corpdesk/ansible-testbed.git
+#     fi'
 
-}"
+gitAnsibleTestbed='
+    source ./fx.sh
+    func1 love horror
+    func2 ball mystery
+    fxGitAnsibleTestbed'
 
 cmdHead='echo "."
 echo "."
