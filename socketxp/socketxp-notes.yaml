@@ -1,0 +1,5 @@
+sudo rm -f /var/lib/socketxp/device.key
+nano /etc/socketxp/config.json
+systemctl restart socketxp
+
+tail -f /var/lib/socketxp/socketxp.log

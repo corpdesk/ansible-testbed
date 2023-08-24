@@ -8,6 +8,7 @@
 # replace line:
 #   - https://stackoverflow.com/questions/5410757/how-to-delete-from-a-text-file-all-lines-that-contain-a-specific-string
 #   - sed --in-place '/some string here/d' yourfile
+#   - sed -i '/pattern/d' filename
 
 hostData="hosts.json";
 hostsFile="/etc/hosts";

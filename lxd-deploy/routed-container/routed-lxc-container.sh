@@ -21,7 +21,7 @@
 # parentBridge="eno1"
 # nic="eth0" 
 # lxc_image="ubuntu:22.04"
-#
+
 # sh routed-lxc-container.sh \
 #   $name \
 #   $networkId \
@@ -52,10 +52,13 @@
 #
 ################################
 
+
 name=$1 # eg "routed"
 
 # host variables
-projDir="$HOME/ansible-testbed"
+# projDir="/home/${whoami}/ansible-testbed"
+# projDir="$HOME/ansible-testbed"
+projDir="/media/emp-06/disk-02/projects/ansible-testbed"
 networkId=$2 # eg: "192.168.0"
 hostId=$3 # last ip digit for the server eg 95
 lxc_container="$name-$hostId"
@@ -81,29 +84,26 @@ export GEN_LXC_PARENT=$parentBridge
 export GEN_LXC_ETH=$nic
 
 # substitute variables in the template
-envsubst <"$template" >"$routedProfile.yaml"
+envsubst <"$template" >"$routedProfile"
 # create profile
 lxc profile create $routedProfile
 # set profile
-lxc profile edit $routedProfile < $routedProfile.yaml
+lxc profile edit $routedProfile < $routedProfile
 # launch container
 # option of nestable: https://ubuntu.com/blog/nested-containers-in-lxd
 # lxc launch ubuntu nestc1 -c security.nesting=true -c security.privileged=true
 # or to change an existing container:
 # lxc config set nestc1 security.nesting true
 lxc launch $lxc_image $lxc_container --profile default --profile $routedProfile
-
-echo -e "-- update container\n"
-lxc exec $lxc_container -- apt update && apt upgrade -y
-
-echo -e "-- Push $initSetup file\n"
+sleep 5
+echo -e "-- Push $initSetup file to $lxc_container/tmp/"
 # lxc file push ../../shared-files/$initSetup $lxc_container/tmp/
-lxc file push $projDir/shared-files/$initSetup $lxc_container/tmp/
-
+lxc file push "$projDir/shared-files/$initSetup" $lxc_container/tmp/
+sleep 5
 echo -e "-- Check /tmp/ directory:\n"
-lxc exec $lxc_container -- ls /tmp/
-
+lxc exec $lxc_container -- ls -la /tmp/
+sleep 5     
 # setup
 echo -e "-- Do initial setup\n"
-lxc exec $lxc_container -- sudo sh /tmp/$initSetup
+lxc exec $lxc_container -- sh /tmp/$initSetup
 

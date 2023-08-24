@@ -22,3 +22,5 @@ echo "--------$(hostname)/pre-init-user.sh: installing jq"
 sudo apt install jq -y
 echo "--------$(hostname)/pre-init-user.sh: installing tracetoute"
 sudo apt install traceroute  -y
+echo "--------$(hostname)/pre-init-user.sh: installing unzip"
+sudo apt install unzip  -y

@@ -77,3 +77,30 @@ cb cluster remove
 cb gluster create
 cb gluster add
 cb gluster remove
+
+--------------------------------------------
+
+/media/emp-06/disk-02/projects/ansible-testbed/lxd-deploy/routed-container/routed-lxc-container.sh
+
+192.168.0.11 fip
+192.168.0.12 lb-01
+192.168.0.13 lb-02
+
+192.168.0.21 cd-db-01 
+192.168.0.22 cd-api-01
+192.168.0.23 cd-sio-01
+192.168.0.24 cd-shell-01
+192.168.0.25 cd-user-01
+192.168.0.26 cd-moduleman-01
+192.168.0.27 cd-comm-01
+
+192.168.0.31 cd-db-02
+
+
+
+sh create-routed-lxd.sh "cd-shell" "24"
+sh create-routed-lxd.sh "cd-user" "25"
+sh create-routed-lxd.sh "cd-moduleman" "26"
+sh create-routed-lxd.sh "cd-comm" "27"
+
+

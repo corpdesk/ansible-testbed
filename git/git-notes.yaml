@@ -4,3 +4,11 @@ Sample1: wget https://github.com/name/folder/file.zip?raw=true
 Sample2: curl --silent --request GET --header 'PRIVATE-TOKEN: replace_with_your_token' \
 'http://git.example.com/foo/bar.sql' --output /tmp/bar.sql
 Sample3: 
+
+update git url:
+git remote set-url origin new.git.url/here
+remomber password:
+git config --global credential.helper store
+discard local changes and do fresh git pull:
+git reset --hard
+git pull

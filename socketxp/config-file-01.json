@@ -1,0 +1,11 @@
+{
+    "region": "eu",
+    "tunnels": [
+        {
+            "destination": "http://127.0.0.1:80"
+        },
+        {
+            "destination": "http://127.0.0.1:22"
+        }
+    ]
+}

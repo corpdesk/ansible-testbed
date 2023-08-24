@@ -136,12 +136,12 @@
         replace: "bind-address         = 0.0.0.0"
         backup: yes
 
-    - name: Ensure mysqlx remote connection is enabled
-      replace:
-        path: /etc/mysql/mysql.conf.d/mysqld.cnf
-        regexp: "^mysqlx-bind-address.*"
-        replace: "mysqlx-bind-address  = 0.0.0.0"
-        backup: yes
+    # - name: Ensure mysqlx remote connection is enabled
+    #   replace:
+    #     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    #     regexp: "^mysqlx-bind-address.*"
+    #     replace: "mysqlx-bind-address  = 0.0.0.0"
+    #     backup: yes
 
     - name: Restart service mysql after allowing remote connection
       ansible.builtin.service:

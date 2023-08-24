@@ -19,23 +19,41 @@ sudo sh /tmp/remove_devops.sh
 # The #? is an extended regular expression that matches the line whether it's commented or not. 
 # The -E switch enables extended regexp support for sed.
 # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-# sudo apt update -y
+# sudo apt update -y    
+echo ""
+echo ""
 echo "---install git -------------------------------------------------------------------------------------------------------"
 sudo apt-get install git  -y
+echo ""
+echo ""
 echo "---install net-tools--------------------------------------------------------------------------------------------------"
 sudo apt-get install net-tools -y
+echo ""
+echo ""
 echo "---install telnet-----------------------------------------------------------------------------------------------------"
 sudo apt-get install telnet -y
+echo ""
+echo ""
 echo "---install openssh-server---------------------------------------------------------------------------------------------"
 sudo apt-get install openssh-server -y
+echo ""
+echo ""
 echo "---install sshpass----------------------------------------------------------------------------------------------------"
 sudo apt-get install sshpass -y
+echo ""
+echo ""
 echo "---install tree-------------------------------------------------------------------------------------------------------"
 sudo snap install tree -y
+echo ""
+echo ""
 echo "---install fish-------------------------------------------------------------------------------------------------------"
 sudo apt-get install fish -y
+echo ""
+echo ""
 echo "---install jq---------------------------------------------------------------------------------------------------------"
 sudo apt-get install jq -y
+echo ""
+echo ""
 echo "---install traceroute-------------------------------------------------------------------------------------------------"
 sudo apt-get install traceroute -y
 # sudo snap install lxd --channel=latest/stable
