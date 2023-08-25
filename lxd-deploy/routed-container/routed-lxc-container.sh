@@ -73,8 +73,13 @@ lxc_image=$6 # "ubuntu:22.04"
 routedProfile="routed_$hostId"
 # network setup template
 template="$projDir/shared-files/routed.template"
-# init setup file
-initSetup="reset_environment.sh"
+
+# init_environment
+initEnv="reset_environment.sh"
+
+# init user file
+initSetup="setup_initial_user.sh"
+
 
 # variables for the template MUST be exported
 export GEN_LXC_IP="$networkId.$hostId"
@@ -96,8 +101,11 @@ lxc profile edit $routedProfile < $routedProfile
 # lxc config set nestc1 security.nesting true
 lxc launch $lxc_image $lxc_container --profile default --profile $routedProfile
 sleep 5
+
+echo -e "-- Push $initEnv file to $lxc_container/tmp/"
+lxc file push "$projDir/shared-files/$initEnv" $lxc_container/tmp/
+
 echo -e "-- Push $initSetup file to $lxc_container/tmp/"
-# lxc file push ../../shared-files/$initSetup $lxc_container/tmp/
 lxc file push "$projDir/shared-files/$initSetup" $lxc_container/tmp/
 sleep 5
 echo -e "-- Check /tmp/ directory:\n"

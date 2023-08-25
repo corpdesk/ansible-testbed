@@ -10,8 +10,28 @@ export NVM_DIR="$HOME/.nvm"
 nvm install v16.20.1
 
 bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
-su devops
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 nvm install v16.20.1'
+
+------------------------------
+initialize container:
+-----------------------
+bash -c 'lxc_container="cd-api-22"
+projDir="/media/emp-06/disk-02/projects/ansible-testbed"
+initEnv="reset_environment.sh"
+initUser="setup_initial_user.sh"
+lxc file push "$projDir/shared-files/$initEnv" $lxc_container/tmp/
+lxc file push "$projDir/shared-files/$initUser" $lxc_container/tmp/
+lxc exec $lxc_container -- sh /tmp/$initUser'
+
+install nodejs via nvm:
+-----------------------
+lxc exec cd-api-22 -- sudo -H -u devops bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+nvm install v16.20.1'
+
 
 # ----------------------------------------------------------------------------------------------------
 root@cd-api-01:~# su devops
