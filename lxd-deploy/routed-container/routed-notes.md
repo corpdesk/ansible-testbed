@@ -69,6 +69,7 @@ initEnv="reset_environment.sh"
 initUser="setup_initial_user.sh"
 lxc file push "$projDir/shared-files/$initEnv" $lxc_container/tmp/
 lxc file push "$projDir/shared-files/$initUser" $lxc_container/tmp/
+sleep 5
 lxc exec $lxc_container -- sh /tmp/$initUser'
 
 install nodejs via nvm:
