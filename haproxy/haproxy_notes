@@ -12,8 +12,14 @@ sudo apt update
 sudo apt install haproxy=2.6.\* -y
 sudo systemctl enable haproxy
 
+Status:
+sudo systemctl status haproxy
+
 Configuration:
 sudo nano /etc/haproxy/haproxy.cfg
+
+Restart:
+sudo systemctl restart haproxy
 
 Ansible methods:
 // https://28gauravkhore.medium.com/how-to-configure-the-haproxy-using-the-ansible-and-also-how-to-configure-haproxy-dynamically-f18a55de3a66

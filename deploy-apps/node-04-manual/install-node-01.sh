@@ -61,6 +61,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 $ nvm install v16.20.1
 
+#----------------------------------------------
+
+devops@cd-api-01:~/cd-api$ export NVM_DIR="$HOME/.nvm"
+devops@cd-api-01:~/cd-api$ [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+devops@cd-api-01:~/cd-api$ npm version
+
 # ----------------------------------------------------------------------------------------------------
 
 Remove:
