@@ -33,11 +33,17 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 nvm install v16.20.1'
 
-
+lxc exec cd-shell-24 -- sudo -H -u devops bash -c 'curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+nvm install v16.20.1
+npm install -g typescript
+npm install -g ts-node
+npm install -g @angular/cli'
 # ----------------------------------------------------------------------------------------------------
 root@cd-api-01:~# su devops
 $ cd ~
-$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+$ ccurl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 su devops  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 15916  100 15916    0     0  14347      0  0:00:01  0:00:01 --:--:-- 14338
