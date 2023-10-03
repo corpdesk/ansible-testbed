@@ -99,12 +99,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   zone="09"
   network="192.168.0"
   # setup devops user
-  config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "remove_devops.sh"
-  config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "reset_environment.sh"
-  config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "setup_initial_user.sh"
+  config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "/tmp/remove_devops.sh"
+  config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "/tmp/reset_environment.sh"
+  config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "/tmp/setup_initial_user.sh"
   # config.vm.provision "file", source: "../../shared-files/init_cluster.js", destination: "init_cluster.js"
   # config.vm.provision "file", source: "../../shared-files/build_cluster.js", destination: "build_cluster.js"
-  config.vm.provision :shell, :inline => "sudo sh setup_initial_user.sh"
+  config.vm.provision :shell, :inline => "sudo sh /tmp/setup_initial_user.sh"
 #   config.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"
 #   config.vm.provision "ansible" do |ans| 
 #     ans.playbook = "setup_initial_user.yaml"

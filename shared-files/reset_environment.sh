@@ -7,7 +7,7 @@
 sudo apt update
 sudo apt upgrade -y
 sudo snap refresh
-# sudo sh /tmp/remove_devops.sh
+sudo sh /tmp/remove_devops.sh
 
 
 # Reset: remove previous versions
