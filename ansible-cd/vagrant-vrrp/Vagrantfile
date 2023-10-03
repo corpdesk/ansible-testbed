@@ -146,7 +146,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
       lb01_config.vm.hostname = "lb-01"
     #   lb01_config.vm.network "public_network", ip: "192.168.0.11"
-      config.vm.network "public_network", ip: "192.168.0.11" :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
+      config.vm.network "public_network", ip: "192.168.0.11", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       lb01_config.vm.provision :shell, path: "../../vrrp/lb.sh", env: {"PRIORITY" => "101"}
   end
 
@@ -157,7 +157,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
       lb02_config.vm.hostname = "lb-02"
     #   lb02_config.vm.network "public_network", ip: "192.168.0.12"
-      config.vm.network "public_network", ip: "192.168.0.12" :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
+      config.vm.network "public_network", ip: "192.168.0.12", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       lb02_config.vm.provision :shell, path: "../../vrrp/lb.sh", env: {"PRIORITY" => "100"}
   end
 
@@ -168,7 +168,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
       web01_config.vm.hostname = "web-21"
     #   web01_config.vm.network "public_network", ip: "192.168.0.21"
-      config.vm.network "public_network", ip: "192.168.0.21" :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
+      config.vm.network "public_network", ip: "192.168.0.21", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       web01_config.vm.provision :shell, path: "../../vrrp/webserver.sh"
   end
 
@@ -179,7 +179,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
       web02_config.vm.hostname = "web-22"
     #   web02_config.vm.network "public_network", ip: "192.168.0.22"
-      config.vm.network "public_network", ip: "192.168.0.22" :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
+      config.vm.network "public_network", ip: "192.168.0.22", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       web02_config.vm.provision :shell, path: "../../vrrp/webserver.sh"
   end
   
