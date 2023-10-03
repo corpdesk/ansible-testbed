@@ -82,7 +82,7 @@ vrrp_script chk_haproxy {
     weight 2
 }
 vrrp_instance VI_1 {
-    interface eno1            # confirm the interface name
+    interface eth1            # confirm the interface name
     state MASTER
     virtual_router_id 51
     priority 100
