@@ -112,7 +112,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #   end
   # network setup
 #   config.vm.network "public_network", auto_config: true
-  config.vm.network "public_network", :bridge => "eth2", :auto_config => "false", :netmask => "255.255.255.0"
+  config.vm.network "public_network", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
 
   # default router
   config.vm.provision "shell",
