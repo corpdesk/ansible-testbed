@@ -99,9 +99,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   zone="09"
   network="192.168.0"
   # setup devops user
-  # config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "remove_devops.sh"
-  # config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "reset_environment.sh"
-  # config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "setup_initial_user.sh"
+  config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "remove_devops.sh"
+  config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "reset_environment.sh"
+  config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "setup_initial_user.sh"
   # config.vm.provision "file", source: "../../shared-files/init_cluster.js", destination: "init_cluster.js"
   # config.vm.provision "file", source: "../../shared-files/build_cluster.js", destination: "build_cluster.js"
   # config.vm.provision :shell, :inline => "sudo sh setup_initial_user.sh"
@@ -118,7 +118,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell",
     run: "always",
     inline: "route add default gw 192.168.0.1"
-    
+
   # config.vm.network "forwarded_port", guest: 8443, host: 8443, auto_correct: true
   config.vm.synced_folder "../shared/", "/shared/dir1", create: true
   config.vm.provider :virtualbox do |v|
