@@ -112,7 +112,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #   end
   # network setup
 #   config.vm.network "public_network", auto_config: true
-  config.vm.network "public_network", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
+#   config.vm.network "public_network", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
 
   # default router
   config.vm.provision "shell",
@@ -145,7 +145,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           vb_config.name = "HAProxy 1 - lay4-lb-02-web-01"
       end
       lb01_config.vm.hostname = "lb-01"
-      lb01_config.vm.network "public_network", ip: "192.168.0.11"
+    #   lb01_config.vm.network "public_network", ip: "192.168.0.11"
+      config.vm.network "public_network", ip: "192.168.0.11" :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       lb01_config.vm.provision :shell, path: "../../vrrp/lb.sh", env: {"PRIORITY" => "101"}
   end
 
@@ -155,7 +156,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           vb_config.name = "HAProxy 2 - lay4-lb-02-web-02"
       end
       lb02_config.vm.hostname = "lb-02"
-      lb02_config.vm.network "public_network", ip: "192.168.0.12"
+    #   lb02_config.vm.network "public_network", ip: "192.168.0.12"
+      config.vm.network "public_network", ip: "192.168.0.12" :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       lb02_config.vm.provision :shell, path: "../../vrrp/lb.sh", env: {"PRIORITY" => "100"}
   end
 
@@ -165,7 +167,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           vb_config.name = "Web Server 1 - lay4-lb-02-web-21"
       end
       web01_config.vm.hostname = "web-21"
-      web01_config.vm.network "public_network", ip: "192.168.0.21"
+    #   web01_config.vm.network "public_network", ip: "192.168.0.21"
+      config.vm.network "public_network", ip: "192.168.0.21" :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       web01_config.vm.provision :shell, path: "../../vrrp/webserver.sh"
   end
 
@@ -175,7 +178,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           vb_config.name = "Web Server 2 - lay4-lb-02-web-22"
       end
       web02_config.vm.hostname = "web-22"
-      web02_config.vm.network "public_network", ip: "192.168.0.22"
+    #   web02_config.vm.network "public_network", ip: "192.168.0.22"
+      config.vm.network "public_network", ip: "192.168.0.22" :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       web02_config.vm.provision :shell, path: "../../vrrp/webserver.sh"
   end
   
