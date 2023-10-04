@@ -55,7 +55,7 @@
 
 name=$1 # eg "routed"
 
-projDir=$3 # current user
+projDir=$7 # project directory
 
 # host variables
 # projDir="/home/${whoami}/ansible-testbed"
