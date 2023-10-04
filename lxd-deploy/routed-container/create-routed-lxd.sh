@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# usage:
+# sh create-routed-lxd.sh "web" "8" "/media/emp-06/disk-02/projects/ansible-testbed"
+# sh create-routed-lxd.sh "web" "9" "/home/emp-07/ansible-testbed"
+
 name=$1
 hostId=$2
 networkId="192.168.0"

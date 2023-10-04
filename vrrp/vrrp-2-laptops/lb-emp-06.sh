@@ -54,7 +54,7 @@ backend webservers
     option httpchk
     option forwardfor
     option http-server-close
-    server web-8  192.168.0.8:80 maxconn 32 check
+    server web-8 192.168.0.8:80 maxconn 32 check
     server web-9 192.168.0.9:80 maxconn 32 check
 EOF
  
