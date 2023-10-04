@@ -6,7 +6,7 @@ networkId="192.168.0"
 parentBridge="wlp2s0"
 nic="eth0" 
 lxcImage="ubuntu:22.04"
-projDir="/home/ansible-testbed"
+projDir=$3
 
 sh routed-lxc-container.sh \
   $name \
