@@ -54,9 +54,9 @@ backend webservers
     option httpchk
     option forwardfor
     option http-server-close
-    server web-8 192.168.0.94:80 maxconn 32 check
-    server web-9 192.168.0.104:80 maxconn 32 check
-    server web-9 192.168.0.114:80 maxconn 32 check
+    server routed-94 192.168.0.94:80 maxconn 32 check
+    server routed-104 192.168.0.104:80 maxconn 32 check
+    server routed-114 192.168.0.114:80 maxconn 32 check
 EOF
  
 echo -e "-- Validating HAProxy configuration\n"
