@@ -9,16 +9,6 @@ sudo apt-get install -y debconf-utils zsh htop libaio1;
 #apt congig file:
 mysqlAptConfig="mysql-apt-config_0.8.26-1_all.deb"
 
-#set the root password
-DEFAULTPASS="yU0B14NC1PdE"
-
-#set some config to avoid prompting
-sudo debconf-set-selections <<EOF
-mysql-apt-config mysql-apt-config/select-server select mysql-8.0
-mysql-community-server mysql-community-server/root-pass password $DEFAULTPASS
-mysql-community-server mysql-community-server/re-root-pass password $DEFAULTPASS
-EOF
-
 #get the mysql repository via wget
 wget --user-agent="Mozilla" -O /tmp/$mysqlAptConfig https://dev.mysql.com/get/$mysqlAptConfig;
 
@@ -32,6 +22,6 @@ sudo -E dpkg -i /tmp/$mysqlAptConfig;
 sudo apt-get update
 
 #install mysql according to previous config
-sudo -E apt-get install mysql-server mysql-client mysql-shell mysql-router --assume-yes --force-yes'
+sudo -E apt install mysql-client mysql-shell mysql-router -y'
 
 # W: --force-yes is deprecated, use one of the options starting with --allow instead.
