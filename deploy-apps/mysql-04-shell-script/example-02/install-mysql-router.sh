@@ -22,6 +22,6 @@ sudo -E dpkg -i /tmp/$mysqlAptConfig;
 sudo apt-get update
 
 #install mysql according to previous config
-sudo -E apt install mysql-client mysql-shell mysql-router -y'
+sudo apt install mysql-client mysql-shell mysql-router -y'
 
 # W: --force-yes is deprecated, use one of the options starting with --allow instead.
