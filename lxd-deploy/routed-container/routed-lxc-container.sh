@@ -107,7 +107,7 @@ lxc profile edit $routedProfile < $routedProfile
 lxc launch $lxc_image $lxc_container --profile default --profile $routedProfile
 sleep 5
 
-mkdir /temp/
+lxc exec $lxc_container --  mkdir /temp/
 echo -e "-- Push $initEnv file to $lxc_container/temp/"
 lxc file push "$projDir/shared-files/$initEnv" $lxc_container/temp/
 
