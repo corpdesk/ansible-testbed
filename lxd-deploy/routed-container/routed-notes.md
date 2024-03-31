@@ -24,6 +24,7 @@ Accomplished:
 
 ###############################
 # # EXAMPLE 1 (single container):
+# projDir="$HOME/ansible-testbed"
 # name="routed"
 # networkId="192.168.0"
 # hostId="97"
@@ -37,7 +38,8 @@ Accomplished:
 #   $hostId \
 #   $parentBridge \
 #   $nic \
-#   $lxc_image 
+#   $lxc_image \
+#   $projDir 
 #
 ################################
 # EXAMPLE 2 (serial ips):

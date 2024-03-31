@@ -56,6 +56,7 @@
 name=$1 # eg "routed"
 
 projDir=$7 # project directory
+echo "projDir: $projDir"
 
 # host variables
 # projDir="/home/${whoami}/ansible-testbed"
@@ -75,6 +76,8 @@ lxc_image=$6 # "ubuntu:22.04"
 routedProfile="routed_$hostId"
 # network setup template
 template="$projDir/shared-files/routed.template"
+echo "template: $template"
+
 
 # init_environment
 initEnv="reset_environment.sh"
