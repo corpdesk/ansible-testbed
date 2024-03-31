@@ -107,16 +107,17 @@ lxc profile edit $routedProfile < $routedProfile
 lxc launch $lxc_image $lxc_container --profile default --profile $routedProfile
 sleep 5
 
-echo -e "-- Push $initEnv file to $lxc_container/tmp/"
-lxc file push "$projDir/shared-files/$initEnv" $lxc_container/tmp/
+mkdir /temp/
+echo -e "-- Push $initEnv file to $lxc_container/temp/"
+lxc file push "$projDir/shared-files/$initEnv" $lxc_container/temp/
 
-echo -e "-- Push $initSetup file to $lxc_container/tmp/"
-lxc file push "$projDir/shared-files/$initSetup" $lxc_container/tmp/
+echo -e "-- Push $initSetup file to $lxc_container/temp/"
+lxc file push "$projDir/shared-files/$initSetup" $lxc_container/temp/
 sleep 5
-echo -e "-- Check /tmp/ directory:\n"
-lxc exec $lxc_container -- ls -la /tmp/
+echo -e "-- Check /temp/ directory:\n"
+lxc exec $lxc_container -- ls -la /temp/
 sleep 5     
 # setup
 echo -e "-- Do initial setup\n"
-lxc exec $lxc_container -- sh /tmp/$initSetup
+lxc exec $lxc_container -- sh /temp/$initSetup
 
