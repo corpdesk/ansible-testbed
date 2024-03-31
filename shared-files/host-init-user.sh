@@ -6,4 +6,7 @@ sudo cp /etc/sudoers /etc/sudoers.backup
 sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
 sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 sudo sed -i -E 's/#?PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+# allow ssh reverse tunneling
+# sed -i "Match User devops" /etc/ssh/sshd_config
+# sed -i "GatewayPorts yes" /etc/ssh/sshd_config
 sudo systemctl restart ssh

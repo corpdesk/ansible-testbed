@@ -56,6 +56,14 @@ echo ""
 echo ""
 echo "---install traceroute-------------------------------------------------------------------------------------------------"
 sudo apt-get install traceroute -y
+echo ""
+echo ""
+echo "---install zip-------------------------------------------------------------------------------------------------"
+sudo apt-get install zip -y
+echo ""
+echo ""
+echo "---install unzip-------------------------------------------------------------------------------------------------"
+sudo apt-get install unzip -y
 # sudo snap install lxd --channel=latest/stable
 # sudo snap refresh lxd --channel=latest/stable
 sudo service ssh restart

@@ -31,7 +31,10 @@ install nodejs via nvm:
 lxc exec cd-api-22 -- sudo -H -u devops bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-nvm install v16.20.1'
+nvm install v16.20.1
+npm install -g typescript
+npm install -g ts-node
+npm install -g @angular/cli'
 
 
 # ----------------------------------------------------------------------------------------------------

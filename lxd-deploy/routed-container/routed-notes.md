@@ -16,7 +16,7 @@ Accomplished:
 # USAGE:
 # routed-lxc-container.sh \
 #   $name : key name of the container. Note that the eventual name is a concatenantion of this string and netork id.
-#   $networkId : the first 3 digits of ip
+#   $networkId : the first 3 octets of ip seperated by .
 #   $hostId : last digit of the ip
 #   $parentBridge : interface for the host
 #   $nic : interface for the container
