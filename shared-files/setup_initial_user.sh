@@ -13,7 +13,7 @@ pswd="yU0B14NC1PdE"
 # check if $initialUser dir exits
 if [ -d "/home/$initialUser/" ] 
 then
-    echo "user $initialUser esists" 
+    echo "user $initialUser exists" 
     sleep 0
 else
     # sudo useradd -m -s /bin/bash $initialUser

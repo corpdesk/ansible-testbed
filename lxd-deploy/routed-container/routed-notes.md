@@ -24,22 +24,24 @@ Accomplished:
 
 ###############################
 # # EXAMPLE 1 (single container):
-# projDir="$HOME/ansible-testbed"
-# name="routed"
-# networkId="192.168.0"
-# hostId="97"
-# parentBridge="eno1"
-# nic="eth0" 
-# lxc_image="ubuntu:22.04"
-#
-# sh routed-lxc-container.sh \
-#   $name \
-#   $networkId \
-#   $hostId \
-#   $parentBridge \
-#   $nic \
-#   $lxc_image \
-#   $projDir 
+bash -c '
+projDir="$HOME/ansible-testbed"
+name="cd-db"
+networkId="192.168.0"
+hostId="91"
+parentBridge="eno1"
+nic="eth0" 
+lxc_image="ubuntu:22.04"
+
+sh routed-lxc-container.sh \
+   $name \
+   $networkId \
+   $hostId \
+   $parentBridge \
+   $nic \
+   $lxc_image \
+   $projDir
+   '
 #
 ################################
 # EXAMPLE 2 (serial ips):
