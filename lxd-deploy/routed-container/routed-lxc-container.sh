@@ -55,10 +55,12 @@
 
 name=$1 # eg "routed"
 
+projDir=$7 # project directory
+
 # host variables
 # projDir="/home/${whoami}/ansible-testbed"
 # projDir="$HOME/ansible-testbed"
-projDir="/media/emp-06/disk-02/projects/ansible-testbed"
+# projDir="/media/emp-06/disk-02/projects/ansible-testbed"
 networkId=$2 # eg: "192.168.0"
 hostId=$3 # last ip digit for the server eg 95
 lxc_container="$name-$hostId"

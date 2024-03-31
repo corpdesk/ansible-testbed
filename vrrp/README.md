@@ -60,8 +60,12 @@ CREATE LXD INSTANCES IN ALL SERVERS <br>
 
 
 
-Note: One of the challenges with macvlan method is that it relies on dhcp. So we are not able to predetermine the ips before the instances are set.
-A method can be crafted to register and auto-feed back the resulting ips. This can allow for smoother automation of the next processes. The results can also be used to set up a dns server.
+Note: <br>
+1. One of the challenges with macvlan method is that it relies on dhcp. So we are not able to predetermine the ips before the instances are set.
+Suggested solution: A method can be crafted to register and auto-feed back the resulting ips. This can allow for smoother automation of the next processes. The results can also be used to set up a dns server.
+2. lxd routed container: not working:
+Ref: https://discuss.linuxcontainers.org/t/unable-to-reach-floating-ip-from-outside-haproxy-lxc-container-keepalived-vrrp-setup/16386
+
 
 To do:
 1. use cloud-init to set up the instances

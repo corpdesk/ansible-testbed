@@ -30,7 +30,7 @@ initAppContainer( $appContainer, $initialUser, $pswd){
     lxc exec $appContainer -- sh /tmp/$resetEnvFile
     #
     # ------------------------------------------------
-    # setup ssh user to allow ansible operations
+    # setup ssh user to allow ssh and ansible operations
     lxc exec $appContainer -- useradd -m -p $(openssl passwd -1 mypassword) $initialUser
     $appIp=$(lxc list -c4 --format csv $cname | cut -d' ' -f1)
     # ssh-copy-id to new container from all the controllers

@@ -96,15 +96,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.synced_folder "/media/emp-06/emp-04-d2/extr-vagrant-disk/", "/glustervolume/"
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  zone="06"
-  network="192.168.1"
+  zone="09"
+  network="192.168.0"
   # setup devops user
-  # config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "remove_devops.sh"
-  # config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "reset_environment.sh"
-  # config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "setup_initial_user.sh"
+  config.vm.provision "file", source: "../../shared-files/remove_devops.sh", destination: "/tmp/remove_devops.sh"
+  config.vm.provision "file", source: "../../shared-files/reset_environment.sh", destination: "/tmp/reset_environment.sh"
+  config.vm.provision "file", source: "../../shared-files/setup_initial_user.sh", destination: "/tmp/setup_initial_user.sh"
   # config.vm.provision "file", source: "../../shared-files/init_cluster.js", destination: "init_cluster.js"
   # config.vm.provision "file", source: "../../shared-files/build_cluster.js", destination: "build_cluster.js"
-  # config.vm.provision :shell, :inline => "sudo sh setup_initial_user.sh"
+  config.vm.provision :shell, :inline => "sudo sh /tmp/setup_initial_user.sh"
 #   config.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"
 #   config.vm.provision "ansible" do |ans| 
 #     ans.playbook = "setup_initial_user.yaml"
@@ -112,6 +112,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #   end
   # network setup
   config.vm.network "public_network", auto_config: true
+#   config.vm.network "public_network", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
+
+  # default router
+  config.vm.provision "shell",
+    run: "always",
+    inline: "route add default gw 192.168.0.1"
+
   # config.vm.network "forwarded_port", guest: 8443, host: 8443, auto_correct: true
   config.vm.synced_folder "../shared/", "/shared/dir1", create: true
   config.vm.provider :virtualbox do |v|
@@ -135,10 +142,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configs for haproxy 1 (master)
   config.vm.define :lb01 do |lb01_config|
       lb01_config.vm.provider :virtualbox do |vb_config|
-          vb_config.name = "HAProxy 1 - lay4-lb-02-web-02"
+          vb_config.name = "HAProxy 1 - lay4-lb-02-web-01"
       end
       lb01_config.vm.hostname = "lb-01"
-      lb01_config.vm.network "public_network", ip: "192.168.1.100"
+      lb01_config.vm.network "public_network", ip: "192.168.0.11"
+    #   lb01_config.vm.network "public_network", ip: "192.168.0.11", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       lb01_config.vm.provision :shell, path: "../../vrrp/lb.sh", env: {"PRIORITY" => "101"}
   end
 
@@ -148,27 +156,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           vb_config.name = "HAProxy 2 - lay4-lb-02-web-02"
       end
       lb02_config.vm.hostname = "lb-02"
-      lb02_config.vm.network "public_network", ip: "192.168.1.104"
+      lb02_config.vm.network "public_network", ip: "192.168.0.12"
+    #   lb02_config.vm.network "public_network", ip: "192.168.0.12", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       lb02_config.vm.provision :shell, path: "../../vrrp/lb.sh", env: {"PRIORITY" => "100"}
   end
 
   # Configs for web server 1
   config.vm.define :web01 do |web01_config|
       web01_config.vm.provider :virtualbox do |vb_config|
-          vb_config.name = "Web Server 1 - lay4-lb-02-web-02"
+          vb_config.name = "Web Server 1 - lay4-lb-02-web-21"
       end
-      web01_config.vm.hostname = "web-01"
-      web01_config.vm.network "public_network", ip: "192.168.1.101"
+      web01_config.vm.hostname = "web-21"
+      web01_config.vm.network "public_network", ip: "192.168.0.21"
+    #   web01_config.vm.network "public_network", ip: "192.168.0.21", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       web01_config.vm.provision :shell, path: "../../vrrp/webserver.sh"
   end
 
   # Configs for web server 2
   config.vm.define :web02 do |web02_config|
       web02_config.vm.provider :virtualbox do |vb_config|
-          vb_config.name = "Web Server 2 - lay4-lb-02-web-02"
+          vb_config.name = "Web Server 2 - lay4-lb-02-web-22"
       end
-      web02_config.vm.hostname = "web-02"
-      web02_config.vm.network "public_network", ip: "192.168.1.105"
+      web02_config.vm.hostname = "web-22"
+      web02_config.vm.network "public_network", ip: "192.168.0.22"
+    #   web02_config.vm.network "public_network", ip: "192.168.0.22", :bridge => "eth1", :auto_config => "false", :netmask => "255.255.255.0"
       web02_config.vm.provision :shell, path: "../../vrrp/webserver.sh"
   end
   

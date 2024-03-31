@@ -1,2 +1,10 @@
 redis cluster:
 https://redis.io/docs/management/scaling/
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install redis -y
+
+sudo nano /etc/redis/redis.conf
+Locate the line “bind 127.0.0.1 ::1” and edit
+
+sudo systemctl restart redis-server

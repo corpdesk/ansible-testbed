@@ -42,7 +42,7 @@ defaults
     timeout server 50000ms
  
 frontend http-in
-    bind *:80
+    bind *:8080
     default_backend webservers
  
 backend webservers
@@ -54,8 +54,9 @@ backend webservers
     option httpchk
     option forwardfor
     option http-server-close
-    server routed-92  192.168.0.21:80 maxconn 32 check
-    server routed-102 192.168.0.22:80 maxconn 32 check
+    server routed-94 192.168.0.94:80 maxconn 32 check
+    server routed-104 192.168.0.104:80 maxconn 32 check
+    server routed-114 192.168.0.114:80 maxconn 32 check
 EOF
  
 echo -e "-- Validating HAProxy configuration\n"
@@ -82,12 +83,12 @@ vrrp_script chk_haproxy {
     weight 2
 }
 vrrp_instance VI_1 {
-    interface eth1            # confirm the interface name
+    interface eno1            # confirm the interface name
     state MASTER
     virtual_router_id 51
-    priority 100
+    priority 101
     virtual_ipaddress {
-        192.168.0.10
+        192.168.0.8
     }
     track_script {
         chk_haproxy

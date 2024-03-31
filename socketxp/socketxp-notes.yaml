@@ -1,5 +1,52 @@
+sudo timedatectl set-timezone Africa/Nairobi
+timedatectl
+
 sudo rm -f /var/lib/socketxp/device.key
 nano /etc/socketxp/config.json
 systemctl restart socketxp
 
 tail -f /var/lib/socketxp/socketxp.log
+
+
+---------------------------------------------
+sudo nano /etc/socketxp/config.json
+                                                                                          
+{
+    "region": "eu",
+    "tunnels": [
+        {
+            "destination": "http://127.0.0.1:8080",
+            "custom_domain": "cb.lab",
+            "subdomain": "cd-shell"
+        },
+        {
+            "destination": "http://127.0.0.1:8081",
+            "custom_domain": "cb.lab",
+            "subdomain": "cd-api"
+        },
+        {
+            "destination": "http://127.0.0.1:8082",
+            "custom_domain": "cb.lab",
+            "subdomain": "cd-sio"
+        },
+        {
+            "destination": "tcp://127.0.0.1:22"
+        }
+    ]
+}
+
+sudo systemctl restart socketxp
+sudo systemctl status socketxp
+
+----------------------------------------------------------
+
+$ socketxp login "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiO..."
+
+socketxp login <your-auth-token-goes-here>  --iot-device-name "sensor12345" --iot-device-group "temp-sensor"
+
+$ socketxp login "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDk1MTg0MDAsImlkIjoiZ2FuZXNodmVscmF..."
+
+$ socketxp login <your-auth-token-goes-here>  --iot-device-name "routed-103"
+
+
+
