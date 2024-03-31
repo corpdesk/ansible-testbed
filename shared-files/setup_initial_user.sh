@@ -2,7 +2,7 @@
 # To run: sudo sh setup_initial_user.sh
 
 # reset environment
-sudo sh /tmp/reset_environment.sh
+sudo sh /temp/reset_environment.sh
 initialUser="devops"
 pswd="yU0B14NC1PdE"
 
