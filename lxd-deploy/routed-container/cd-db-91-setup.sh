@@ -32,21 +32,17 @@ sudo service mysql restart
 echo "----------------------------------------------------"
 echo "CREATE DEVOPS USER WITH PRIVILLAGES"
 echo "----------------------------------------------------"
+
+
 # MySQL login credentials
 MYSQL_USER="root"
-MYSQL_PASSWORD="yU0B14NC1PdE."
+rootpasswd="yU0B14NC1PdE."
 
 # MySQL database and user details
 NEW_USERNAME="devops"
-NEW_PASSWORD="yU0B14NC1PdE."
-DATABASE_NAME="database_name"
+NEW_PASSWORD="yU0B14NC1PdE.#"
+mysql -uroot -p${rootpasswd} -e "CREATE USER '$NEW_USERNAME'@'%' IDENTIFIED BY '$NEW_PASSWORD'; GRANT ALL PRIVILEGES ON *.* TO '${NEW_USERNAME}'@'%';"
 
-# Log in to MySQL and create a new user with grant all privileges
-mysql -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" << EOF
-CREATE USER '$NEW_USERNAME'@'localhost' IDENTIFIED BY '$NEW_PASSWORD';
-GRANT ALL PRIVILEGES ON *.* TO 'devops'@'%';;
-FLUSH PRIVILEGES;
-EOF
 
 echo "User '$NEW_USERNAME' created with grant all privileges."
 echo "----------------------------------------------------"
