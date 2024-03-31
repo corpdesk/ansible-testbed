@@ -5,7 +5,7 @@ echo "INSTALL AND HARDEN MYSQL "
 echo "----------------------------------------------------"
 
    
-sudo apt install mysql-server
+sudo apt install mysql-server -y
 sudo systemctl start mysql.service
 ROOT_PASSWORD="yU0B14NC1PdE."
 mysql -u root <<EOF
