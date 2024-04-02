@@ -1,0 +1,43 @@
+# Physical machines:
+- emp-09
+- emp-10
+- emp-11
+
+# On all the Physical machnes run:
+sudo apt-get autoclean
+sudo dpkg --configure -a
+sudo apt update
+sudo apt upgrade -y
+
+# WEBMIN for observability and http management:
+sudo apt update
+sudo apt install curl -y
+curl -fsSL https://download.webmin.com/jcameron-key.asc | sudo gpg --dearmor -o /usr/share/keyrings/webmin.gpg
+sudo echo "deb [signed-by=/usr/share/keyrings/webmin.gpg] http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+sudo apt update -y
+sudo apt install webmin -y
+
+# OVN setup:
+# https://stgraber.org/2021/06/11/inexpensive-highly-available-lxd-cluster-6-months-later/
+sudo apt install ovn-host ovn-central -y
+
+sudo systemctl enable ovn-central
+sudo systemctl enable ovn-host
+
+sudo ovs-vsctl set open_vswitch . \
+   external_ids:ovn-remote=tcp:192.168.0.9:6642,tcp:192.168.0.10:6642,tcp:192.168.0.11:6642 \
+   external_ids:ovn-encap-type=geneve \
+   external_ids:ovn-encap-ip=192.168.0.[x]
+# specified network must be listed when you rung 'lxc network list'
+# it must me managed network
+# the range setting for ipv4.dhcp.ranges and ipv4.ovn.ranges must be within the settings for the selected network eg 10.100.188.1/24
+# the two ranges should not overlap
+lxc network set lxdbr0 ipv4.dhcp.ranges=10.100.188.100-10.100.188.120 ipv4.ovn.ranges=10.100.188.121-10.100.188.130
+lxc network create ovn-cb --type=ovn network=lxdbr0
+
+# create container using ovn:
+lxc init ubuntu:22.04 c1
+lxc config device override c1 eth0 network=ovn-cb
+lxc start c1
+
+
