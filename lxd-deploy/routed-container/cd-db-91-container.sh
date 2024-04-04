@@ -14,7 +14,7 @@ projDir="$HOME/ansible-testbed"
 name="cd-db"
 networkId="192.168.0"
 hostId="91"
-parentBridge="eno1"
+parentBridge="wlp2s0"
 nic="eth0" 
 lxc_image="ubuntu:22.04"
 

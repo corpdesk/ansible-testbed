@@ -30,3 +30,10 @@ sh routed-lxc-container.sh \
 
 sleep 5
 sh $setup_file
+
+echo -e "-- Push $setup_file file to $lxc_container/temp/"
+lxc file push $setup_file $lxc_container/temp/
+sleep 5
+lxc exec $lxc_container -- sh /temp/$setup_file
+
+sh cd-api-start.sh
