@@ -2,6 +2,7 @@
 lxc_container="c1"
 repoDir="$HOME/temp/"
 app_file="cd-api.zip"
+add_host_file="../../shared-files/add_host.sh"
 
 # install npm and typescript
 echo "----------------------------------------------------"
@@ -24,6 +25,9 @@ echo "DEPLOY cd-api"
 echo "----------------------------------------------------"
 echo -e "-- Push $app_file file to $lxc_container/home/devops"
 lxc file push $HOME/temp/cd-api.zip c1/home/devops/
+echo -e "-- Push $app_file file to $lxc_container/home/devops"
+lxc file push $add_host_file c1/home/devops/
+
 # change ownership
 echo -e "-- set ownership"
 lxc exec $lxc_container -- sudo chown devops /home/devops/$app_file
@@ -35,7 +39,17 @@ unzip /home/devops/cd-api.zip -d /home/devops
 '
 
 # configure hosts
+lxc exec $lxc_container -- sudo -H -u devops bash -c '
+# database access
+sh /home/devops/add_host.sh "cd-db-91" "192.168.0.91"
+# api access
+sh /home/devops/add_host.sh "cd-api-92" "192.168.0.92"
+# socket-io push server access
+sh /home/devops/add_host.sh "cd-sio-93" "192.168.0.93"
+# web server access
+sh /home/devops/add_host.sh "cd-web-94" "192.168.0.94"
+'
 
-sh cd-api-start.sh
+
 
 
