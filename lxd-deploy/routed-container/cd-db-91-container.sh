@@ -1,7 +1,8 @@
 #!/bin/bash
 lxc_container="cd-db-91"
 setup_file="cd-db-91-setup.sh"
-restore_file="$HOME/temp/"
+dump_file="$HOME/temp/Dump20240404.sql"
+restore_db_file="/home/emp-07/ansible-testbed/shared-files/restore_db.sh"
 echo "----------------------------------------------------"
 echo "CLEAN"
 echo "----------------------------------------------------"
@@ -32,6 +33,9 @@ sh routed-lxc-container.sh \
 echo -e "-- Push $setup_file file to $lxc_container/temp/"
 lxc file push $setup_file $lxc_container/temp/
 # push dump file
+echo -e "-- Push $dump_file file to $lxc_container/temp/"
+lxc file push $dump_file $lxc_container/temp/
+# push restore file
 echo -e "-- Push $restore_file file to $lxc_container/temp/"
 lxc file push $restore_file $lxc_container/temp/
 sleep 5
