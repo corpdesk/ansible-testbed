@@ -1,6 +1,7 @@
 #!/bin/bash
 lxc_container="cd-db-91"
 setup_file="cd-db-91-setup.sh"
+restore_file="$HOME/temp/"
 echo "----------------------------------------------------"
 echo "CLEAN"
 echo "----------------------------------------------------"
@@ -30,5 +31,8 @@ sh routed-lxc-container.sh \
 
 echo -e "-- Push $setup_file file to $lxc_container/temp/"
 lxc file push $setup_file $lxc_container/temp/
+# push dump file
+echo -e "-- Push $restore_file file to $lxc_container/temp/"
+lxc file push $restore_file $lxc_container/temp/
 sleep 5
 lxc exec $lxc_container -- sh /temp/$setup_file
