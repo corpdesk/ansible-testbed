@@ -12,6 +12,16 @@ MYSQL_DATABASE="cd1213"
 # Path to the MySQL backup file
 BACKUP_FILE="/temp/Dump20240404.sql"
 
+# Name of the new schema to create
+NEW_SCHEMA="cd1213"
+
+# Log in to MySQL and create a new schema
+mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" << EOF
+CREATE DATABASE $NEW_SCHEMA;
+EOF
+
+echo "Schema '$NEW_SCHEMA' created successfully."
+
 # Check if the backup file exists
 if [ ! -f "$BACKUP_FILE" ]; then
     echo "Error: Backup file not found: $BACKUP_FILE"
