@@ -1,4 +1,14 @@
 Notes:
+
+
+Database container:
+  - cd-db-91
+  - scp (shared_files/scp.sh) backup from emp-06 to emp-07/temp/
+  - push backup file to container
+  - push restore script to container
+  - run restore script
+
+
 Motivated by need for:
 - access containers accross lan
 - automate container creation and management
