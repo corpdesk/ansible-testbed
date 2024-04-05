@@ -1,5 +1,5 @@
 #!/bin/bash
-lxc_container="c1"
+lxc_container="cd-api-92"
 repoDir="$HOME/temp/"
 app_file="cd-api.zip"
 add_host_file="../../shared-files/add_host.sh"
@@ -8,7 +8,7 @@ add_host_file="../../shared-files/add_host.sh"
 echo "----------------------------------------------------"
 echo "INSTALL npm AND typescript"
 echo "----------------------------------------------------"
-lxc exec c1 -- sudo -H -u devops bash -c '
+lxc exec $lxc_container -- sudo -H -u devops bash -c '
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -24,9 +24,9 @@ echo "----------------------------------------------------"
 echo "DEPLOY cd-api"
 echo "----------------------------------------------------"
 echo -e "-- Push $app_file file to $lxc_container/home/devops"
-lxc file push $HOME/temp/cd-api.zip c1/home/devops/
+lxc file push $HOME/temp/cd-api.zip cd-api-92/home/devops/
 echo -e "-- Push $app_file file to $lxc_container/home/devops"
-lxc file push $add_host_file c1/home/devops/
+lxc file push $add_host_file cd-api-92/home/devops/
 
 # change ownership
 echo -e "-- set ownership"
