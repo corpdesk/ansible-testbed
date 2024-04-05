@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # preceed this procedure with the following to avoid password prompt
-# ssh-copy-id username@remote_host
+# ssh-copy-id emp-07@remote_host
 
 # Define variables
 REMOTE_HOST="username@remote_host"
