@@ -64,6 +64,10 @@ echo ""
 echo ""
 echo "---install unzip-------------------------------------------------------------------------------------------------"
 sudo apt-get install unzip -y
+echo ""
+echo ""
+echo "---install curl-------------------------------------------------------------------------------------------------"
+sudo apt-get install curl -y
 # sudo snap install lxd --channel=latest/stable
 # sudo snap refresh lxd --channel=latest/stable
 sudo service ssh restart
