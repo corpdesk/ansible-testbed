@@ -16,6 +16,8 @@ pwd
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 npm install @socket.io/redis-adapter
+npm install socket.io
+npm install ioredis
 npm start
 '
 
