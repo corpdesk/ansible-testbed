@@ -8,3 +8,4 @@ sudo nano /etc/redis/redis.conf
 Locate the line “bind 127.0.0.1 ::1” and edit
 
 sudo systemctl restart redis-server
+

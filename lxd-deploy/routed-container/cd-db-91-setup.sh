@@ -46,3 +46,5 @@ mysql -uroot -p${rootpasswd} -e "CREATE USER '$NEW_USERNAME'@'%' IDENTIFIED BY '
 
 echo "User '$NEW_USERNAME' created with grant all privileges."
 echo "----------------------------------------------------"
+
+
