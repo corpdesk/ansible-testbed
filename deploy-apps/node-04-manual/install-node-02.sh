@@ -17,8 +17,7 @@ npm version
 
 bash -c 'export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-npm version
-npm start'
+npm version'
 
 
 

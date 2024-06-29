@@ -2,7 +2,7 @@
 # To run: sudo sh setup_initial_user.sh
 
 # reset environment
-sudo sh /temp/reset_environment.sh
+sudo sh reset_environment.sh
 initialUser="devops"
 pswd="yU0B14NC1PdE"
 
@@ -28,13 +28,13 @@ else
     # confirm user and password:
     # cat /etc/shadow | grep $initialUser
     echo "escalate the $initialUser to sudoer:"
-    usermod -aG sudo $initialUser
+    sudo usermod -aG sudo $initialUser
     sudo id $initialUser
     # no password for $initialUser as a sudoer
     # OPTION 1
     # sudo echo "$initialUser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
     # OPTION 2
-    bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
+    sudo bash -c 'echo "devops ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers'
     # OPTION 3
     # touch /etc/sudoers.d/devops
     # sed '1 i devops\tALL=(ALL)\tNOPASSWD:\tALL' /etc/sudoers.d/devops
